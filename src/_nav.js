@@ -72,6 +72,14 @@ export default {
       icon: 'File',
       children: [
         {
+          name: 'Projects',
+          url: '/pages/projects',
+        },
+        {
+          name: 'Projects | Create',
+          url: '/pages/projects-new',
+        },
+        {
           name: 'Blank',
           url: '/pages/blank',
         },

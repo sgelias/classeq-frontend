@@ -21,6 +21,9 @@ import Modals from './elements/Modals';
 import ProgressBars from './elements/ProgressBars';
 import PaginationPage from './elements/Pagination';
 import ErrorPage from './shared/404';
+import ProjectsList from './projects/projects-list/ProjectsList';
+import ProjectsCreate from './projects/projects-create/ProjectsCreate';
+
 
 // See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
 const pageList = [
@@ -138,6 +141,16 @@ const pageList = [
     name: 'Widgets',
     path: '/widgets',
     component: Widgets,
+  },
+  {
+    name: 'Projects',
+    path: '/pages/projects',
+    component: ProjectsList,
+  },
+  {
+    name: 'Projects | Create',
+    path: '/pages/projects-new',
+    component: ProjectsCreate,
   },
 ];
 
