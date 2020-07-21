@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Col, Row, Card, CardBody } from 'reactstrap';
 
-import { BaseProject } from '../../../helpers/urlProviders';
+import { BaseProject } from '../../../../_helpers/url-providers';
 
 
 interface Project extends BaseProject {
     handleChange: Function,
-    handleSubmit: any,
+    handleSubmit: Function | any,
 }
 
 

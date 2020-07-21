@@ -72,6 +72,10 @@ export default {
       icon: 'File',
       children: [
         {
+          name: 'Login',
+          url: '/pages/login',
+        },
+        {
           name: 'Projects',
           url: '/pages/projects',
         },

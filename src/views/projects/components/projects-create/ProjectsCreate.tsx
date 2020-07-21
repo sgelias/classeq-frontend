@@ -1,8 +1,8 @@
 import React from 'react';
-import axios from 'axios';
 
-import { provideProjectsCreateUrl, BaseProject } from '../../../helpers/urlProviders';
+import { BaseProject } from '../../../../_helpers/url-providers';
 import ProjectsForm from '../projects-form-single/ProjectsForm';
+import { projectServices as ps } from '../_projects.services';
 
 
 export default class ProjectsCreate extends React.Component {
@@ -22,10 +22,9 @@ export default class ProjectsCreate extends React.Component {
 
 
     private createProject(record: BaseProject) {
-        const url = provideProjectsCreateUrl();
-        axios.post(url.url, record)
+        ps.createProject(record)
             .then(res => console.log(res));
-    }
+    };
 
 
     private handleSubmit(event: Event) {

@@ -4,9 +4,10 @@ import {
     provideProjectsListUrl,
     provideProjectsCreateUrl,
     BaseProject,
+    CustomRequestConfig,
     CreatedProject,
     ProjectsListObjects
-} from '../../helpers/urlProviders';
+} from '../../../_helpers/url-providers';
 
 
 // TODO: implantar a utilização de jwt para identificação dos uruários.
@@ -14,20 +15,21 @@ import {
 // https://jasonwatmore.com/post/2017/12/07/react-redux-jwt-authentication-tutorial-example
 
 
-// TODO: terminar de implantas os params para a o retorno da lista, incluindo tamando da página, e tal.
 /**
  * Get all projects.
  * @param params An object of type ...
  */
 const getAll = async (params?: any): Promise<{ data: ProjectsListObjects }> => {
-    const url = provideProjectsListUrl({});
-    return await axios.get(url.url);
+    let config: CustomRequestConfig = provideProjectsListUrl(params);
+    config.method = "GET";
+    return await axios(config);
 }
 
 
-const createProject = async (record: BaseProject): Promise<CreatedProject> => {
-    const url = provideProjectsCreateUrl();
-    return await axios.post(url.url, record);
+const createProject = async (record: BaseProject): Promise<CreatedProject | any> => {
+    let config: CustomRequestConfig = provideProjectsCreateUrl(record);
+    config.method = "POST"
+    return await axios(config);
 }
 
 

@@ -1,17 +1,19 @@
 import { v4 as uuid } from 'uuid/interfaces';
 
+import { AxiosRequestConfig } from 'axios';
+
 // *******************
 // Shared utilities.
 // *******************
 
 
+export interface CustomRequestConfig extends AxiosRequestConfig {}
+
+
 // Common headers.
 const baseHeader: Headers = new Headers();
 baseHeader.append('Access-Control-Allow-Origin', 'http://localhost:8000/*');
-
-
-// Common params.
-const baseParams: URLSearchParams = new URLSearchParams()
+baseHeader.append('Content-Type', 'application/json');
 
 
 // Base url to perform request to backend API.
@@ -33,6 +35,7 @@ export interface ListResponseInterface {
     tp?: number,
     p?: number,
     ps?: number,
+    q?: string,
 }
 
 
@@ -40,21 +43,21 @@ export interface ListResponseInterface {
  * Validate query parameters for default.
  * @param qpars The query parameter object.
  */
-const validateParams = (qpars: any) => {
-    let params = baseParams;
+const buildParamsForLists = (qpars: any = {}) => {
+    let params: any = {}
 
     /* Page Size */
     if (!qpars.ps) qpars.ps = 10;
-    params.set('ps', `${qpars.ps}`);
-
+    params.ps = qpars.ps;
+    
     /* Filter term */
     if (qpars.q)
-    params.append('q', `${qpars.q}`);
-
+    params.q = qpars.q;
+    
     /* Current page */
     if (qpars.p)
-    params.append('p', `${qpars.p}`);
-
+    params.p = qpars.p;
+    
     return params;
 }
 
@@ -95,11 +98,11 @@ export interface ProjectsListObjects extends ListResponseInterface {
 
 /**
  * Provide a configured URL for list requests.
- * @see `validateParams` method.
+ * @see `buildParamsForLists` method.
  * @param query_params Basic query params for request configuration.
  */
-export const provideProjectsListUrl = (query_params?: any) => {
-    let params = validateParams(query_params);
+export const provideProjectsListUrl = (query_params?: any): CustomRequestConfig => {
+    let params = buildParamsForLists(query_params);
     return {
         url: `${baseUrl}/projs/`,
         params: params,
@@ -110,15 +113,41 @@ export const provideProjectsListUrl = (query_params?: any) => {
 
 /**
  * Provide a configured URL for create requests.
- * @see `validateParams` method.
- * @param query_params Basic query params for request configuration.
+ * @param data Data to be submited as a new record.
  */
-export const provideProjectsCreateUrl = () => {
+export const provideProjectsCreateUrl = (data: any): CustomRequestConfig => {
     return {
         url: `${baseUrl}/projs/new`,
         headers: baseHeader,
+        data: data,
     }
 }
 
 
 export const provideProjectsEditUrl = () => { }
+
+
+// *******************
+// Auth utilities.
+// *******************
+
+
+export interface AuthCredentials {
+    username: string | undefined,
+    password: string | undefined,
+    submitted?: boolean,
+}
+
+
+/**
+ * Provide a configured URL for create requests.
+ * @see `AuthCredentials`
+ * @param data Data to be submited as a new record.
+ */
+export const provideAuthLoginUrl = (data: AuthCredentials): CustomRequestConfig => {
+    return {
+        url: `${baseUrl}/auth/get-token/`,
+        headers: baseHeader,
+        data: data,
+    }
+}

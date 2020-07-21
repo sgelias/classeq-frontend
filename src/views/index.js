@@ -21,8 +21,10 @@ import Modals from './elements/Modals';
 import ProgressBars from './elements/ProgressBars';
 import PaginationPage from './elements/Pagination';
 import ErrorPage from './shared/404';
-import ProjectsList from './projects/projects-list/ProjectsList';
-import ProjectsCreate from './projects/projects-create/ProjectsCreate';
+
+import ProjectsList from './projects/components/projects-list/ProjectsList';
+import ProjectsCreate from './projects/components/projects-create/ProjectsCreate';
+import LoginPage from './auth/components/LoginPage';
 
 
 // See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
@@ -151,6 +153,11 @@ const pageList = [
     name: 'Projects | Create',
     path: '/pages/projects-new',
     component: ProjectsCreate,
+  },
+  {
+    name: 'Login',
+    path: '/pages/login',
+    component: LoginPage,
   },
 ];
 
