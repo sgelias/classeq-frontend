@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button, Form, FormGroup, Label, Input, Col, Row, Card, CardBody } from 'reactstrap';
+
 import { AuthCredentials } from '../../../_helpers/url-providers';
 
 
@@ -10,49 +12,59 @@ interface Auth extends AuthCredentials {
 
 export default (props: Auth) => {
 
+
+    const isDisabled = (
+        props.submitted && 
+        (!props.username || !props.password)
+    );
+
+
     return (
-        <div className="col-md-6 col-md-offset-3">
-            <div className="alert alert-info">
-                Username: test<br />
-                Password: test
-            </div>
-            <h2>Login</h2>
-            <form name="form" onSubmit={props.handleSubmit}>
 
-                {/* Username */}
-                <div className={'form-group' + (props.submitted && !props.username ? ' has-error' : '')}>
-                    <label htmlFor="username">Username</label>
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        name="username" 
-                        onChange={props.handleChange('username')}
-                    />
-                    {props.submitted && !props.username &&
-                        <div className="help-block">Username is required</div>
-                    }
-                </div>
+        <Row>
+            <Col md={{ size: 8, offset: 2 }}>
+                <Card>
+                    <CardBody>
+                        <Form>
 
-                {/* Password */}
-                <div className={'form-group' + (props.submitted && !props.password ? ' has-error' : '')}>
-                    <label htmlFor="password">Password</label>
-                    <input 
-                        type="password"
-                        className="form-control"
-                        name="password"
-                        onChange={props.handleChange('password')}
-                    />
-                    {props.submitted && !props.password &&
-                        <div className="help-block">Password is required</div>
-                    }
-                </div>
+                            {/* Username */}
+                            <FormGroup>
+                                <Label for="username">Username</Label>
+                                <Input
+                                    type="text"
+                                    name="username"
+                                    id="username"
+                                    placeholder="Username"
+                                    onChange={props.handleChange('username')}
+                                    required={true}
+                                />
+                            </FormGroup>
 
-                {/* Login button */}
-                <div className="form-group">
-                    <button className="btn btn-primary">Login</button>
-                </div>
+                            {/* Password */}
+                            <FormGroup>
+                                <Label for="password">password</Label>
+                                <Input
+                                    type="password"
+                                    name="password"
+                                    id="password"
+                                    placeholder="-----"
+                                    onChange={props.handleChange('password')}
+                                    required={true}
+                                />
+                            </FormGroup>
 
-            </form>
-        </div>
+                            {/* Login button */}
+                            <Button 
+                                color="primary"
+                                disabled={isDisabled}
+                                onClick={props.handleSubmit}>
+                                <i className="fa fa-paper-plane"></i>&nbsp;&nbsp;Login
+                            </Button>
+
+                        </Form>
+                    </CardBody>
+                </Card>
+            </Col>
+        </Row>
     );
 }
