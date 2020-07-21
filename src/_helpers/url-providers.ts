@@ -2,22 +2,55 @@ import { v4 as uuid } from 'uuid/interfaces';
 
 import { AxiosRequestConfig } from 'axios';
 
+
 // *******************
 // Shared utilities.
 // *******************
 
 
+// Base url to perform request to backend API.
+const backendUrl: string = 'http://localhost:8000';
+const baseUrl: string = `${backendUrl}/api/v1`;
+
+
+/**
+ * A custom request interface to abstract AxiosRequestConfig.
+ * @see `AxiosRequestConfig` of axios package.
+ */
 export interface CustomRequestConfig extends AxiosRequestConfig {}
 
 
-// Common headers.
-const baseHeader: Headers = new Headers();
-baseHeader.append('Access-Control-Allow-Origin', 'http://localhost:8000/*');
-baseHeader.append('Content-Type', 'application/json');
+/**
+ * Return authorization header with jwt token.
+ */
+const authHeader = (): Object => {
+    // @ts-ignore
+    let user = JSON.parse(localStorage.getItem('user'));
+
+    if (user && user.token) {
+        return { 'Authorization': `JWT ${user.token}` };
+    } else {
+        return {};
+    }
+}
 
 
-// Base url to perform request to backend API.
-const baseUrl: string = 'http://localhost:8000/api/v1';
+/**
+ * Get common headers.
+ * @param add_headers Additional headers to include on final header object.
+ * @param is_authenticated If true the authentication token is also provided.
+ */
+const getCommonHeaders = (is_authenticated: boolean = false, add_headers?: Object): Object => {
+    let headers = {
+        'Access-Control-Allow-Origin': `${backendUrl}/*`,
+        'Content-Type': 'application/json'
+    }
+
+    if (add_headers) headers = { ...headers, ...add_headers };
+    if (is_authenticated) headers = { ...headers, ...authHeader() }
+
+    return headers;
+}
 
 
 /**
@@ -40,7 +73,7 @@ export interface ListResponseInterface {
 
 
 /**
- * Validate query parameters for default.
+ * Validate query parameters for queries performed with a list as a response.
  * @param qpars The query parameter object.
  */
 const buildParamsForLists = (qpars: any = {}) => {
@@ -102,11 +135,11 @@ export interface ProjectsListObjects extends ListResponseInterface {
  * @param query_params Basic query params for request configuration.
  */
 export const provideProjectsListUrl = (query_params?: any): CustomRequestConfig => {
-    let params = buildParamsForLists(query_params);
+    const params = buildParamsForLists(query_params);
     return {
         url: `${baseUrl}/projs/`,
         params: params,
-        headers: baseHeader,
+        headers: getCommonHeaders(),
     }
 }
 
@@ -118,7 +151,7 @@ export const provideProjectsListUrl = (query_params?: any): CustomRequestConfig 
 export const provideProjectsCreateUrl = (data: any): CustomRequestConfig => {
     return {
         url: `${baseUrl}/projs/new`,
-        headers: baseHeader,
+        headers: getCommonHeaders(true),
         data: data,
     }
 }
@@ -132,6 +165,10 @@ export const provideProjectsEditUrl = () => { }
 // *******************
 
 
+
+/**
+ * Interface for minimal credentials object.
+ */
 export interface AuthCredentials {
     username: string | undefined,
     password: string | undefined,
@@ -147,7 +184,7 @@ export interface AuthCredentials {
 export const provideAuthLoginUrl = (data: AuthCredentials): CustomRequestConfig => {
     return {
         url: `${baseUrl}/auth/get-token/`,
-        headers: baseHeader,
+        headers: getCommonHeaders(),
         data: data,
     }
 }

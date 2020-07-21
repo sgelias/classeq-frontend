@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Col, Row, Card, CardBody } from 'reactstrap';
 
-import { AuthCredentials } from '../../../_helpers/url-providers';
+import { AuthCredentials } from '../../../../_helpers/url-providers';
 
 
 interface Auth extends AuthCredentials {
@@ -14,13 +14,12 @@ export default (props: Auth) => {
 
 
     const isDisabled = (
-        props.submitted && 
-        (!props.username || !props.password)
+        (props.submitted && !props.username) ||
+        (props.submitted || !props.password)
     );
 
 
     return (
-
         <Row>
             <Col md={{ size: 8, offset: 2 }}>
                 <Card>
@@ -42,12 +41,12 @@ export default (props: Auth) => {
 
                             {/* Password */}
                             <FormGroup>
-                                <Label for="password">password</Label>
+                                <Label for="password">Password</Label>
                                 <Input
                                     type="password"
                                     name="password"
                                     id="password"
-                                    placeholder="-----"
+                                    placeholder="*****"
                                     onChange={props.handleChange('password')}
                                     required={true}
                                 />

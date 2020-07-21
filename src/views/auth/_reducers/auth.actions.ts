@@ -6,9 +6,9 @@ import { history } from '../../../_helpers/history';
 
 const login = (username: string, password: string) => {
 
-    const request = (user: any) => { return { type: authConstants.LOGIN_REQUEST, user } }
-    const success = (user: any) => { return { type: authConstants.LOGIN_SUCCESS, user } }
-    const failure = (error: any) => { return { type: authConstants.LOGIN_FAILURE, error } }
+    const request = (user: any) => { return { type: authConstants.LOGIN_REQUEST, user } };
+    const success = (user: any) => { return { type: authConstants.LOGIN_SUCCESS, user } };
+    const failure = (error: any) => { return { type: authConstants.LOGIN_FAILURE, error } };
 
     return (dispatch: any) => {
         dispatch(request({ username }));
@@ -24,13 +24,13 @@ const login = (username: string, password: string) => {
                 }
             );
     };
-}
+};
 
 
 const logout = () => {
     authService.logout();
     return { type: authConstants.LOGOUT };
-}
+};
 
 
 export const authActions = {

@@ -25,6 +25,7 @@ export default (project: Project) => {
                 <Card>
                     <CardBody>
                         <Form>
+
                             {/* title */}
                             <FormGroup>
                                 <Label for="title">Title</Label>
@@ -34,7 +35,8 @@ export default (project: Project) => {
                                     id="title"
                                     placeholder="A brief and concise phrase that described yout project"
                                     onChange={project.handleChange('title')}
-                                    required={true} />
+                                    required={true} 
+                                />
                             </FormGroup>
 
                             {/* Description */}
@@ -46,7 +48,8 @@ export default (project: Project) => {
                                     id="description"
                                     placeholder="A detailed description of the project"
                                     onChange={project.handleChange('description')}
-                                    required={true} />
+                                    required={true} 
+                                />
                             </FormGroup>
 
                             {/* Submit button */}
@@ -56,6 +59,7 @@ export default (project: Project) => {
                                 onClick={project.handleSubmit}>
                                 <i className="fa fa-paper-plane"></i>&nbsp;&nbsp;Submit
                             </Button>
+
                         </Form>
                     </CardBody>
                 </Card>

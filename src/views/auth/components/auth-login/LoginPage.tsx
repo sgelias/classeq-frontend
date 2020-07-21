@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { AuthCredentials } from '../../../_helpers/url-providers';
-import { authActions } from '../../auth/_reducers/auth.actions';
+import { AuthCredentials } from '../../../../_helpers/url-providers';
+import { authActions } from '../../_reducers/auth.actions';
 import LoginPageView from './LoginPageView';
 
 
@@ -13,7 +13,7 @@ interface DispatchProps {
 }
 
 
-interface StateProps extends AuthCredentials {}
+interface StateProps extends AuthCredentials {};
 
 
 class LoginPage extends React.Component<DispatchProps> {

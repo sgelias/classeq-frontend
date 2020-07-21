@@ -24,7 +24,7 @@ import ErrorPage from './shared/404';
 
 import ProjectsList from './projects/components/projects-list/ProjectsList';
 import ProjectsCreate from './projects/components/projects-create/ProjectsCreate';
-import LoginPage from './auth/components/LoginPage';
+import LoginPage from './auth/components/auth-login/LoginPage';
 
 
 // See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
