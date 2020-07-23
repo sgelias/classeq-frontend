@@ -1,42 +1,52 @@
 import React from 'react';
-
-
-import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
-import { BaseProject } from '../../../../_helpers/url-providers';
-import ProjectsForm from '../projects-form-single/ProjectsForm';
-import { projectServices as ps } from '../_projects.services';
 import { RouteComponentProps } from 'react-router-dom';
 
+import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
+import { CreatedProject } from '../../../../_helpers/url-providers';
+import { history } from '../../../../_helpers/history';
+import ProjectsForm from '../projects-form-single/ProjectsForm';
+import { projectServices as ps } from '../_projects.services';
 
-interface Props extends RouteComponentProps {}
+
+interface State extends CreatedProject {}
 
 
-export default class ProjectsCreate extends React.Component<Props, {}> {
+export default class ProjectsCreate extends React.Component<RouteComponentProps, State> {
 
 
-    state: BaseProject = {
-        title: '',
-        description: '',
-    };
+    public state: any | CreatedProject;
 
 
     constructor(props: any) {
         super(props);
+    
+        this.state = {
+            uuid: (this.props.match.params as any).rid
+        };
+        
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     };
 
 
-    private createProject(record: BaseProject) {
-        ps.create(record)
-            .then(res => console.log(res));
+    componentDidMount() {
+        ps.get(this.state.uuid)
+            .then(res => this.setState(() => { return res.data }))
+            .catch(() => console.log(this.state));
+    };
+
+
+    private async updateProject(record: CreatedProject) {
+        await ps.update(record)
+            .then((res) => console.log(res));
     };
 
 
     private handleSubmit(event: Event) {
         console.log(this.state);
         event.preventDefault();
-        this.createProject(this.state);
+        this.updateProject(this.state)
+            .then(() => history.push(`/projects/${this.state.uuid}`));
     };
 
 
@@ -50,13 +60,14 @@ export default class ProjectsCreate extends React.Component<Props, {}> {
 
 
     render() {
-        const { title, description } = this.state;
+        const { title, description, uuid } = this.state;
         const { match } = this.props;
 
         return (
             <div>
                 <BreadcrumbsItemBuilder url={match.url} params={match.params} />
                 <ProjectsForm 
+                    uuid={uuid}
                     title={title}
                     description={description}
                     handleChange={this.handleChange}

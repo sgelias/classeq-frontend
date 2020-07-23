@@ -28,7 +28,6 @@ class LoginPage extends React.Component<DispatchProps> {
 
     constructor(props: any) {
         super(props);
-        this.props.dispatch(authActions.logout());
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     };
@@ -76,6 +75,9 @@ const mapStateToProps = (state: DispatchProps): DispatchProps => ({
 });
 
 
-export default connect(
+const connectedLoginPage = connect(
     mapStateToProps
 )(LoginPage);
+
+
+export { connectedLoginPage as LoginPage };

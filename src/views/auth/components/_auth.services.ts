@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
     provideAuthLoginUrl,
     AuthCredentials,
-    CustomRequestConfig
+    CustomRequestConfig,
 } from '../../../_helpers/url-providers';
 
 
@@ -29,7 +29,6 @@ const login = async (username: string, password: string) => {
     };
 
     let config: CustomRequestConfig = provideAuthLoginUrl(credentials);
-    config.method = "POST";
 
     return await axios(config)
         .then(user => {

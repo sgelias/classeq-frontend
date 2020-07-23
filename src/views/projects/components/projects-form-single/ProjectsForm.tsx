@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Col, Row, Card, CardBody } from 'reactstrap';
 
-import { BaseProject } from '../../../../_helpers/url-providers';
+import { BaseProject, CreatedProject } from '../../../../_helpers/url-providers';
 
 
-interface Project extends BaseProject {
+interface Project extends BaseProject, CreatedProject {
     handleChange: Function,
     handleSubmit: Function | any,
 }
@@ -34,6 +34,7 @@ export default (project: Project) => {
                                     name="title"
                                     id="title"
                                     placeholder="A brief and concise phrase that described yout project"
+                                    value={project.title || ''}
                                     onChange={project.handleChange('title')}
                                     required={true} 
                                 />
@@ -47,6 +48,7 @@ export default (project: Project) => {
                                     name="description"
                                     id="description"
                                     placeholder="A detailed description of the project"
+                                    value={project.description || ''}
                                     onChange={project.handleChange('description')}
                                     required={true} 
                                 />

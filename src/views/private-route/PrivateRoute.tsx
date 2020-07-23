@@ -5,10 +5,12 @@ import { authService } from '../auth/components/_auth.services';
 
 
 // @ts-ignore
-export const PrivateRoute = ({ component: Component, ...rest }) => (
+const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={props => (
         authService.getToken()
             ? <Component {...props} />
-            : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+            : <Redirect to={{ pathname: '/pages/login', state: { from: props.location } }} />
     )} />
 )
+
+export default PrivateRoute;

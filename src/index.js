@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+//import { Provider } from 'react-redux';
+import { ThroughProvider } from 'react-through'
+//import { BreadcrumbsProvider } from 'react-breadcrumbs-dynamic';
 
 import * as serviceWorker from './registerServiceWorker';
 import App from './App';
@@ -8,9 +10,9 @@ import { store } from './_helpers/store';
 
 
 ReactDOM.render(
-    <Provider store={store}>
+    <ThroughProvider store={store}>
         <App />
-    </Provider>,
+    </ThroughProvider>,
     document.getElementById('app')
 );
 // If you want your app to work offline and load faster, you can change

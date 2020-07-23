@@ -22,9 +22,8 @@ import ProgressBars from './elements/ProgressBars';
 import PaginationPage from './elements/Pagination';
 import ErrorPage from './shared/404';
 
-import ProjectsList from './projects/components/projects-list/ProjectsList';
-import ProjectsCreate from './projects/components/projects-create/ProjectsCreate';
-import LoginPage from './auth/components/auth-login/LoginPage';
+import { ProjectsList, ProjectsDetails, ProjectsCreate, ProjectsUpdate } from './projects/index';
+import { LoginPage } from './auth/index';
 
 
 // See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
@@ -144,19 +143,37 @@ const pageList = [
     path: '/widgets',
     component: Widgets,
   },
+
+  /**
+   * Projects routes.
+   */
   {
     name: 'Projects',
-    path: '/pages/projects',
+    path: '/projects',
     component: ProjectsList,
   },
   {
-    name: 'Projects | Create',
-    path: '/pages/projects-new',
+    name: 'Create',
+    path: '/projects/new',
     component: ProjectsCreate,
   },
   {
+    name: 'Details',
+    path: '/projects/:rid',
+    component: ProjectsDetails,
+  },
+  {
+    name: 'Edit',
+    path: '/projects/:rid/edit',
+    component: ProjectsUpdate,
+  },
+
+  /**
+   * Auth routes.
+   */
+   {
     name: 'Login',
-    path: '/pages/login',
+    path: '/login',
     component: LoginPage,
   },
 ];

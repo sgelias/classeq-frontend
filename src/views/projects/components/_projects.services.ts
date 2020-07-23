@@ -1,39 +1,75 @@
 import axios from 'axios';
+import { v4 as uuid } from 'uuid/interfaces';
 
 import {
-    provideProjectsListUrl,
-    provideProjectsCreateUrl,
     BaseProject,
     CustomRequestConfig,
     CreatedProject,
-    ProjectsListObjects
+    ListResponseInterface,
+    ProjectsListObjects,
+    provideProjectsUrl,
 } from '../../../_helpers/url-providers';
 
 
-// TODO: implantar a utilização de jwt para identificação dos uruários.
-// Authentication with jwt
-// https://jasonwatmore.com/post/2017/12/07/react-redux-jwt-authentication-tutorial-example
-
-
 /**
- * Get all projects.
+ * List all records.
+ * 
  * @param params An object of type ...
  */
-const getAll = async (params?: any): Promise<{ data: ProjectsListObjects }> => {
-    let config: CustomRequestConfig = provideProjectsListUrl(params);
-    config.method = "GET";
+const list = async (params?: ListResponseInterface): Promise<{ data: ProjectsListObjects }> => {
+    let config: CustomRequestConfig = provideProjectsUrl("GET", { query_params: params });
     return await axios(config);
 }
 
 
-const createProject = async (record: BaseProject): Promise<CreatedProject | any> => {
-    let config: CustomRequestConfig = provideProjectsCreateUrl(record);
-    config.method = "POST"
+/**
+ * Get a single record.
+ * 
+ * @param params An object of type ...
+ */
+const get = async (id: uuid): Promise<{ data: CreatedProject }> => {
+    let config: CustomRequestConfig = provideProjectsUrl("GET", { id: id });
+    return await axios(config);
+}
+
+
+/**
+ * Create a new record.
+ * 
+ * @param record An project object.
+ */
+const create = async (record: BaseProject): Promise<CreatedProject> => {
+    let config: CustomRequestConfig = provideProjectsUrl("POST", { data: record });
+    return await axios(config);
+}
+
+
+/**
+ * Update an existent record.
+ * 
+ * @param record An project object.
+ */
+const update = async (record: CreatedProject): Promise<CreatedProject> => {
+    let config: CustomRequestConfig = provideProjectsUrl("PUT", { data: record });
+    return await axios(config);
+}
+
+
+/**
+ * Delete a single record.
+ * 
+ * @param id The uuid of the records to be deleted.
+ */
+const deleteRecord = async (id: uuid): Promise<any> => {
+    let config: CustomRequestConfig = provideProjectsUrl("DELETE", { id: id });
     return await axios(config);
 }
 
 
 export const projectServices = {
-    getAll,
-    createProject,
+    list,
+    get,
+    create,
+    update,
+    deleteRecord,
 }

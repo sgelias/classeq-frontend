@@ -73,27 +73,23 @@ export default {
       children: [
         {
           name: 'Login',
-          url: '/pages/login',
+          url: '/login',
         },
         {
           name: 'Projects',
-          url: '/pages/projects',
-        },
-        {
-          name: 'Projects | Create',
-          url: '/pages/projects-new',
+          url: '/projects',
         },
         {
           name: 'Blank',
-          url: '/pages/blank',
+          url: '/blank',
         },
         {
           name: 'Sub Navigation',
-          url: '/pages/subnav',
+          url: '/subnav',
         },
         {
           name: '404',
-          url: '/pages/404',
+          url: '/404',
         },
       ],
     },

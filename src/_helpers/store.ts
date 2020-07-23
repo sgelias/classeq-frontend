@@ -3,7 +3,7 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 
 import { alert } from '../views/alerts/_reducers/alerts.reducers';
-import { auth } from '../views/auth/_reducers/auth.reducers';
+import { auth } from '../views/auth/index';
 
 
 const rootReducer = combineReducers({
