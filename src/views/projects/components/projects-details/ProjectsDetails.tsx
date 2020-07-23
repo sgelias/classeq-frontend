@@ -1,9 +1,9 @@
 import React from 'react';
-import { NavLink, RouteComponentProps } from 'react-router-dom';
-import { Col, Row, Card, CardBody, CardSubtitle, CardText, CardHeader } from 'reactstrap';
+import { RouteComponentProps } from 'react-router-dom';
 
 import { projectServices as ps } from '../_projects.services';
-import { CreatedProject, User } from '../../../../_helpers/url-providers';
+import { CreatedProject } from '../../../../_helpers/url-providers';
+import ProjectsDetailsView from './ProjectsDetailsView';
 import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
 
 
@@ -34,57 +34,20 @@ export default class ProjectsDetails extends React.Component<RouteComponentProps
 
     render() {
         const { match } = this.props;
+        const { title, description, created, updated, user } = this.state;
 
         return (
             <div>
                 <BreadcrumbsItemBuilder url={match.url} params={match.params} />
-                <Row>
-                    <Col md={{ size: 8, offset: 2 }}>
-                        <Card>
-                            <CardHeader>
-                                <h3>
-                                    {this.state.title}&nbsp;&nbsp;&nbsp;
-                                    <NavLink to={`${match.url}/edit`} activeClassName="active">
-                                        <i className="fa fa-pencil"></i>
-                                    </NavLink>
-                                </h3>
-                            </CardHeader>
-                            <CardBody>
-                                <CardSubtitle>{this.state.description}</CardSubtitle>
-                                <CardText>
-                                    <UserCredentials user={this.state.user} /><br />
-                                    <small className="text-muted">
-                                        Created in&nbsp;
-                                        {new Date(this.state.created).toLocaleDateString("en-US")},&nbsp;
-                                        updated in&nbsp;
-                                        {new Date(this.state.updated).toLocaleDateString("en-US")}.
-                                    </small>
-                                </CardText>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
+                <ProjectsDetailsView 
+                    title={title}
+                    description={description}
+                    created={created}
+                    updated={updated}
+                    user={user}
+                    url={match.url}
+                />
             </div>
-        )
-    }
-}
-
-
-function UserCredentials(props: any) {
-    const user: User = props.user;
-    if (user?.first_name && user?.last_name) {
-        return (
-            <small>
-                <span className="text-muted">Owner:&nbsp;</span>
-                {`${user.first_name} ${user.last_name}`}
-            </small>
-        )
-    } else {
-        return (
-            <small>
-                <span className="text-muted">Owner:&nbsp;</span>
-                {`${user?.username}`}
-            </small>
         )
     }
 }

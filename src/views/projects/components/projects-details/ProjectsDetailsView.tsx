@@ -1,49 +1,37 @@
 import React from 'react';
-import { Button, Col, Row, Card, CardBody, CardTitle, NavLink, Table } from 'reactstrap';
+import { CardSubtitle, CardBody, CardHeader, CardText, Col, Row, Card } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 
+import { Dates, UserCredentials } from '../shared/index';
 import { CreatedProject } from '../../../../_helpers/url-providers';
 
 
-export default (props: CreatedProject) => {
+const ProjectsDetailsView = (props: CreatedProject) => {
 
     return (
         <Row>
             <Col md={{ size: 8, offset: 2 }}>
                 <Card>
+                    <CardHeader>
+                        <h3>
+                            {props.title}&nbsp;&nbsp;&nbsp;
+                            <NavLink to={`${props.url}/edit`} >
+                                <i className="fa fa-pencil"></i>
+                            </NavLink>
+                        </h3>
+                    </CardHeader>
                     <CardBody>
-                        <Table striped>
-                            <tbody>
-                                <tr>
-                                    <th>Title</th>
-                                    <td>{ props.title }</td>
-
-                                    <th>Description</th>
-                                    <td>{ props.description }</td>
-
-                                    <th>Dates</th>
-                                    <td>
-                                        Created in&nbsp;
-                                        { props.title },&nbsp;
-                                        updated in&nbsp;
-                                        { props.title }.
-                                    </td>
-
-                                    <th>Manager</th>
-                                    <td>{ props.user }</td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                    </CardBody>
-                </Card>
-
-                <Card>
-                    <CardBody>
-                        <NavLink to={`/pages/projects/${props.uuid}/edit`} activeClassName="active">
-                            <Button color="primary">Edit</Button>
-                        </NavLink>
+                        <CardSubtitle>{props.description}</CardSubtitle>
+                        <CardText>
+                            <UserCredentials user={props.user} /><br />
+                            <Dates created={props.created} updated={props.updated} />
+                        </CardText>
                     </CardBody>
                 </Card>
             </Col>
         </Row>
     )
 }
+
+
+export default ProjectsDetailsView;

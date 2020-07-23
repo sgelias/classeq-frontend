@@ -146,8 +146,8 @@ export interface BaseProject {
 export interface CreatedProject extends BaseProject {
     uuid?: uuid,
     user?: User,
-    created?: Date,
-    updated?: Date,
+    created?: Date | undefined,
+    updated?: Date | undefined,
     [key: string]: any;
 }
 
