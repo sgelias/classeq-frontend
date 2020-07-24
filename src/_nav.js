@@ -72,16 +72,24 @@ export default {
       icon: 'File',
       children: [
         {
+          name: 'Login',
+          url: '/login',
+        },
+        {
+          name: 'Projects',
+          url: '/projects',
+        },
+        {
           name: 'Blank',
-          url: '/pages/blank',
+          url: '/blank',
         },
         {
           name: 'Sub Navigation',
-          url: '/pages/subnav',
+          url: '/subnav',
         },
         {
           name: '404',
-          url: '/pages/404',
+          url: '/404',
         },
       ],
     },
