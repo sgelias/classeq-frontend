@@ -11,10 +11,13 @@ import { RouteComponentProps } from 'react-router-dom';
 interface Props extends RouteComponentProps {}
 
 
-export default class ProjectsCreate extends React.Component<Props, {}> {
+interface State extends BaseProject {}
 
 
-    state: BaseProject = {
+export default class ProjectsCreate extends React.Component<Props, State> {
+
+
+    public state: BaseProject = {
         title: '',
         description: '',
     };

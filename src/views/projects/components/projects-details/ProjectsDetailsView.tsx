@@ -10,7 +10,7 @@ const ProjectsDetailsView = (props: CreatedProject) => {
 
     return (
         <Row>
-            <Col md={{ size: 8, offset: 2 }} lg={{ size: 6, offset: 2 }}>
+            <Col sm={{ size: 8, offset: 2 }} lg={{ size: 6, offset: 2 }}>
                 <Card>
                     <CardHeader>
                         <h3>

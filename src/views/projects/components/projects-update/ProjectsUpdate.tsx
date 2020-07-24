@@ -11,7 +11,10 @@ import { projectServices as ps } from '../_projects.services';
 interface State extends CreatedProject {}
 
 
-export default class ProjectsCreate extends React.Component<RouteComponentProps, State> {
+interface Props extends RouteComponentProps {}
+
+
+export default class ProjectsCreate extends React.Component<Props, State> {
 
 
     public state: any | CreatedProject;

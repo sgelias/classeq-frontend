@@ -8,7 +8,7 @@ import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
 import { TreesList } from '../../../trees/index';
 
 
-interface State extends CreatedProject { }
+interface State extends CreatedProject {}
 
 
 interface Props extends RouteComponentProps {}
@@ -26,7 +26,7 @@ export default class ProjectsDetails extends React.Component<Props, State> {
         this.state = {
             uuid: (this.props.match.params as any).rid
         };
-    }
+    };
 
 
     componentDidMount() {
