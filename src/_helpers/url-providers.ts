@@ -22,21 +22,6 @@ export interface CustomRequestConfig extends AxiosRequestConfig {}
 
 
 /**
- * Return authorization header with jwt token.
- */
-const authHeader = (): Object => {
-    // @ts-ignore
-    let user = JSON.parse(localStorage.getItem('user'));
-
-    if (user && user.token) {
-        return { 'Authorization': `JWT ${user.token}` };
-    } else {
-        return {};
-    }
-}
-
-
-/**
  * This is a common interface for list requests. Keys denotes:
  * count: the total number of records;
  * previous and next: navigation links;
@@ -44,7 +29,7 @@ const authHeader = (): Object => {
  * p: the page to be shown;
  * ps: the expected size of the page to show.
  */
-export interface ListResponseInterface {
+ export interface ListResponseInterface {
     count?: number,
     previous?: any,
     next?: any,
@@ -58,10 +43,36 @@ export interface ListResponseInterface {
 /**
  * Define the basic interface for http requests.
  */
- export interface HttpQueryParams {
+export interface HttpQueryParams {
     id?: uuid,
     query_params?: ListResponseInterface,
     data?: Object | any
+}
+
+
+/**
+ * Interface for also created records.
+ */
+export interface CreatedRecords {
+    uuid?: uuid,
+    created?: Date | undefined,
+    updated?: Date | undefined,
+    [key: string]: any;
+}
+
+
+/**
+ * Return authorization header with jwt token.
+ */
+const authHeader = (): Object => {
+    // @ts-ignore
+    let user = JSON.parse(localStorage.getItem('user'));
+
+    if (user && user.token) {
+        return { 'Authorization': `JWT ${user.token}` };
+    } else {
+        return {};
+    }
 }
 
 
@@ -140,15 +151,11 @@ export interface BaseProject {
 
 
 /**
- * Interface for also created projects. it would be used in projects lists,
+ * Interface for also created projects. It would be used in projects lists,
  * updates and delete.
  */
-export interface CreatedProject extends BaseProject {
-    uuid?: uuid,
+export interface CreatedProject extends BaseProject, CreatedRecords {
     user?: User,
-    created?: Date | undefined,
-    updated?: Date | undefined,
-    [key: string]: any;
 }
 
 
@@ -169,7 +176,7 @@ export interface ProjectsListObjects extends ListResponseInterface {
  * @see `buildParamsForLists` method.
  * @see `Method` from axios package.
  * @see `CustomRequestConfig` interface.
- * @param method A valid http verb.
+ * @param method A valid http verb of class Method from axios package.
  * @param args An Object containing specific params as 
  */
 export const provideProjectsUrl = (method: Method, args: HttpQueryParams): CustomRequestConfig => {
@@ -211,6 +218,107 @@ export const provideProjectsUrl = (method: Method, args: HttpQueryParams): Custo
             return request = { ...request, ...{
                 method: method,
                 url: `${baseUrl}/projs/${args.data.uuid}/delete`,
+            }};
+        
+        default: 
+            return request;
+    }
+}
+
+
+// *******************
+// Trees utilities.
+// *******************
+
+
+/**
+ * Interface for genes.
+ */
+interface Gene {
+    id: uuid,
+    name: string,
+    name_slug: string,
+}
+
+
+/**
+ * Interface for not also created trees. It would be used in creation forms.
+ */
+export interface BaseTrees {
+    title?: string,
+    description?: string,
+    gene?: Gene,
+    tree?: string,
+    related_tree?: any,
+}
+
+
+/**
+ * Interface for also created trees. It would be used in tree lists, updates and
+ * delete.
+ */
+export interface CreatedTrees extends BaseTrees, CreatedRecords {}
+
+
+/**
+ * Interface for Projects list.
+ */
+export interface TreesListObjects extends ListResponseInterface {
+    results: Array<CreatedTrees>
+}
+
+
+/**
+ * Return an appropriated http config object of CustomRequestConfig
+ * type to be used in axios requests. See example below.
+ * 
+ * @example axios(provideProjectsUrl("GET", { id: id }))
+ * @see `getCommonHeaders` method.
+ * @see `buildParamsForLists` method.
+ * @see `Method` from axios package.
+ * @see `CustomRequestConfig` interface.
+ * @param method A valid http verb of class Method from axios package.
+ * @param args An Object containing specific params as 
+ */
+export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
+    
+    let request: CustomRequestConfig = {
+        headers: getCommonHeaders(true),
+    };
+
+    switch (method) {
+        case "GET":
+            if (args.id && !args.query_params) {
+                return request = { ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/${project_pk}/trees/${args.id}`,
+                }};
+            } else {
+                return request = { ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/${project_pk}/trees/`,
+                    params: buildParamsForLists(args.query_params),
+                }};
+            };
+        
+        case "POST":
+            return request = { ...request, ...{
+                method: method,
+                url: `${baseUrl}/${project_pk}/trees/new`,
+                data: args.data,
+            }};
+        
+        case "PUT":
+            return request = { ...request, ...{
+                method: method,
+                url: `${baseUrl}/${project_pk}/trees/${args.data.uuid}/edit`,
+                data: args.data,
+            }};
+        
+        case "DELETE":
+            return request = { ...request, ...{
+                method: method,
+                url: `${baseUrl}/${project_pk}/trees/${args.data.uuid}/delete`,
             }};
         
         default: 

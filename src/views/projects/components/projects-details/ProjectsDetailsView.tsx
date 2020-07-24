@@ -2,7 +2,7 @@ import React from 'react';
 import { CardSubtitle, CardBody, CardHeader, CardText, Col, Row, Card } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
-import { Dates, UserCredentials } from '../shared/index';
+import { Dates, UserCredentials } from '../../../shared/index';
 import { CreatedProject } from '../../../../_helpers/url-providers';
 
 
@@ -10,7 +10,7 @@ const ProjectsDetailsView = (props: CreatedProject) => {
 
     return (
         <Row>
-            <Col md={{ size: 8, offset: 2 }}>
+            <Col md={{ size: 8, offset: 2 }} lg={{ size: 6, offset: 2 }}>
                 <Card>
                     <CardHeader>
                         <h3>
@@ -22,6 +22,7 @@ const ProjectsDetailsView = (props: CreatedProject) => {
                     </CardHeader>
                     <CardBody>
                         <CardSubtitle>{props.description}</CardSubtitle>
+                        <hr/>
                         <CardText>
                             <UserCredentials user={props.user} /><br />
                             <Dates created={props.created} updated={props.updated} />

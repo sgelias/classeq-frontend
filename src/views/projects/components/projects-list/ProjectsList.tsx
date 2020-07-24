@@ -5,13 +5,16 @@ import { NavLink, RouteComponentProps } from 'react-router-dom';
 import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
 import { ProjectsListObjects } from '../../../../_helpers/url-providers';
 import { projectServices as ps } from '../_projects.services';
-import { Dates } from '../shared/index';
+import { Dates } from '../../../shared/index';
 
 
 interface Props extends RouteComponentProps {}
 
 
-export default class ProjectsList extends Component<Props, ProjectsListObjects> {
+interface State extends ProjectsListObjects {}
+
+
+export default class ProjectsList extends Component<Props, State> {
 
 
     public state: Readonly<ProjectsListObjects> = {

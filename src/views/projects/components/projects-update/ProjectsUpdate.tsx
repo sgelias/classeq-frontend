@@ -43,7 +43,6 @@ export default class ProjectsCreate extends React.Component<RouteComponentProps,
 
 
     private handleSubmit(event: Event) {
-        console.log(this.state);
         event.preventDefault();
         this.updateProject(this.state)
             .then(() => history.push(`/projects/${this.state.uuid}`));

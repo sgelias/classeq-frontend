@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { User } from '../../../../_helpers/url-providers';
+import { User } from '../../_helpers/url-providers';
 
 
 export default (props: any) => {

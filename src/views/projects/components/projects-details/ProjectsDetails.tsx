@@ -5,12 +5,16 @@ import { projectServices as ps } from '../_projects.services';
 import { CreatedProject } from '../../../../_helpers/url-providers';
 import ProjectsDetailsView from './ProjectsDetailsView';
 import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
+import { TreesList } from '../../../trees/index';
 
 
 interface State extends CreatedProject { }
 
 
-export default class ProjectsDetails extends React.Component<RouteComponentProps, State> {
+interface Props extends RouteComponentProps {}
+
+
+export default class ProjectsDetails extends React.Component<Props, State> {
 
 
     public state: any;
@@ -34,7 +38,7 @@ export default class ProjectsDetails extends React.Component<RouteComponentProps
 
     render() {
         const { match } = this.props;
-        const { title, description, created, updated, user } = this.state;
+        const { title, description, created, updated, user, uuid } = this.state;
 
         return (
             <div>
@@ -47,6 +51,7 @@ export default class ProjectsDetails extends React.Component<RouteComponentProps
                     user={user}
                     url={match.url}
                 />
+                <TreesList project_id={uuid} />
             </div>
         )
     }

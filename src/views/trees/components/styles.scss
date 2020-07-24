@@ -1,0 +1,17 @@
+.no-wrap-text {
+    div {
+        overflow: auto;
+        -moz-box-shadow:    inset 0 0 2px #000000;
+        -webkit-box-shadow: inset 0 0 2px #000000;
+        box-shadow:         inset 0 0 2px #000000;
+
+        span {
+            //margin-top: 15px !important;
+            white-space: nowrap; /* CSS3 */
+            white-space: -moz-nowrap; /* Firefox */
+            white-space: -nowrap; /* Opera <7 */
+            white-space: -o-nowrap; /* Opera 7 */
+            word-wrap: inherit; /* IE */
+        }
+    }
+}
