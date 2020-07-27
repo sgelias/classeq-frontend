@@ -10,7 +10,7 @@ const login = (username: string, password: string) => {
     const success = (user: any) => { return { type: authConstants.LOGIN_SUCCESS, user } };
     const failure = (error: any) => { return { type: authConstants.LOGIN_FAILURE, error } };
 
-    return (dispatch: any) => {
+    return (dispatch: Function) => {
         dispatch(request({ username }));
         authService.login(username, password)
             .then(

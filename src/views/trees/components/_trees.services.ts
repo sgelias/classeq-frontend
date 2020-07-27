@@ -5,16 +5,19 @@ import {
     BaseTrees,
     CreatedTrees,
     CustomRequestConfig, 
+    GeneListObjects, 
     ListResponseInterface, 
     TreesListObjects, 
     provideTreesUrl,
+    provideGeneSearchUrl,
 } from "../../../_helpers/url-providers";
 
 
 /**
  * List all records.
  * 
- * @param params An object of type ...
+ * @see `ListResponseInterface`
+ * @param params An object of type ListResponseInterface.
  */
 const list = async (project_pk: uuid, params?: ListResponseInterface): Promise<{ data: TreesListObjects }> => {
     let config: CustomRequestConfig = provideTreesUrl("GET", project_pk, { query_params: params });
@@ -25,7 +28,8 @@ const list = async (project_pk: uuid, params?: ListResponseInterface): Promise<{
 /**
  * Get a single record.
  * 
- * @param params An object of type ...
+ * @see `ListResponseInterface`
+ * @param params An object of type ListResponseInterface.
  */
 const get = async (project_pk: uuid, id: uuid): Promise<{ data: CreatedTrees }> => {
     let config: CustomRequestConfig = provideTreesUrl("GET", project_pk, { id: id });
@@ -66,10 +70,22 @@ const deleteRecord = async (project_pk: uuid, id: uuid): Promise<any> => {
 }
 
 
+/**
+ * Get genes given a search term.
+ * 
+ * @param term A string to filter results.
+ */
+const searchGene = async (term: string): Promise<{ data: GeneListObjects }> => {
+    let config: CustomRequestConfig = provideGeneSearchUrl(term);
+    return await axios(config);
+}
+
+
 export const treesServices = {
     list,
     get,
     create,
     update,
     deleteRecord,
+    searchGene,
 }

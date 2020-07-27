@@ -21,6 +21,12 @@ export default class TreesList extends React.Component<Props, State> {
 
     public status: Readonly<TreesListObjects> = {
         results: [],
+    };
+
+
+    constructor(props: any) {
+        super(props);
+        this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
     }
 
 
@@ -28,7 +34,12 @@ export default class TreesList extends React.Component<Props, State> {
         ts.list(this.props.project_id).then(res => this.setState({
             results: res.data.results
         }));
-    }
+    };
+
+
+    private forceUpdateHandler() {
+        this.forceUpdate();
+    };
 
 
     render() {
@@ -85,7 +96,7 @@ export default class TreesList extends React.Component<Props, State> {
                             </CardBody>
                             
                             <CardFooter>
-                                <TreesModal project_id={this.props.project_id}/>
+                                <TreesModal project_id={this.props.project_id} />
                             </CardFooter>
                         </Card>
                     </Col>

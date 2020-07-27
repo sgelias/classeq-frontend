@@ -20,7 +20,7 @@ const TreesModal = (props: Props) => {
     const { className, is_update, tree_id } = props;
 
 
-    const [modal, setModal] = useState(false);
+    const [ modal, setModal ] = useState(false);
 
 
     const toggle = () => setModal(!modal);
@@ -28,11 +28,11 @@ const TreesModal = (props: Props) => {
 
     const getComponent = () => {
         if (is_update) {
-            return <TreesUpdate project_id={props.project_id} tree_id={tree_id}/>
-        }
+            return <TreesUpdate project_id={props.project_id} tree_id={tree_id} />;
+        };
 
-        return <TreesCreate project_id={props.project_id}/>
-    }
+        return <TreesCreate project_id={props.project_id}/>;
+    };
 
 
     const setActionType = () => {
@@ -41,7 +41,7 @@ const TreesModal = (props: Props) => {
         }
 
         return <i className="fa fa-plus"></i>
-    }
+    };
 
 
     return (
@@ -65,9 +65,6 @@ const TreesModal = (props: Props) => {
                 </ModalBody>
                 
                 <ModalFooter>
-                    <Button color="primary" onClick={ toggle }>
-                        Do Something
-                    </Button>{' '}
                     <Button color="secondary" onClick={ toggle }>
                         Cancel
                     </Button>

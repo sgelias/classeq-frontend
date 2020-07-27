@@ -2,9 +2,11 @@ import React from 'react';
 import { Button, Card, CardBody, Col, Form, FormGroup, Label, Input, Row } from 'reactstrap';
 
 import { BaseTrees, CreatedTrees } from '../../../../_helpers/url-providers';
+import AutocompleteInput from './AutocompleteInput';
 
 
-export interface Props extends BaseTrees, CreatedTrees {
+interface Props extends BaseTrees, CreatedTrees {
+    handleGeneInput: Function,
     handleChange: Function,
     handleSubmit: Function | any,
 }
@@ -56,17 +58,10 @@ export default (props: Props) => {
                             </FormGroup>
 
                             {/* Gene */}
-                            {/* FOR AUTOCOMPLETE WITH DEBUNCE EXAMPLE */}
-                            {/* https://itnext.io/build-your-own-autocomplete-input-with-react-and-reenhance-components-97386da48678 */}
                             <FormGroup>
-                                <Label for="gene">Gene</Label>
-                                <Input
-                                    type="text"
-                                    name="gene"
-                                    id="gene"
-                                    /* value={trees.gene || ''} */
-                                    /* onChange={trees.handleChange('gene')} */
-                                    required={true}
+                                <AutocompleteInput
+                                    gene={props.gene}
+                                    handleGeneInput={props.handleGeneInput}
                                 />
                             </FormGroup>
 
@@ -102,7 +97,6 @@ export default (props: Props) => {
                                 onClick={props.handleSubmit}>
                                 <i className="fa fa-paper-plane"></i>&nbsp;&nbsp;Submit
                             </Button>
-
                         </Form>
                     </CardBody>
                 </Card>

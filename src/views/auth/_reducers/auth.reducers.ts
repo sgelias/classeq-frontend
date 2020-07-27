@@ -1,9 +1,13 @@
 import { authConstants } from './auth.constants';
 import { authService as as } from '../components/_auth.services';
+import { User } from '../../../_helpers/url-providers';
 
 
-let user = as.getToken();
+let user: User = as.getToken();
+
+
 const initialState = user ? { loggedIn: true, user } : {};
+
 
 const auth = (state = initialState, action: any) => {
   switch (action.type) {
@@ -30,5 +34,6 @@ const auth = (state = initialState, action: any) => {
       return state
   }
 }
+
 
 export default auth;

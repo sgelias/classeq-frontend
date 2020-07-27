@@ -1,7 +1,7 @@
 import React from 'react';
 import { v4 as uuid } from 'uuid/interfaces';
 
-import { BaseTrees } from '../../../../_helpers/url-providers';
+import { BaseTrees, Gene } from '../../../../_helpers/url-providers';
 import { treesServices as ts } from '../_trees.services';
 import TreesForm from '../trees-form-single/TreesForm';
 
@@ -29,27 +29,33 @@ export default class TreesCreate extends React.Component<Props, State> {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleGeneInput = this.handleGeneInput.bind(this);
     };
 
 
-    private createTree(record: BaseTrees) {
-        ts.create(this.props.project_id, record)
+    private async createTree(record: BaseTrees) {
+        await ts.create(this.props.project_id, record)
             .then(res => console.log(res));
     };
 
 
     private handleSubmit(event: Event) {
-        console.log(this.state);
-        event.preventDefault();
         this.createTree(this.state);
+    };
+
+
+    private handleGeneInput(value: Gene) {
+        this.setState({ gene: value });
     };
 
 
     private handleChange(input: any) {
         return (event: any) => {
-            this.setState({
-                [input]: event.target.value,
-            })
+            if (event?.target?.value && input !== "gene") {
+                this.setState({
+                    [input]: event.target.value,
+                })
+            }
         }
     };
 
@@ -66,6 +72,7 @@ export default class TreesCreate extends React.Component<Props, State> {
                 related_tree={related_tree}
                 handleChange={this.handleChange}
                 handleSubmit={this.handleSubmit}
+                handleGeneInput={this.handleGeneInput}
             />
         )
     }

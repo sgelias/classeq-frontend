@@ -23,6 +23,8 @@
     "bootstrap": "^4.5.0",
     "chart.js": "^2.9.3",
     "classnames": "^2.2.6",
+    "downshift": "^6.0.2",
+    "http-proxy-middleware": "^1.0.5",
     "intl": "^1.2.5",
     "jquery": "^3.5.1",
     "jwt-decode": "^2.2.0",
@@ -50,7 +52,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "proxy": "http://localhost:3000"
   },
   "eslintConfig": {
     "extends": "react-app"

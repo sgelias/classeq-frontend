@@ -14,7 +14,8 @@ import {
 /**
  * List all records.
  * 
- * @param params An object of type ...
+ * @see `ListResponseInterface`
+ * @param params An object of type ListResponseInterface.
  */
 const list = async (params?: ListResponseInterface): Promise<{ data: ProjectsListObjects }> => {
     let config: CustomRequestConfig = provideProjectsUrl("GET", { query_params: params });
@@ -25,7 +26,8 @@ const list = async (params?: ListResponseInterface): Promise<{ data: ProjectsLis
 /**
  * Get a single record.
  * 
- * @param params An object of type ...
+ * @see `ListResponseInterface`
+ * @param params An object of type ListResponseInterface.
  */
 const get = async (id: uuid): Promise<{ data: CreatedProject }> => {
     let config: CustomRequestConfig = provideProjectsUrl("GET", { id: id });
