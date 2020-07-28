@@ -18,23 +18,40 @@ const treesListActions = {
 };
 
 
-const treesCreateActions = {
+const treesSingleActions = {
 
-    treesCreatePending(pending: boolean) {
-        return { type: treesConstants.CREATE_PENDING, pending: pending }
+    treesDetailsPending(pending: boolean) {
+        return { type: treesConstants.DETAILS_PENDING, pending: pending }
     },
 
-    treesCreateSuccess(tree: CreatedTrees) {
-        return { type: treesConstants.CREATE_SUCCESS, tree: tree }
+    treesDetailsSuccess(record: CreatedTrees) {
+        return { type: treesConstants.DETAILS_SUCCESS, record: record }
     },
 
-    treesCreateFail(error: any) {
-        return { type: treesConstants.CREATE_SUCCESS, error: error }
+    treesDetailsFail(error: any) {
+        return { type: treesConstants.DETAILS_FAIL, error: error }
+    },
+};
+
+
+const treesUpdateActions = {
+
+    treesUpdatePending(pending: boolean) {
+        return { type: treesConstants.UPDATE_PENDING, pending: pending }
+    },
+
+    treesUpdateSuccess(record: CreatedTrees) {
+        return { type: treesConstants.UPDATE_SUCCESS, record: record }
+    },
+
+    treesUpdateFail(error: any) {
+        return { type: treesConstants.UPDATE_FAIL, error: error }
     },
 };
 
 
 export const treesActions = {
     ...treesListActions,
-    ...treesCreateActions,
+    ...treesSingleActions,
+    ...treesUpdateActions,
 };

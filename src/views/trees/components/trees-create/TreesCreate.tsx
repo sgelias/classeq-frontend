@@ -8,6 +8,7 @@ import TreesForm from '../trees-form-single/TreesForm';
 
 interface Props {
     project_id: uuid,
+    toggle: Function,
 }
 
 
@@ -41,6 +42,7 @@ export default class TreesCreate extends React.Component<Props, State> {
 
     private handleSubmit(event: Event) {
         this.createTree(this.state);
+        this.props.toggle();
     };
 
 

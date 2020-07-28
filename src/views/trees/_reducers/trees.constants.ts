@@ -5,22 +5,22 @@ const treesListConstants = {
 };
 
 
-const treesCreateConstants = {
-    CREATE_PENDING: 'TREES_CREATE_PENDING',
-    CREATE_SUCCESS: 'TREES_CREATE_SUCCESS',
-    CREATE_FAIL: 'TREES_CREATE_FAIL'
+const treesDetailsConstants = {
+    DETAILS_PENDING: 'TREES_DETAILS_PENDING',
+    DETAILS_SUCCESS: 'TREES_DETAILS_SUCCESS',
+    DETAILS_FAIL: 'TREES_DETAILS_FAIL',
 };
 
 
 const treesUpdateConstants = {
     UPDATE_PENDING: 'TREES_UPDATE_PENDING',
     UPDATE_SUCCESS: 'TREES_UPDATE_SUCCESS',
-    UPDATE_FAIL: 'TREES_UPDATE_FAIL'
+    UPDATE_FAIL: 'TREES_UPDATE_FAIL',
 };
 
 
 export const treesConstants = {
     ...treesListConstants,
-    ...treesCreateConstants,
+    ...treesDetailsConstants,
     ...treesUpdateConstants,
 };

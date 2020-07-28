@@ -28,10 +28,10 @@ const TreesModal = (props: Props) => {
 
     const getComponent = () => {
         if (is_update) {
-            return <TreesUpdate project_id={props.project_id} tree_id={tree_id} />;
+            return <TreesUpdate project_id={props.project_id} tree_id={tree_id} toggle={toggle} />;
         };
 
-        return <TreesCreate project_id={props.project_id}/>;
+        return <TreesCreate project_id={props.project_id} toggle={toggle} />;
     };
 
 

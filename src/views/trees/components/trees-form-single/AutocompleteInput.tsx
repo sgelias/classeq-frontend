@@ -69,10 +69,10 @@ const AutocompleteInput = (props: Props) => {
                         />
 
                         {/* Selection list */}
-                        <ul {...getMenuProps()}>
+                        <ul {...getMenuProps()} className="suggestion-list">
                             {isOpen ?
                                 genes.map((item, index) => (
-                                    <li key={index}
+                                    <li key={index} className="suggestion-list-item"
                                         {...getItemProps({
                                             item, index, key: index, style: {
                                                 listStyle: 'mone',
@@ -84,9 +84,11 @@ const AutocompleteInput = (props: Props) => {
                                     >
                                         <span>{item.name}</span><br/>
                                         {item.meta.terms.map((term, index) => (
-                                            <Badge color="secondary" className="m-1" key={index} pill>
-                                                { term }
-                                            </Badge>
+                                            <small key={index}>
+                                                <Badge color="primary" className="m-1" pill>
+                                                    { term }
+                                                </Badge>
+                                            </small>
                                         ))}
                                     </li>
                                 )) : null}

@@ -62,9 +62,9 @@ export interface HttpQueryParams {
  * Interface for also created records.
  */
 export interface CreatedRecords {
-    uuid?: uuid,
-    created?: Date | undefined,
-    updated?: Date | undefined,
+    readonly uuid?: uuid,
+    readonly created?: | Date | undefined,
+    readonly updated?: Date | undefined,
     [key: string]: any;
 }
 
@@ -269,6 +269,7 @@ export interface BaseTrees {
     gene?: Gene | undefined,
     tree?: string,
     related_tree?: any,
+    [key: string]: any,
 }
 
 

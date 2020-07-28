@@ -22,7 +22,7 @@ import {
 const list = async (project_pk: uuid, params?: ListResponseInterface): Promise<{ data: TreesListObjects }> => {
     let config: CustomRequestConfig = provideTreesUrl("GET", project_pk, { query_params: params });
     return await axios(config);
-}
+};
 
 
 /**
@@ -34,7 +34,7 @@ const list = async (project_pk: uuid, params?: ListResponseInterface): Promise<{
 const get = async (project_pk: uuid, id: uuid): Promise<{ data: CreatedTrees }> => {
     let config: CustomRequestConfig = provideTreesUrl("GET", project_pk, { id: id });
     return await axios(config);
-}
+};
 
 
 /**
@@ -45,7 +45,7 @@ const get = async (project_pk: uuid, id: uuid): Promise<{ data: CreatedTrees }> 
 const create = async (project_pk: uuid, record: BaseTrees): Promise<CreatedTrees> => {
     let config: CustomRequestConfig = provideTreesUrl("POST", project_pk, { data: record });
     return await axios(config);
-}
+};
 
 
 /**
@@ -56,7 +56,7 @@ const create = async (project_pk: uuid, record: BaseTrees): Promise<CreatedTrees
 const update = async (project_pk: uuid, record: CreatedTrees): Promise<CreatedTrees> => {
     let config: CustomRequestConfig = provideTreesUrl("PUT", project_pk, { data: record });
     return await axios(config);
-}
+};
 
 
 /**
@@ -67,7 +67,7 @@ const update = async (project_pk: uuid, record: CreatedTrees): Promise<CreatedTr
 const deleteRecord = async (project_pk: uuid, id: uuid): Promise<any> => {
     let config: CustomRequestConfig = provideTreesUrl("DELETE", project_pk, { id: id });
     return await axios(config);
-}
+};
 
 
 /**
@@ -78,7 +78,7 @@ const deleteRecord = async (project_pk: uuid, id: uuid): Promise<any> => {
 const searchGene = async (term: string): Promise<{ data: GeneListObjects }> => {
     let config: CustomRequestConfig = provideGeneSearchUrl(term);
     return await axios(config);
-}
+};
 
 
 export const treesServices = {
@@ -88,4 +88,4 @@ export const treesServices = {
     update,
     deleteRecord,
     searchGene,
-}
+};

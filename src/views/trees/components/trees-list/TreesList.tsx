@@ -23,7 +23,7 @@ const TreesList = (props: Props) => {
 
 
     const trees: Array<CreatedTrees> = useSelector((state: RootStateOrAny) => (
-        state.treesReducers.results
+        state.treesListReducer.results
     ));
 
 
