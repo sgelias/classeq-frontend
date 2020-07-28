@@ -18,7 +18,7 @@ const AutocompleteInput = (props: Props) => {
     let is_selected: boolean = props.gene ? true : false;
 
 
-    const [genes, setGenes] = useState<Array<Gene>>([]);
+    const [ genes, setGenes ] = useState<Array<Gene>>([]);
 
 
     const handleGenes = (genes: Gene[]) => {
@@ -33,7 +33,7 @@ const AutocompleteInput = (props: Props) => {
                 props.handleGeneInput({
                     id: selection.id,
                     name: selection.name,
-                    name_slug: selection.data,
+                    name_slug: selection.name_slug,
                     meta: selection.meta,
                 });
             }}
@@ -97,7 +97,7 @@ const AutocompleteInput = (props: Props) => {
                             <>
                                 <small className="text-muted">Selected: </small>
                                 <Badge color="success" pill>
-                                    {props.gene?.name}
+                                    { props.gene?.name } | { props.gene?.name_slug }
                                 </Badge>
                             </>
                         ) : null}

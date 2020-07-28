@@ -283,7 +283,8 @@ export interface CreatedTrees extends BaseTrees, CreatedRecords {}
  * Interface for Projects list.
  */
 export interface TreesListObjects extends ListResponseInterface {
-    results: Array<CreatedTrees>
+    results: Array<CreatedTrees>,
+    [key: string]: any,
 }
 
 

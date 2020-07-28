@@ -1,14 +1,40 @@
-import { v4 as uuid } from 'uuid/interfaces';
-
-import { treesServices as ts } from '../components/_trees.services';
+import { treesConstants } from './trees.constants';
 import { CreatedTrees } from '../../../_helpers/url-providers';
 
 
-const updateTreesList = (project_pk: uuid, record: CreatedTrees) => {
-    return () => ts.update(project_pk, record);
+const treesListActions = {
+
+    treesListPending(pending: boolean) {
+        return { type: treesConstants.LIST_PENDING, pending: pending }
+    },
+
+    treesListSuccess(results: Array<CreatedTrees>) {
+        return { type: treesConstants.LIST_SUCCESS, results: results }
+    },
+
+    treesListFail(error: any) {
+        return { type: treesConstants.LIST_FAIL, error: error }
+    },
+};
+
+
+const treesCreateActions = {
+
+    treesCreatePending(pending: boolean) {
+        return { type: treesConstants.CREATE_PENDING, pending: pending }
+    },
+
+    treesCreateSuccess(tree: CreatedTrees) {
+        return { type: treesConstants.CREATE_SUCCESS, tree: tree }
+    },
+
+    treesCreateFail(error: any) {
+        return { type: treesConstants.CREATE_SUCCESS, error: error }
+    },
 };
 
 
 export const treesActions = {
-    updateTreesList,
+    ...treesListActions,
+    ...treesCreateActions,
 };

@@ -1,22 +1,43 @@
 import { treesConstants } from './trees.constants';
-import { treesServices as ts } from '../components/_trees.services';
-import { CreatedTrees } from '../../../_helpers/url-providers';
+import { TreesListObjects } from '../../../_helpers/url-providers';
+import { compose } from 'redux';
 
 
-const initialState: CreatedTrees = {
-    /*  */
-}
+const initialState: TreesListObjects = {
+    results: [],
+    pending: false,
+    error: null,
+};
 
 
-const trees = (state = initialState, action: any) => {
-    switch(action.type) {
+const treesListReducers = (state = initialState, action: any) => {
+    switch (action.type) {
 
-        case treesConstants.UPDATE_LIST:
+        case treesConstants.LIST_PENDING:
             return {
+                ...state,
+                pending: action.pending
+            };
 
-            }
+        case treesConstants.LIST_SUCCESS:
+            return {
+                ...state,
+                results: action.results
+            };
+
+        case treesConstants.LIST_FAIL:
+            return {
+                ...state, 
+                error: action.error
+            };
+
+        default:
+            return state;
 
     }
-}
+};
 
-//https://www.youtube.com/watch?v=fZojNH1OplI
+
+export const treesReducers = compose(
+    treesListReducers
+);

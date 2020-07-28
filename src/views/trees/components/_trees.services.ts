@@ -4,12 +4,12 @@ import { v4 as uuid } from 'uuid/interfaces';
 import {
     BaseTrees,
     CreatedTrees,
-    CustomRequestConfig, 
-    GeneListObjects, 
-    ListResponseInterface, 
-    TreesListObjects, 
+    CustomRequestConfig,
+    GeneListObjects,
+    ListResponseInterface,
     provideTreesUrl,
     provideGeneSearchUrl,
+    TreesListObjects,
 } from "../../../_helpers/url-providers";
 
 

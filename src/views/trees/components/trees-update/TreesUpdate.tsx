@@ -6,13 +6,17 @@ import { treesServices as ts } from '../_trees.services';
 import TreesForm from '../trees-form-single/TreesForm';
 
 
-interface State extends CreatedTrees {}
+interface State extends CreatedTrees { }
 
 
 interface Props extends CreatedTrees {
     project_id: uuid,
     tree_id?: uuid,
 }
+
+
+
+// const TreesUpdateFunction = (props: Props) => { };
 
 
 export default class TreesUpdate extends React.Component<Props, State> {
@@ -79,6 +83,6 @@ export default class TreesUpdate extends React.Component<Props, State> {
                     handleSubmit={this.handleSubmit}
                     handleGeneInput={this.handleGeneInput}
                 />
-        )
+            )
     }
 }
