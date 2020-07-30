@@ -1,7 +1,9 @@
 import React from 'react';
+import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
 import { v4 as uuid } from 'uuid/interfaces';
 
 import { BaseTrees, Gene } from '../../../../_helpers/url-providers';
+import { treesActions as ta } from '../../_reducers/trees.actions';
 import { treesServices as ts } from '../_trees.services';
 import TreesForm from '../trees-form-single/TreesForm';
 
@@ -9,73 +11,65 @@ import TreesForm from '../trees-form-single/TreesForm';
 interface Props {
     project_id: uuid,
     toggle: Function,
-}
+};
 
 
-interface State extends BaseTrees {}
+const TreesCreate = (props: Props) => {
 
 
-export default class TreesCreate extends React.Component<Props, State> {
+    const dispatch = useDispatch();
 
 
-    public state: State = {
-        title: '',
-        description: '',
-        gene: undefined,
-        tree: '',
-    };
+    const record: BaseTrees = useSelector((state: RootStateOrAny) => ({}));
 
 
-    constructor(props: any) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleGeneInput = this.handleGeneInput.bind(this);
-    };
-
-
-    private async createTree(record: BaseTrees) {
-        await ts.create(this.props.project_id, record)
+    const createTree = async (record: BaseTrees) => {
+        await ts.create(props.project_id, record)
             .then(res => console.log(res));
     };
 
 
-    private handleSubmit(event: Event) {
-        this.createTree(this.state);
-        this.props.toggle();
+    const handleSubmit = () => {
+        Promise.resolve()
+            .then(async () => await createTree(record))
+            .then(async () => await ts.list(props.project_id, dispatch))
+            .then(() => props.toggle());
     };
 
 
-    private handleGeneInput(value: Gene) {
-        this.setState({ gene: value });
+    const handleGeneInput = (value: Gene) => {
+        try {
+            dispatch(ta.treesDetailsSuccess({ gene: value }));
+        } catch (err) {
+            dispatch(ta.treesDetailsFail(err));
+        };
     };
 
 
-    private handleChange(input: any) {
+    const handleChange = (input: any) => {
         return (event: any) => {
-            if (event?.target?.value && input !== "gene") {
-                this.setState({
-                    [input]: event.target.value,
-                })
-            }
+            try {
+                dispatch(ta.treesDetailsSuccess({ [input]: event.target.value }));
+            } catch (err) {
+                dispatch(ta.treesDetailsFail(err));
+            };
         }
     };
 
 
-    render() {
-        const { title, description, gene, tree, related_tree } = this.state;
+    return (
+        <TreesForm
+            title={record.title}
+            description={record.description}
+            gene={record.gene}
+            tree={record.tree}
+            related_tree={record.related_tree}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            handleGeneInput={handleGeneInput}
+        />
+    )
+};
 
-        return (
-            <TreesForm
-                title={title}
-                description={description}
-                gene={gene}
-                tree={tree}
-                related_tree={related_tree}
-                handleChange={this.handleChange}
-                handleSubmit={this.handleSubmit}
-                handleGeneInput={this.handleGeneInput}
-            />
-        )
-    }
-}
+
+export default TreesCreate;

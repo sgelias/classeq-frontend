@@ -75,7 +75,7 @@ export default class Header extends React.Component<Props, State> {
               isSidebarCollapsed={this.props.isSidebarCollapsed}
             />
             <div className="page-heading">
-              <small>
+              <small className="float-left">
                 <Breadcrumbs
                   separator={<span className="text-muted"> / </span>}
                   item={NavLink}
@@ -88,7 +88,7 @@ export default class Header extends React.Component<Props, State> {
             </div>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
-              <Nav className="ml-auto" navbar>
+              <Nav className="mx-auto px-auto" navbar>
                 {this.props.children}
               </Nav>
             </Collapse>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { CardSubtitle, CardBody, CardHeader, CardText, Col, Row, Card } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Dates, UserCredentials } from '../../../shared/index';
 import { CreatedProject } from '../../../../_helpers/url-providers';
@@ -10,13 +11,20 @@ const ProjectsDetailsView = (props: CreatedProject) => {
 
     return (
         <Row>
-            <Col sm={{ size: 8, offset: 2 }} lg={{ size: 6, offset: 2 }}>
+            <Col 
+                md={{ size: 12, offset: 0 }} 
+                lg={{ size: 10, offset: 1 }} 
+                xl={{ size: 8, offset: 2 }}
+            >
                 <Card>
                     <CardHeader>
                         <h3>
-                            {props.title}&nbsp;&nbsp;&nbsp;
+                            <FontAwesomeIcon icon="project-diagram" size="xs" />
+                            &nbsp;&nbsp;&nbsp;
+                            {props.title}
+                            &nbsp;&nbsp;&nbsp;
                             <NavLink to={`${props.url}/edit`} >
-                                <i className="fa fa-pencil"></i>
+                                <FontAwesomeIcon icon="pencil-alt" size="xs" />
                             </NavLink>
                         </h3>
                     </CardHeader>

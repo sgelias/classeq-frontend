@@ -19,8 +19,16 @@ const treesUpdateConstants = {
 };
 
 
+const treesCreateConstants = {
+    CREATE_PENDING: 'TREES_CREATE_PENDING',
+    CREATE_SUCCESS: 'TREES_CREATE_SUCCESS',
+    CREATE_FAIL: 'TREES_CREATE_FAIL',
+};
+
+
 export const treesConstants = {
     ...treesListConstants,
     ...treesDetailsConstants,
     ...treesUpdateConstants,
+    ...treesCreateConstants,
 };

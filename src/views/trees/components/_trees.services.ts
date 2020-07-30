@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { v4 as uuid } from 'uuid/interfaces';
 
+import { treesActions as ta } from '../_reducers/trees.actions';
 import {
     BaseTrees,
     CreatedTrees,
@@ -9,7 +10,6 @@ import {
     ListResponseInterface,
     provideTreesUrl,
     provideGeneSearchUrl,
-    TreesListObjects,
 } from "../../../_helpers/url-providers";
 
 
@@ -19,9 +19,16 @@ import {
  * @see `ListResponseInterface`
  * @param params An object of type ListResponseInterface.
  */
-const list = async (project_pk: uuid, params?: ListResponseInterface): Promise<{ data: TreesListObjects }> => {
+const list = async (project_pk: uuid, dispacher: any, params?: ListResponseInterface): Promise<void> => {
     let config: CustomRequestConfig = provideTreesUrl("GET", project_pk, { query_params: params });
-    return await axios(config);
+
+    await dispacher(ta.treesListPending(true));
+    await axios(config)
+        .then(async res => {
+            await dispacher(ta.treesListSuccess(res.data.results));
+            await dispacher(ta.treesListPending(false));
+        })
+        .catch(err => dispacher(ta.treesListFail(err)));
 };
 
 

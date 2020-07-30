@@ -13,7 +13,7 @@ interface Props extends CreatedTrees {
     project_id: uuid,
     tree_id?: uuid,
     toggle: Function,
-}
+};
 
 
 const TreesUpdate = (props: Props) => {

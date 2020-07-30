@@ -12,7 +12,7 @@ interface Props {
 };
 
 
-const AutocompleteInput = (props: Props) => {
+const AutocompleteGeneInput = (props: Props) => {
 
 
     let is_selected: boolean = props.gene ? true : false;
@@ -63,6 +63,7 @@ const AutocompleteInput = (props: Props) => {
                             name="gene"
                             id="gene"
                             required={true}
+                            placeholder={props.gene?.name}
                             onKeyDown={event => { if (event.key === 'Enter') event.preventDefault(); }}
                             {...getInputProps()}
                             {...getRootProps({ refKey: 'innerRef' }, { suppressRefError: true })}
@@ -110,4 +111,4 @@ const AutocompleteInput = (props: Props) => {
 }
 
 
-export default AutocompleteInput;
+export default AutocompleteGeneInput;

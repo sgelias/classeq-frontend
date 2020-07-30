@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card, CardBody, Col, Form, FormGroup, Label, Input, Row } from 'reactstrap';
 
 import { BaseTrees, CreatedTrees } from '../../../../_helpers/url-providers';
-import AutocompleteInput from './AutocompleteInput';
+import AutocompleteGeneInput from './AutocompleteGeneInput';
 
 
 interface Props extends BaseTrees, CreatedTrees {
@@ -59,7 +59,7 @@ export default (props: Props) => {
 
                             {/* Gene */}
                             <FormGroup>
-                                <AutocompleteInput
+                                <AutocompleteGeneInput
                                     gene={props.gene}
                                     handleGeneInput={props.handleGeneInput}
                                 />

@@ -50,8 +50,25 @@ const treesUpdateActions = {
 };
 
 
+const treesCreateActions = {
+
+    treesCreatePending(pending: boolean) {
+        return { type: treesConstants.CREATE_PENDING, pending: pending }
+    },
+
+    treesCreateSuccess(records: Array<CreatedTrees>) {
+        return { type: treesConstants.CREATE_SUCCESS, records: records }
+    },
+
+    treesCreateFail(error: any) {
+        return { type: treesConstants.CREATE_FAIL, error: error }
+    },
+}
+
+
 export const treesActions = {
     ...treesListActions,
     ...treesSingleActions,
     ...treesUpdateActions,
+    ...treesCreateActions,
 };

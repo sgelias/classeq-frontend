@@ -1,5 +1,5 @@
 import { treesConstants } from './trees.constants';
-import { TreesListObjects, BaseTrees, CreatedTrees } from '../../../_helpers/url-providers';
+import { TreesListObjects, CreatedTrees } from '../../../_helpers/url-providers';
 
 
 // *******************
@@ -12,14 +12,6 @@ const treesListInitialState: TreesListObjects = {
     pending: false,
     error: null,
 };
-
-
-// TODO: Create reducer for records creation.
-/* const treesBaseInitialState: BaseTrees = {
-    record: {},
-    pending: false,
-    error: null,
-}; */
 
 
 const treesCreatedInitialState: CreatedTrees = {
@@ -37,6 +29,7 @@ const treesCreatedInitialState: CreatedTrees = {
 export const treesListReducer = (state = treesListInitialState, action: any) => {
     switch (action.type) {
 
+        /* List cases */
         case treesConstants.LIST_PENDING:
             return {
                 ...state,
@@ -54,7 +47,9 @@ export const treesListReducer = (state = treesListInitialState, action: any) => 
                 ...state,
                 error: action.error
             };
-
+        
+        
+        /* Update cases */
         case treesConstants.UPDATE_PENDING:
             return {
                 ...state,
@@ -79,7 +74,29 @@ export const treesListReducer = (state = treesListInitialState, action: any) => 
                 ...state,
                 error: action.error
             };
+        
+        
+        /* Create cases */
+        case treesConstants.CREATE_PENDING:
+            return {
+                ...state,
+                pending: action.pending
+            };
 
+        case treesConstants.CREATE_SUCCESS:
+            return {
+                ...state,
+                records: [ ...state.results, ...action.results ],
+            };
+
+        case treesConstants.CREATE_FAIL:
+            return {
+                ...state,
+                error: action.error
+            }
+
+
+        /* Default */
         default:
             return state;
 

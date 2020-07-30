@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { v4 as uuid } from 'uuid/interfaces';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ReactTooltip from "react-tooltip";
 
 import TreesCreate from '../trees-create/TreesCreate';
 import TreesUpdate from '../trees-update/TreesUpdate';
@@ -11,6 +13,7 @@ interface Props extends BaseTrees, CreatedTrees {
     project_id: uuid,
     tree_id?: uuid,
     is_update?: boolean,
+    label?: string
 }
 
 
@@ -37,17 +40,18 @@ const TreesModal = (props: Props) => {
 
     const setActionType = () => {
         if (is_update) {
-            return <i className="fa fa-pencil"></i>
+            return <FontAwesomeIcon icon="pencil-alt" />
         }
 
-        return <i className="fa fa-plus"></i>
+        return <span><FontAwesomeIcon icon="plus" />&nbsp;&nbsp;</span>
     };
 
 
     return (
         <span>
-            <Button color="link" onClick={ toggle }>
-                { setActionType() }
+            <Button color="link" onClick={ toggle } className="sm py-0" data-tip="Edit record">
+                { setActionType() }{ props?.label ? `${props?.label}` : null }
+                <ReactTooltip />
             </Button>
 
             <Modal 
@@ -57,18 +61,14 @@ const TreesModal = (props: Props) => {
                 size="xl"
             >
                 <ModalHeader toggle={ toggle }>
-                    Upload a new phylogenetic tree
+                    <span className="text-muted">
+                        Upload a new phylogenetic tree
+                    </span>
                 </ModalHeader>
                 
                 <ModalBody>
                     { getComponent() }
                 </ModalBody>
-                
-                <ModalFooter>
-                    <Button color="secondary" onClick={ toggle }>
-                        Cancel
-                    </Button>
-                </ModalFooter>
             </Modal>
         </span>
     );
