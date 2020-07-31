@@ -8,9 +8,17 @@ import { AxiosRequestConfig, Method } from 'axios';
 // *******************
 
 
-// Base url to perform request to backend API.
+/**
+ * Base url to perform request to backend API.
+ */
 const backendUrl: string = 'http://localhost:8000';
 const baseUrl: string = `${backendUrl}/api/v1`;
+
+
+/**
+ * Gene connector base url.
+ */
+const geneConnectorBaseUrl: string = 'https://lepiota.herokuapp.com/api';
 
 
 /**
@@ -54,9 +62,9 @@ export interface HttpQueryParams {
  * Interface for also created records.
  */
 export interface CreatedRecords {
-    uuid?: uuid,
-    created?: Date | undefined,
-    updated?: Date | undefined,
+    readonly uuid?: uuid,
+    readonly created?: | Date | undefined,
+    readonly updated?: Date | undefined,
     [key: string]: any;
 }
 
@@ -234,10 +242,21 @@ export const provideProjectsUrl = (method: Method, args: HttpQueryParams): Custo
 /**
  * Interface for genes.
  */
-interface Gene {
+export interface Gene {
     id: uuid,
     name: string,
     name_slug: string,
+    meta: {
+        terms: Array<string>
+    }
+}
+
+
+/**
+ * Interface for list of Gene objects.
+ */
+export interface GeneListObjects extends ListResponseInterface {
+    results: Array<Gene>
 }
 
 
@@ -247,9 +266,10 @@ interface Gene {
 export interface BaseTrees {
     title?: string,
     description?: string,
-    gene?: Gene,
+    gene?: Gene | undefined,
     tree?: string,
     related_tree?: any,
+    [key: string]: any,
 }
 
 
@@ -264,7 +284,8 @@ export interface CreatedTrees extends BaseTrees, CreatedRecords {}
  * Interface for Projects list.
  */
 export interface TreesListObjects extends ListResponseInterface {
-    results: Array<CreatedTrees>
+    results: Array<CreatedTrees>,
+    [key: string]: any,
 }
 
 
@@ -324,6 +345,21 @@ export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQuer
         default: 
             return request;
     }
+}
+
+
+/**
+ * Provide a basic url to perform a request to Gene-Connector gene public API.
+ * 
+ * @param term A string containing a term to filter records.
+ */
+export const provideGeneSearchUrl = (term: string): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(),
+        method: "GET",
+        url: `${geneConnectorBaseUrl}/public/gene/`,
+        params: { q: term }
+    };
 }
 
 

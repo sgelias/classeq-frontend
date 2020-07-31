@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import { Provider } from 'react-redux';
 import { ThroughProvider } from 'react-through'
-//import { BreadcrumbsProvider } from 'react-breadcrumbs-dynamic';
 
 import * as serviceWorker from './registerServiceWorker';
 import App from './App';
 import { store } from './_helpers/store';
+import './assets/images/fontawesome/fontawesome';
 
 
 ReactDOM.render(

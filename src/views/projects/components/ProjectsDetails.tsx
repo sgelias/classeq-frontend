@@ -1,14 +1,14 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { projectServices as ps } from '../_projects.services';
-import { CreatedProject } from '../../../../_helpers/url-providers';
+import { projectServices as ps } from '../_services/_projects.services';
+import { CreatedProject } from '../../../_helpers/url-providers';
 import ProjectsDetailsView from './ProjectsDetailsView';
-import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
-import { TreesList } from '../../../trees/index';
+import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
+import { TreesList } from '../../trees/index';
 
 
-interface State extends CreatedProject { }
+interface State extends CreatedProject {}
 
 
 interface Props extends RouteComponentProps {}
@@ -26,7 +26,7 @@ export default class ProjectsDetails extends React.Component<Props, State> {
         this.state = {
             uuid: (this.props.match.params as any).rid
         };
-    }
+    };
 
 
     componentDidMount() {

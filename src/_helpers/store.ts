@@ -4,11 +4,17 @@ import { createLogger } from 'redux-logger';
 
 import { alert } from '../views/alerts/_reducers/alerts.reducers';
 import { auth } from '../views/auth/index';
+import {
+    treesListReducer,
+    treesDetailsReducer,
+} from '../views/trees/_reducers/trees.reducers';
 
 
 const rootReducer = combineReducers({
     alert,
     auth,
+    treesListReducer,
+    treesDetailsReducer,
 });
 
 

@@ -1,25 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { AuthCredentials } from '../../../../_helpers/url-providers';
-import { authActions } from '../../_reducers/auth.actions';
+import { authActions } from '../_reducers/auth.actions';
 import LoginPageView from './LoginPageView';
+import { RouteComponentProps } from 'react-router-dom';
+import { AuthCredentials } from '../../../_helpers/url-providers';
 
 
-interface DispatchProps {
+interface Props extends RouteComponentProps {
     dispatch: (method: any) => void,
     authentication?: any,
+}
+
+
+interface State extends AuthCredentials {
     loggingIn?: any,
 }
 
 
-interface StateProps extends AuthCredentials {};
+class LoginPage extends React.Component<Props, State | {}> {
 
 
-class LoginPage extends React.Component<DispatchProps> {
-
-
-    state: StateProps = {
+    public state: any = {
         username: undefined,
         password: undefined,
         submitted: false,
@@ -33,15 +35,6 @@ class LoginPage extends React.Component<DispatchProps> {
     };
 
 
-    private handleChange(input: any) {
-        return (event: any) => {
-            this.setState({
-                [input]: event.target.value,
-            })
-        }
-    };
-
-
     private handleSubmit(event: any) {
         event.preventDefault();
         this.setState({ submitted: true });
@@ -49,6 +42,15 @@ class LoginPage extends React.Component<DispatchProps> {
         const { dispatch } = this.props;
         if (username && password) {
             dispatch(authActions.login(username, password));
+        }
+    };
+
+
+    private handleChange(input: any) {
+        return (event: any) => {
+            this.setState({
+                [input]: event.target.value,
+            })
         }
     };
 
@@ -69,9 +71,9 @@ class LoginPage extends React.Component<DispatchProps> {
 }
 
 
-const mapStateToProps = (state: DispatchProps): DispatchProps => ({
-    loggingIn: state.authentication,
-    dispatch: state.dispatch,
+const mapStateToProps = (props: Props) => ({
+    loggingIn: props.authentication,
+    dispatch: props.dispatch,
 });
 
 

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Row, Button, Col, Card, CardBody, CardFooter, CardText } from 'reactstrap';
 import { NavLink, RouteComponentProps } from 'react-router-dom';
 
-import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
-import { ProjectsListObjects } from '../../../../_helpers/url-providers';
-import { projectServices as ps } from '../_projects.services';
-import { Dates } from '../../../shared/index';
+import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
+import { ProjectsListObjects } from '../../../_helpers/url-providers';
+import { projectServices as ps } from '../_services/_projects.services';
+import { Dates } from '../../shared/index';
 
 
 interface Props extends RouteComponentProps {}

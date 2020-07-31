@@ -1,25 +1,39 @@
 import { authConstants } from './auth.constants';
+import { authService as as } from '../_services/_auth.services';
+import { User } from '../../../_helpers/url-providers';
 
 
-export function auth(state = {}, action: any) {
-    switch (action.type) {
+let user: User = as.getToken();
 
-        case authConstants.GETALL_REQUEST:
-            return {
-                loading: true
-            };
 
-        case authConstants.GETALL_SUCCESS:
-            return {
-                items: action.users
-            };
+const initialState = user ? { loggedIn: true, user } : {};
 
-        case authConstants.GETALL_FAILURE:
-            return {
-                error: action.error
-            };
 
-        default:
-            return state
-    }
+const auth = (state = initialState, action: any) => {
+  switch (action.type) {
+
+    case authConstants.LOGIN_REQUEST:
+      return {
+        loggingIn: true,
+        user: action.user
+      };
+
+    case authConstants.LOGIN_SUCCESS:
+      return {
+        loggedIn: true,
+        user: action.user
+      };
+
+    case authConstants.LOGIN_FAILURE:
+      return {};
+
+    case authConstants.LOGOUT:
+      return {};
+
+    default:
+      return state
+  }
 }
+
+
+export default auth;

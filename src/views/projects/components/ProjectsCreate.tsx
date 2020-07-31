@@ -1,20 +1,23 @@
 import React from 'react';
 
 
-import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
-import { BaseProject } from '../../../../_helpers/url-providers';
-import ProjectsForm from '../projects-form-single/ProjectsForm';
-import { projectServices as ps } from '../_projects.services';
+import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
+import { BaseProject } from '../../../_helpers/url-providers';
+import ProjectsForm from './ProjectsForm';
+import { projectServices as ps } from '../_services/_projects.services';
 import { RouteComponentProps } from 'react-router-dom';
 
 
 interface Props extends RouteComponentProps {}
 
 
-export default class ProjectsCreate extends React.Component<Props, {}> {
+interface State extends BaseProject {}
 
 
-    state: BaseProject = {
+export default class ProjectsCreate extends React.Component<Props, State> {
+
+
+    public state: BaseProject = {
         title: '',
         description: '',
     };

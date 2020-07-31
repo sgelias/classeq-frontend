@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Button, Badge, NavItem, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Header, SidebarNav, Footer, PageContent, Avatar, Chat, PageAlert, Page } from '../vibe';
 
@@ -83,12 +83,12 @@ export default class DashboardLayout extends Component {
                 <HeaderNav />
               </Header>
               <PageContent>
-                <React.Fragment>
+                <Switch>
                   {routes.map((page, key) => (
                     <Route exact path={page.path} component={page.component} key={key}/>
                   ))}
                   {/* <Route path="/pages/login" component={LoginPage} /> */}
-                </React.Fragment>
+                </Switch>
               </PageContent>
             </Page>
           </div>
