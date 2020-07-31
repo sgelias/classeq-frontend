@@ -13,7 +13,8 @@ interface Props extends BaseTrees, CreatedTrees {
     project_id: uuid,
     tree_id?: uuid,
     is_update?: boolean,
-    label?: string
+    label?: string,
+    color?: string,
 }
 
 
@@ -49,7 +50,12 @@ const TreesModal = (props: Props) => {
 
     return (
         <span>
-            <Button color="link" onClick={ toggle } className="sm py-0" data-tip="Edit record">
+            <Button 
+                color={ props.color  ? props.color : 'link'  } 
+                onClick={ toggle } 
+                className="sm py-0" 
+                data-tip="Edit record" 
+            >
                 { setActionType() }{ props?.label ? `${props?.label}` : null }
                 <ReactTooltip />
             </Button>
