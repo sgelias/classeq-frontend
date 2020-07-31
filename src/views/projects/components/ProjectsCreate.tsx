@@ -1,10 +1,10 @@
 import React from 'react';
 
 
-import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
-import { BaseProject } from '../../../../_helpers/url-providers';
-import ProjectsForm from '../projects-form-single/ProjectsForm';
-import { projectServices as ps } from '../_projects.services';
+import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
+import { BaseProject } from '../../../_helpers/url-providers';
+import ProjectsForm from './ProjectsForm';
+import { projectServices as ps } from '../_services/_projects.services';
 import { RouteComponentProps } from 'react-router-dom';
 
 

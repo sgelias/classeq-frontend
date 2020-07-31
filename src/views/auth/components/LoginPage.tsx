@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { authActions } from '../../_reducers/auth.actions';
+import { authActions } from '../_reducers/auth.actions';
 import LoginPageView from './LoginPageView';
 import { RouteComponentProps } from 'react-router-dom';
-import { AuthCredentials } from '../../../../_helpers/url-providers';
+import { AuthCredentials } from '../../../_helpers/url-providers';
 
 
 interface Props extends RouteComponentProps {

@@ -3,8 +3,8 @@ import { CardSubtitle, CardBody, CardHeader, CardText, Col, Row, Card } from 're
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { Dates, UserCredentials } from '../../../shared/index';
-import { CreatedProject } from '../../../../_helpers/url-providers';
+import { Dates, UserCredentials } from '../../shared/index';
+import { CreatedProject } from '../../../_helpers/url-providers';
 
 
 const ProjectsDetailsView = (props: CreatedProject) => {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { projectServices as ps } from '../_projects.services';
-import { CreatedProject } from '../../../../_helpers/url-providers';
+import { projectServices as ps } from '../_services/_projects.services';
+import { CreatedProject } from '../../../_helpers/url-providers';
 import ProjectsDetailsView from './ProjectsDetailsView';
-import { BreadcrumbsItemBuilder } from '../../../shared/BreadcrumbsItemBuilder';
-import { TreesList } from '../../../trees/index';
+import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
+import { TreesList } from '../../trees/index';
 
 
 interface State extends CreatedProject {}

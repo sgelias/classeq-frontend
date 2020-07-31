@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, CardBody, Col, Form, FormGroup, Label, Input, Row } from 'reactstrap';
 
-import { BaseTrees, CreatedTrees } from '../../../../_helpers/url-providers';
+import { BaseTrees, CreatedTrees } from '../../../_helpers/url-providers';
 import AutocompleteGeneInput from './AutocompleteGeneInput';
 
 

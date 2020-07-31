@@ -4,9 +4,9 @@ import { v4 as uuid } from 'uuid/interfaces';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactTooltip from "react-tooltip";
 
-import TreesCreate from '../trees-create/TreesCreate';
-import TreesUpdate from '../trees-update/TreesUpdate';
-import { BaseTrees, CreatedTrees } from '../../../../_helpers/url-providers';
+import TreesCreate from './TreesCreate';
+import TreesUpdate from './TreesUpdate';
+import { BaseTrees, CreatedTrees } from '../../../_helpers/url-providers';
 
 
 interface Props extends BaseTrees, CreatedTrees {

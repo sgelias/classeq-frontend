@@ -1,5 +1,5 @@
 import { authConstants } from './auth.constants';
-import { authService as as } from '../components/_auth.services';
+import { authService as as } from '../_services/_auth.services';
 import { User } from '../../../_helpers/url-providers';
 
 

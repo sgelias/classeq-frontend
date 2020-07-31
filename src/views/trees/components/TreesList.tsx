@@ -7,10 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ReactTooltip from "react-tooltip";
 
-import { Dates } from '../../../shared/index';
-import { CreatedTrees } from '../../../../_helpers/url-providers';
-import { treesServices as ts } from '../_trees.services';
-import TreesModal from '../trees-modal/TreesModal';
+import { Dates } from '../../shared/index';
+import { CreatedTrees } from '../../../_helpers/url-providers';
+import { treesServices as ts } from '../_services/_trees.services';
+import TreesModal from './TreesModal';
 
 
 interface Props {
@@ -74,16 +74,6 @@ const TreesList = (props: Props) => {
                                             <td>
                                                 {/* Title */}
                                                 {item.title}
-                                                {/* Phylogenetic tree */}
-                                                {!item.tree ? null : (
-                                                    <CopyToClipboard text={item.tree}
-                                                        onCopy={() => alert("Phylogenetic tree copied to clipboard.")}>
-                                                        <Button color="link" className="sm pr-0 py-0">
-                                                            <FontAwesomeIcon icon="copy" size="xs" data-tip="Copy phylogeny to clipboard" />
-                                                            <ReactTooltip />
-                                                        </Button>
-                                                    </CopyToClipboard>
-                                                )}
 
                                                 <br/>
 
@@ -115,6 +105,16 @@ const TreesList = (props: Props) => {
 
                                             {/* Actions */}
                                             <td>
+                                                {/* Phylogenetic tree */}
+                                                {!item.tree ? null : (
+                                                    <CopyToClipboard text={item.tree}
+                                                        onCopy={() => alert("Phylogenetic tree copied to clipboard.")}>
+                                                        <Button color="link" className="sm pr-0 py-0">
+                                                            <FontAwesomeIcon icon="copy" size="xs" data-tip="Copy phylogeny to clipboard" />
+                                                            <ReactTooltip />
+                                                        </Button>
+                                                    </CopyToClipboard>
+                                                )}
                                                 {/* Edit modal */}
                                                 <TreesModal
                                                     is_update={true}

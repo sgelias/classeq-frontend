@@ -2,10 +2,10 @@ import React from 'react';
 import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
 import { v4 as uuid } from 'uuid/interfaces';
 
-import { BaseTrees, Gene } from '../../../../_helpers/url-providers';
-import { treesActions as ta } from '../../_reducers/trees.actions';
-import { treesServices as ts } from '../_trees.services';
-import TreesForm from '../trees-form-single/TreesForm';
+import { BaseTrees, Gene } from '../../../_helpers/url-providers';
+import { treesActions as ta } from '../_reducers/trees.actions';
+import { treesServices as ts } from '../_services/_trees.services';
+import TreesForm from './TreesForm';
 
 
 interface Props {

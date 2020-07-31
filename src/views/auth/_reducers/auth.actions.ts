@@ -1,5 +1,5 @@
 import { authConstants } from './auth.constants';
-import { authService } from '../components/_auth.services';
+import { authService } from '../_services/_auth.services';
 import { alertActions } from '../../alerts/_reducers/alerts.actions';
 import { history } from '../../../_helpers/history';
 
