@@ -25,3 +25,7 @@ ul.suggestion-list {
         }
     }
 }
+
+details > summary::-webkit-details-marker {
+    display: none;
+}

@@ -12,7 +12,7 @@ interface Props {
 };
 
 
-const AutocompleteGeneInput = (props: Props) => {
+export default (props: Props) => {
 
 
     let is_selected: boolean = props.gene ? true : false;
@@ -108,7 +108,4 @@ const AutocompleteGeneInput = (props: Props) => {
                 )}
         </Downshift>
     )
-}
-
-
-export default AutocompleteGeneInput;
+};

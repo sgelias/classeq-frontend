@@ -1,9 +1,8 @@
 import React from 'react';
-import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid/interfaces';
 
-import { BaseTrees, Gene } from '../../../_helpers/url-providers';
-import { treesActions as ta } from '../_reducers/trees.actions';
+import { BaseTrees } from '../../../_helpers/url-providers';
 import { treesServices as ts } from '../_services/_trees.services';
 import TreesForm from './TreesForm';
 
@@ -14,13 +13,13 @@ interface Props {
 };
 
 
-const TreesCreate = (props: Props) => {
+export default (props: Props) => {
 
 
     const dispatch = useDispatch();
 
 
-    const record: BaseTrees = useSelector((state: RootStateOrAny) => ({}));
+    const record: BaseTrees = useSelector(() => ({}));
 
 
     const createTree = async (record: BaseTrees) => {
@@ -37,26 +36,6 @@ const TreesCreate = (props: Props) => {
     };
 
 
-    const handleGeneInput = (value: Gene) => {
-        try {
-            dispatch(ta.treesDetailsSuccess({ gene: value }));
-        } catch (err) {
-            dispatch(ta.treesDetailsFail(err));
-        };
-    };
-
-
-    const handleChange = (input: any) => {
-        return (event: any) => {
-            try {
-                dispatch(ta.treesDetailsSuccess({ [input]: event.target.value }));
-            } catch (err) {
-                dispatch(ta.treesDetailsFail(err));
-            };
-        }
-    };
-
-
     return (
         <TreesForm
             title={record.title}
@@ -64,12 +43,7 @@ const TreesCreate = (props: Props) => {
             gene={record.gene}
             tree={record.tree}
             related_tree={record.related_tree}
-            handleChange={handleChange}
             handleSubmit={handleSubmit}
-            handleGeneInput={handleGeneInput}
         />
     )
 };
-
-
-export default TreesCreate;

@@ -18,21 +18,18 @@ interface Props extends BaseTrees, CreatedTrees {
 }
 
 
-const TreesModal = (props: Props) => {
+export default (props: Props) => {
 
 
-    const { className, is_update, tree_id } = props;
-
-
-    const [ modal, setModal ] = useState(false);
+    const [modal, setModal] = useState(false);
 
 
     const toggle = () => setModal(!modal);
 
 
     const getComponent = () => {
-        if (is_update) {
-            return <TreesUpdate project_id={props.project_id} tree_id={tree_id} toggle={toggle} />;
+        if (props.is_update) {
+            return <TreesUpdate project_id={props.project_id} tree_id={props.tree_id} toggle={toggle} />;
         };
 
         return <TreesCreate project_id={props.project_id} toggle={toggle} />;
@@ -40,7 +37,7 @@ const TreesModal = (props: Props) => {
 
 
     const setActionType = () => {
-        if (is_update) {
+        if (props.is_update) {
             return <FontAwesomeIcon icon="pencil-alt" />
         }
 
@@ -49,35 +46,33 @@ const TreesModal = (props: Props) => {
 
 
     return (
-        <span>
-            <Button 
-                color={ props.color  ? props.color : 'link'  } 
-                onClick={ toggle } 
-                className="sm py-0" 
-                data-tip="Edit record" 
+        <>
+            <Button
+                color={props.color ? props.color : 'link'}
+                onClick={toggle}
+                className="sm py-0"
+                data-tip="Edit record"
             >
-                { setActionType() }{ props?.label ? `${props?.label}` : null }
+                {setActionType()}{props?.label ? `${props?.label}` : null}
                 <ReactTooltip />
             </Button>
 
-            <Modal 
-                isOpen={ modal }
-                className={ className }
-                scrollable={ true }
+            <Modal
+                isOpen={modal}
+                className={props.className}
+                scrollable={true}
                 size="xl"
             >
-                <ModalHeader toggle={ toggle }>
+                <ModalHeader toggle={toggle}>
                     <span className="text-muted">
                         Upload a new phylogenetic tree
                     </span>
                 </ModalHeader>
-                
+
                 <ModalBody>
-                    { getComponent() }
+                    {getComponent()}
                 </ModalBody>
             </Modal>
-        </span>
+        </>
     );
-}
-
-export default TreesModal;
+};

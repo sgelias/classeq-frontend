@@ -277,7 +277,9 @@ export interface BaseTrees {
  * Interface for also created trees. It would be used in tree lists, updates and
  * delete.
  */
-export interface CreatedTrees extends BaseTrees, CreatedRecords {}
+export interface CreatedTrees extends BaseTrees, CreatedRecords {
+    is_active?: boolean,
+}
 
 
 /**
