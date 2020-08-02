@@ -19,7 +19,7 @@ interface Props {
 };
 
 
-enum ViewType {
+enum ViewTypeEnum {
     List = 0,
     Details = 1,
 };
@@ -31,7 +31,7 @@ export default (props: Props) => {
     const dispatch = useDispatch();
 
 
-    const [activeView, setActiveView] = useState<ViewType>(0);
+    const [activeView, setActiveView] = useState<ViewTypeEnum>(0);
 
 
     const [animating, setAnimating] = useState<boolean>(false);
@@ -111,9 +111,9 @@ export default (props: Props) => {
                     <CardHeader>
                         <h3>
                             <FontAwesomeIcon icon="tree" size="xs" />
-                                &nbsp;&nbsp;&nbsp;
-                                Phylogenetic Trees
-                            </h3>
+                            &nbsp;&nbsp;&nbsp;
+                            Phylogenetic Trees
+                        </h3>
                     </CardHeader>
 
                     <CardBody className="pt-1">

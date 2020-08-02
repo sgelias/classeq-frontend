@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { CardTitle, CardText, Button, ListGroup, ListGroupItem } from 'reactstrap';
 import { v4 as uuid } from 'uuid/interfaces';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { treesActions as ta } from '../_reducers/trees.actions';
 import { treesServices as ts } from '../_services/_trees.services';
 import { CreatedTrees } from '../../../_helpers/url-providers';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trasher } from '../../shared';
 
 
@@ -31,11 +31,9 @@ export default (props: Props) => {
 
 
     const toogleAdvancedOptions = (value?: boolean): void => {
-        if (value !== undefined) {
-            setAdvancedOptions(value);
-        } else {
-            setAdvancedOptions(!advancedOptions);
-        }
+        value !== undefined
+            ? setAdvancedOptions(value)
+            : setAdvancedOptions(!advancedOptions);
     };
 
 
@@ -48,6 +46,15 @@ export default (props: Props) => {
             .then(() => dispatch(ta.treesUpdateSuccess(record)))
             .then(() => dispatch(ta.treesDetailsPending(false)))
             .catch(err => dispatch(ta.treesDetailsFail(err)));
+    };
+
+
+    const deleteRecord = async (): Promise<void> => {
+        if (record.uuid) {
+            await ts.deleteRecord(props.project_id, record.uuid)
+                .then(async () => await ts.list(props.project_id, dispatch))
+                .then(() => props.setList());
+        }
     };
 
 
@@ -66,7 +73,11 @@ export default (props: Props) => {
             <hr/>
 
             <div>
-                <Button onClick={() => toogleAdvancedOptions()} color="link" className="py-0 px-1">
+                <Button 
+                    onClick={() => toogleAdvancedOptions()} 
+                    color="link" 
+                    className="py-0 px-1"
+                >
                     Advanced options
                 </Button>
 
@@ -102,6 +113,7 @@ export default (props: Props) => {
                         </ListGroupItem>
                         <Trasher
                             trashMethod={trashRecord}
+                            deleteMethod={deleteRecord}
                             label={record.title}
                             record_status={record.is_active}
                         />

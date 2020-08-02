@@ -23,8 +23,7 @@ export default (props: Props) => {
 
 
     const createTree = async (record: BaseTrees) => {
-        await ts.create(props.project_id, record)
-            .then(res => console.log(res));
+        await ts.create(props.project_id, record);
     };
 
 

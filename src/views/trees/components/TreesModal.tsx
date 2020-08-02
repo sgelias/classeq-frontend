@@ -15,7 +15,7 @@ interface Props extends BaseTrees, CreatedTrees {
     is_update?: boolean,
     label?: string,
     color?: string,
-}
+};
 
 
 export default (props: Props) => {

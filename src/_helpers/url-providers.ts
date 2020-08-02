@@ -225,7 +225,7 @@ export const provideProjectsUrl = (method: Method, args: HttpQueryParams): Custo
         case "DELETE":
             return request = { ...request, ...{
                 method: method,
-                url: `${baseUrl}/projs/${args.data.uuid}/delete`,
+                url: `${baseUrl}/projs/${args.id}/delete`,
             }};
         
         default: 
@@ -341,7 +341,7 @@ export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQuer
         case "DELETE":
             return request = { ...request, ...{
                 method: method,
-                url: `${baseUrl}/${project_pk}/trees/${args.data.uuid}/delete`,
+                url: `${baseUrl}/${project_pk}/trees/${args.id}/delete`,
             }};
         
         default: 
