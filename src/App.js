@@ -2,8 +2,8 @@ import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import { store } from './_helpers/store';
-import { history } from './_helpers/history';
+import { store } from './_helpers/_store';
+import { history } from './_helpers/_history';
 import DashboardLayout from './layouts/DashboardLayout';
 import './vibe/scss/styles.scss';
 

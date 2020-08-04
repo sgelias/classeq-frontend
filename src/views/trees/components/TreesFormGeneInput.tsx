@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Downshift from 'downshift'
 import { Badge, Input, Label } from 'reactstrap';
 
-import { Gene } from '../../../_helpers/url-providers';
+import { Gene } from '../../../_helpers/_url-providers';
 import { treesServices as ts } from '../_services/_trees.services';
 
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 
 import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
-import { BaseProject } from '../../../_helpers/url-providers';
+import { BaseProject } from '../../../_helpers/_url-providers';
 import ProjectsForm from './ProjectsForm';
 import { projectServices as ps } from '../_services/_projects.services';
 import { RouteComponentProps } from 'react-router-dom';

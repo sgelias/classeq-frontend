@@ -8,7 +8,7 @@ import {
     ListResponseInterface,
     ProjectsListObjects,
     provideProjectsUrl,
-} from '../../../_helpers/url-providers';
+} from '../../../_helpers/_url-providers';
 
 
 /**

@@ -1,0 +1,19 @@
+.clades-card {
+    max-height: 750px;
+    overflow-y: scroll;
+
+    td {
+
+        &.not-null-cell {
+            background: #e4eeff !important;
+        }
+
+        &.selected {
+            background: red;
+        }
+    }
+    
+    table.tableBodyScroll tbody {
+        overflow-y: scroll;
+    }
+}

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useAsyncEffect } from 'use-async-effect';
 import { v4 as uuid } from 'uuid/interfaces';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
-import { Carousel, CarouselItem } from 'reactstrap';
+import { Carousel, CarouselItem, Button } from 'reactstrap';
 import { Alert, Col, Card, CardBody, CardFooter, CardHeader, Row } from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { CreatedTrees } from '../../../_helpers/url-providers';
-import { treesActions as ta } from '../_reducers/trees.actions';
+import { CreatedTrees } from '../../../_helpers/_url-providers';
+import { treesActions as ta } from '../_reducers/_trees.actions';
 import { treesServices as ts } from '../_services/_trees.services';
 import TreesListItems from './TreesListItems';
 import TreesModal from './TreesModal';
@@ -49,7 +49,6 @@ export default (props: Props) => {
 
     const setList = (): void => {
         if (animating) return;
-        console.log("List");
         setActiveView(0);
     };
 
@@ -100,19 +99,26 @@ export default (props: Props) => {
     ];
 
 
-    return !trees ? null : (
+    return trees && (
         <Row>
-            <Col
-                md={{ size: 12, offset: 0 }}
-                lg={{ size: 10, offset: 1 }}
-                xl={{ size: 8, offset: 2 }}
-            >
+            <Col>
                 <Card>
                     <CardHeader>
                         <h3>
                             <FontAwesomeIcon icon="tree" size="xs" />
                             &nbsp;&nbsp;&nbsp;
                             Phylogenetic Trees
+
+                            {activeView === 1 && (
+                                <Button
+                                    onClick={() => setList()}
+                                    color="link float-right"
+                                >
+                                    <FontAwesomeIcon icon="arrow-left" size="xs" />
+                                    &nbsp;&nbsp;&nbsp;
+                                    Go back
+                                </Button>
+                            )}
                         </h3>
                     </CardHeader>
 

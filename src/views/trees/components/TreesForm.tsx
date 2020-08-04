@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Card, CardBody, Col, Form, FormGroup, Label, Input, Row } from 'reactstrap';
 
-import { treesActions as ta } from '../_reducers/trees.actions';
-import { BaseTrees, CreatedTrees, Gene } from '../../../_helpers/url-providers';
+import { treesActions as ta } from '../_reducers/_trees.actions';
+import { BaseTrees, CreatedTrees, Gene } from '../../../_helpers/_url-providers';
 import TreesFormGeneInput from './TreesFormGeneInput';
 import { useDispatch } from 'react-redux';
 

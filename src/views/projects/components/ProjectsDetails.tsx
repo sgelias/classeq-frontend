@@ -2,16 +2,17 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { projectServices as ps } from '../_services/_projects.services';
-import { CreatedProject } from '../../../_helpers/url-providers';
+import { CreatedProject } from '../../../_helpers/_url-providers';
 import ProjectsDetailsView from './ProjectsDetailsView';
 import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
 import { TreesList } from '../../trees/index';
+import { CladesList } from '../../clades';
 
 
-interface State extends CreatedProject {}
+interface State extends CreatedProject { }
 
 
-interface Props extends RouteComponentProps {}
+interface Props extends RouteComponentProps { }
 
 
 export default class ProjectsDetails extends React.Component<Props, State> {
@@ -41,9 +42,13 @@ export default class ProjectsDetails extends React.Component<Props, State> {
         const { title, description, created, updated, user, uuid } = this.state;
 
         return (
-            <div>
-                <BreadcrumbsItemBuilder url={match.url} params={match.params} />
-                <ProjectsDetailsView 
+            <>
+                <BreadcrumbsItemBuilder 
+                    url={match.url} 
+                    params={match.params} 
+                />
+
+                <ProjectsDetailsView
                     title={title}
                     description={description}
                     created={created}
@@ -51,8 +56,13 @@ export default class ProjectsDetails extends React.Component<Props, State> {
                     user={user}
                     url={match.url}
                 />
-                <TreesList project_id={uuid} />
-            </div>
+
+                <TreesList
+                    project_id={uuid}
+                />
+
+                <CladesList />
+            </>
         )
     }
-}
+};

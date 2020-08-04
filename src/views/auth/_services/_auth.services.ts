@@ -4,7 +4,7 @@ import {
     provideAuthLoginUrl,
     AuthCredentials,
     CustomRequestConfig,
-} from '../../../_helpers/url-providers';
+} from '../../../_helpers/_url-providers';
 
 
 /**

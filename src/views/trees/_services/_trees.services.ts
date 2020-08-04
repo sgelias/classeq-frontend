@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { v4 as uuid } from 'uuid/interfaces';
 
-import { treesActions as ta } from '../_reducers/trees.actions';
+import { treesActions as ta } from '../_reducers/_trees.actions';
 import {
     BaseTrees,
     CreatedTrees,
@@ -10,13 +10,16 @@ import {
     ListResponseInterface,
     provideTreesUrl,
     provideGeneSearchUrl,
-} from "../../../_helpers/url-providers";
+    provideGetLeavesUrl,
+} from "../../../_helpers/_url-providers";
 
 
 /**
  * List all records.
  * 
  * @see `ListResponseInterface`
+ * @param project_pk A primary key of a reference project.
+ * @param dispacher A dispach object of redux.
  * @param params An object of type ListResponseInterface.
  */
 const list = async (project_pk: uuid, dispacher: any, params?: ListResponseInterface): Promise<void> => {
@@ -36,7 +39,8 @@ const list = async (project_pk: uuid, dispacher: any, params?: ListResponseInter
  * Get a single record.
  * 
  * @see `ListResponseInterface`
- * @param params An object of type ListResponseInterface.
+ * @param project_pk A primary key of a reference tree.
+ * @param id The tree primary key.
  */
 const get = async (project_pk: uuid, id: uuid): Promise<{ data: CreatedTrees }> => {
     let config: CustomRequestConfig = provideTreesUrl("GET", project_pk, { id: id });
@@ -47,6 +51,7 @@ const get = async (project_pk: uuid, id: uuid): Promise<{ data: CreatedTrees }> 
 /**
  * Create a new record.
  * 
+ * @param project_pk A primary key of a reference tree.
  * @param record An project object.
  */
 const create = async (project_pk: uuid, record: BaseTrees): Promise<CreatedTrees> => {
@@ -58,6 +63,7 @@ const create = async (project_pk: uuid, record: BaseTrees): Promise<CreatedTrees
 /**
  * Update an existent record.
  * 
+ * @param project_pk A primary key of a reference tree.
  * @param record An project object.
  */
 const update = async (project_pk: uuid, record: CreatedTrees): Promise<CreatedTrees> => {
@@ -69,6 +75,7 @@ const update = async (project_pk: uuid, record: CreatedTrees): Promise<CreatedTr
 /**
  * Delete a single record.
  * 
+ * @param project_pk A primary key of a reference tree.
  * @param id The uuid of the records to be deleted.
  */
 const deleteRecord = async (project_pk: uuid, id: uuid): Promise<any> => {
@@ -88,6 +95,18 @@ const searchGene = async (term: string): Promise<{ data: GeneListObjects }> => {
 };
 
 
+/**
+ * Get all leaves of a specified tree.
+ * 
+ * @param project_pk A primary key of a reference tree.
+ * @param id The uuid of the records to be deleted.
+ */
+const getLeaves = async (project_pk: uuid, id: uuid): Promise<any> => {
+    let config: CustomRequestConfig = provideGetLeavesUrl(project_pk, { id: id });
+    return await axios(config);
+};
+
+
 export const treesServices = {
     list,
     get,
@@ -95,4 +114,5 @@ export const treesServices = {
     update,
     deleteRecord,
     searchGene,
+    getLeaves,
 };

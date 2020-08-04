@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreatedProject } from '../../_helpers/url-providers';
+import { CreatedProject } from '../../_helpers/_url-providers';
 
 
 interface Props extends CreatedProject {}

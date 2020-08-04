@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Col, Row, Card, CardBody } from 'reactstrap';
 
-import { AuthCredentials } from '../../../_helpers/url-providers';
+import { AuthCredentials } from '../../../_helpers/_url-providers';
 
 
 interface Auth extends AuthCredentials {

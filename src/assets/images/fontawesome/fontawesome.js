@@ -6,7 +6,11 @@ import {
     faTree,
     faCopy,
     faCog,
-    faArrowLeft
+    faArrowLeft,
+    faLeaf,
+    faCodeBranch,
+    faAngleDoubleRight,
+    faAngleDoubleLeft,
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -18,4 +22,8 @@ library.add(
     faCopy,
     faCog,
     faArrowLeft,
+    faLeaf,
+    faCodeBranch,
+    faAngleDoubleRight,
+    faAngleDoubleLeft,
 );

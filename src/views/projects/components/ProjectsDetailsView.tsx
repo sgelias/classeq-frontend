@@ -4,18 +4,14 @@ import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Dates, UserCredentials } from '../../shared/index';
-import { CreatedProject } from '../../../_helpers/url-providers';
+import { CreatedProject } from '../../../_helpers/_url-providers';
 
 
-const ProjectsDetailsView = (props: CreatedProject) => {
+export default (props: CreatedProject) => {
 
     return (
         <Row>
-            <Col 
-                md={{ size: 12, offset: 0 }} 
-                lg={{ size: 10, offset: 1 }} 
-                xl={{ size: 8, offset: 2 }}
-            >
+            <Col>
                 <Card>
                     <CardHeader>
                         <h3>
@@ -40,7 +36,4 @@ const ProjectsDetailsView = (props: CreatedProject) => {
             </Col>
         </Row>
     )
-}
-
-
-export default ProjectsDetailsView;
+};

@@ -1,6 +1,6 @@
 import { authConstants } from './auth.constants';
 import { authService as as } from '../_services/_auth.services';
-import { User } from '../../../_helpers/url-providers';
+import { User } from '../../../_helpers/_url-providers';
 
 
 let user: User = as.getToken();

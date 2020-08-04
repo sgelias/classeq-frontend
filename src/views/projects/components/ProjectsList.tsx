@@ -3,7 +3,7 @@ import { Row, Button, Col, Card, CardBody, CardFooter, CardText } from 'reactstr
 import { NavLink, RouteComponentProps } from 'react-router-dom';
 
 import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
-import { ProjectsListObjects } from '../../../_helpers/url-providers';
+import { ProjectsListObjects } from '../../../_helpers/_url-providers';
 import { projectServices as ps } from '../_services/_projects.services';
 import { Dates } from '../../shared/index';
 

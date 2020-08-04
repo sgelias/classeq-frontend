@@ -128,6 +128,51 @@ const buildParamsForLists = (qpars: any = {}) => {
 
 
 // *******************
+// Auth utilities.
+// *******************
+
+
+/**
+ * Interface for minimal credentials object.
+ */
+ export interface AuthCredentials {
+    username: string | undefined,
+    password: string | undefined,
+    submitted?: boolean,
+}
+
+
+/**
+ * Interface for payload variables (variables decoded from auth token).
+ */
+export interface Payload {
+    email: string,
+    exp: number,
+    orig_iat: number,
+    user_id: number,
+    username: string,
+}
+
+
+/**
+ * Provide a configured URL for create requests.
+ * 
+ * @see `AuthCredentials`
+ * @see `Method` from axios package.
+ * @param method An http method.
+ * @param data Data to be submited as a new record.
+ */
+export const provideAuthLoginUrl = (data: AuthCredentials): CustomRequestConfig => {
+    return {
+        method: "POST",
+        url: `${baseUrl}/auth/get-token/`,
+        headers: getCommonHeaders(),
+        data: data,
+    }
+}
+
+
+// *******************
 // User utilities.
 // *******************
 
@@ -301,6 +346,7 @@ export interface TreesListObjects extends ListResponseInterface {
  * @see `Method` from axios package.
  * @see `CustomRequestConfig` interface.
  * @param method A valid http verb of class Method from axios package.
+ * @param project_pk A project primary key.
  * @param args An Object containing specific params as 
  */
 export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
@@ -355,7 +401,7 @@ export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQuer
  * 
  * @param term A string containing a term to filter records.
  */
-export const provideGeneSearchUrl = (term: string): CustomRequestConfig => {
+ export const provideGeneSearchUrl = (term: string): CustomRequestConfig => {
     return {
         headers: getCommonHeaders(),
         method: "GET",
@@ -365,46 +411,81 @@ export const provideGeneSearchUrl = (term: string): CustomRequestConfig => {
 }
 
 
-// *******************
-// Auth utilities.
-// *******************
-
-
-/**
- * Interface for minimal credentials object.
- */
-export interface AuthCredentials {
-    username: string | undefined,
-    password: string | undefined,
-    submitted?: boolean,
-}
-
-
-/**
- * Interface for payload variables (variables decoded from auth token).
- */
-export interface Payload {
-    email: string,
-    exp: number,
-    orig_iat: number,
-    user_id: number,
-    username: string,
-}
-
-
-/**
- * Provide a configured URL for create requests.
- * 
- * @see `AuthCredentials`
- * @see `Method` from axios package.
- * @param method An http method.
- * @param data Data to be submited as a new record.
- */
-export const provideAuthLoginUrl = (data: AuthCredentials): CustomRequestConfig => {
+export const provideGetLeavesUrl = (project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
     return {
-        method: "POST",
-        url: `${baseUrl}/auth/get-token/`,
         headers: getCommonHeaders(),
-        data: data,
+        method: "GET",
+        url: `${baseUrl}/${project_pk}/trees/${args.id}/get-leaves`,
+    }
+}
+
+
+// *******************
+// Clades utilities.
+// *******************
+
+
+/**
+ * Interface for created clades.
+ */
+ export interface CreatedClades extends CreatedRecords {
+    tree?: uuid,
+    parent?: uuid,
+    branch_type?: string,
+    name?: string,
+    branch_length?: number,
+    confidence?: number,
+    child?: Array<uuid>,
+    is_valid?: boolean,
+    is_active?: boolean,
+    [key: string]: any,
+}
+
+
+/**
+ * Interface for Clades list.
+ */
+export interface CladesListObjects extends ListResponseInterface {
+    results: Array<CreatedClades>,
+    [key: string]: any,
+}
+
+
+/**
+ * Return an appropriated http config object of CustomRequestConfig
+ * type to be used in axios requests. See example below.
+ * 
+ * @example axios(provideProjectsUrl("GET", { id: id }))
+ * @see `getCommonHeaders` method.
+ * @see `buildParamsForLists` method.
+ * @see `Method` from axios package.
+ * @see `CustomRequestConfig` interface.
+ * @param method A valid http verb of class Method from axios package.
+ * @param tree_pk A tree primary key.
+ * @param args An Object containing specific params as 
+ */
+export const provideCladesUrl = (method: Method, tree_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
+    
+    let request: CustomRequestConfig = {
+        headers: getCommonHeaders(true),
+    };
+
+    switch (method) {
+        case "GET":
+            if (args.id && !args.query_params) {
+                return request = { ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/${tree_pk}/clades/${args.id}`,
+                }};
+            } else {
+                return request = { ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/${tree_pk}/clades/`,
+                    params: buildParamsForLists(args.query_params),
+                }};
+            };
+        
+        default: 
+            return request;
     }
 }

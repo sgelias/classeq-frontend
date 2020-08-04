@@ -1,5 +1,5 @@
-import { treesConstants } from './trees.constants';
-import { CreatedTrees } from '../../../_helpers/url-providers';
+import { treesConstants } from './_trees.constants';
+import { CreatedTrees } from '../../../_helpers/_url-providers';
 
 
 const treesListActions = {

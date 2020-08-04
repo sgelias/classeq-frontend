@@ -1,10 +1,17 @@
-import { treesConstants } from './trees.constants';
-import { TreesListObjects, CreatedTrees } from '../../../_helpers/url-providers';
+import { treesConstants } from './_trees.constants';
+import { TreesListObjects, CreatedTrees } from '../../../_helpers/_url-providers';
 
 
 // *******************
 // Initial state objects.
 // *******************
+
+
+interface CreatedTreesReducer {
+    record: CreatedTrees,
+    pending: boolean,
+    error: any,
+};
 
 
 const treesListInitialState: TreesListObjects = {
@@ -14,7 +21,7 @@ const treesListInitialState: TreesListObjects = {
 };
 
 
-const treesCreatedInitialState: CreatedTrees = {
+const treesCreatedInitialState: CreatedTreesReducer = {
     record: {},
     pending: false,
     error: null,

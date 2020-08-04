@@ -4,9 +4,11 @@ import { Button, Table, Badge } from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ReactTooltip from "react-tooltip";
+import { useDispatch } from 'react-redux';
 
 import { Dates } from '../../shared/index';
-import { CreatedTrees } from '../../../_helpers/url-providers';
+import { CreatedTrees } from '../../../_helpers/_url-providers';
+import { cladesServices as cs } from '../../clades/_services/_clades.services';
 import TreesModal from './TreesModal';
 
 
@@ -20,10 +22,18 @@ interface Props {
 export default (props: Props) => {
 
 
+    const dispatch = useDispatch();
+
+
     const max_text_size: number = 25;
 
 
-    return !props.trees ? null : (
+    const listClades = async (tree: uuid | undefined): Promise<void> => {
+        tree !== undefined && await cs.list(tree, dispatch);
+    };
+
+
+    return props.trees && (
         <Table hover>
 
             <thead>
@@ -41,7 +51,12 @@ export default (props: Props) => {
 
                         <td>
                             {/* Title */}
-                            {item.title}
+                            <Button
+                                onClick={() => listClades(item.uuid)}
+                                color="link"
+                            >
+                                {item.title}
+                            </Button>
 
                             <br />
 
@@ -71,7 +86,8 @@ export default (props: Props) => {
 
                         {/* Actions */}
                         <td>
-                            {/* Phylogenetic tree */}
+
+                            {/* Copy phylogenetic tree to clipboard */}
                             {!item.tree ? null : (
                                 <CopyToClipboard text={item.tree}
                                     onCopy={() => alert("Phylogenetic tree copied to clipboard.")}>
@@ -85,12 +101,15 @@ export default (props: Props) => {
                                     </Button>
                                 </CopyToClipboard>
                             )}
+
                             {/* Edit modal */}
                             <TreesModal
                                 is_update={true}
                                 tree_id={item.uuid}
                                 project_id={props.project_id}
                             />
+
+                            {/* Details and advanced options modal */}
                             <Button
                                 onClick={() => props.setItemDetails(item.uuid)}
                                 color="link"
@@ -102,6 +121,7 @@ export default (props: Props) => {
                                 />
                                 <ReactTooltip />
                             </Button>
+
                         </td>
                     </tr>
                 ))}

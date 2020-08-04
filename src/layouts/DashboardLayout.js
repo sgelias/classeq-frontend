@@ -19,7 +19,7 @@ export default class DashboardLayout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sidebarCollapsed: false,
+      sidebarCollapsed: true,
       isMobile: window.innerWidth <= MOBILE_SIZE,
       showChat1: true,
     };

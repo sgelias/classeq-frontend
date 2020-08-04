@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Col, Row, Card, CardBody } from 'reactstrap';
 
-import { BaseProject, CreatedProject } from '../../../_helpers/url-providers';
+import { BaseProject, CreatedProject } from '../../../_helpers/_url-providers';
 
 
 interface Project extends BaseProject, CreatedProject {

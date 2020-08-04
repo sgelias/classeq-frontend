@@ -6,7 +6,7 @@ import ReactTooltip from "react-tooltip";
 
 import TreesCreate from './TreesCreate';
 import TreesUpdate from './TreesUpdate';
-import { BaseTrees, CreatedTrees } from '../../../_helpers/url-providers';
+import { BaseTrees, CreatedTrees } from '../../../_helpers/_url-providers';
 
 
 interface Props extends BaseTrees, CreatedTrees {
@@ -28,20 +28,16 @@ export default (props: Props) => {
 
 
     const getComponent = () => {
-        if (props.is_update) {
-            return <TreesUpdate project_id={props.project_id} tree_id={props.tree_id} toggle={toggle} />;
-        };
-
-        return <TreesCreate project_id={props.project_id} toggle={toggle} />;
+        return props.is_update
+            ? <TreesUpdate project_id={props.project_id} tree_id={props.tree_id} toggle={toggle} />
+            : <TreesCreate project_id={props.project_id} toggle={toggle} />;
     };
 
 
     const setActionType = () => {
-        if (props.is_update) {
-            return <FontAwesomeIcon icon="pencil-alt" />
-        }
-
-        return <span><FontAwesomeIcon icon="plus" />&nbsp;&nbsp;</span>
+        return props.is_update
+            ? <FontAwesomeIcon icon="pencil-alt" />
+            : <span><FontAwesomeIcon icon="plus" />&nbsp;&nbsp;</span>;
     };
 
 

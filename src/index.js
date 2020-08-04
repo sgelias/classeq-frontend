@@ -4,7 +4,7 @@ import { ThroughProvider } from 'react-through'
 
 import * as serviceWorker from './registerServiceWorker';
 import App from './App';
-import { store } from './_helpers/store';
+import { store } from './_helpers/_store';
 import './assets/images/fontawesome/fontawesome';
 
 

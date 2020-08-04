@@ -2,8 +2,8 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
-import { CreatedProject } from '../../../_helpers/url-providers';
-import { history } from '../../../_helpers/history';
+import { CreatedProject } from '../../../_helpers/_url-providers';
+import { history } from '../../../_helpers/_history';
 import ProjectsForm from './ProjectsForm';
 import { projectServices as ps } from '../_services/_projects.services';
 

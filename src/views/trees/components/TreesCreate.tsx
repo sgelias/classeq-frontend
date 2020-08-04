@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid/interfaces';
 
-import { BaseTrees } from '../../../_helpers/url-providers';
+import { BaseTrees } from '../../../_helpers/_url-providers';
 import { treesServices as ts } from '../_services/_trees.services';
 import TreesForm from './TreesForm';
 

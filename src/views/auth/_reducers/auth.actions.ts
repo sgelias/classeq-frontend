@@ -1,7 +1,7 @@
 import { authConstants } from './auth.constants';
 import { authService } from '../_services/_auth.services';
 import { alertActions } from '../../alerts/_reducers/alerts.actions';
-import { history } from '../../../_helpers/history';
+import { history } from '../../../_helpers/_history';
 
 
 const login = (username: string, password: string) => {

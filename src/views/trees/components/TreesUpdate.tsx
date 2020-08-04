@@ -3,8 +3,8 @@ import { v4 as uuid } from 'uuid/interfaces';
 import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
 import { useAsyncEffect } from 'use-async-effect';
 
-import { CreatedTrees } from '../../../_helpers/url-providers';
-import { treesActions as ta } from '../_reducers/trees.actions';
+import { CreatedTrees } from '../../../_helpers/_url-providers';
+import { treesActions as ta } from '../_reducers/_trees.actions';
 import { treesServices as ts } from '../_services/_trees.services';
 import TreesForm from './TreesForm';
 

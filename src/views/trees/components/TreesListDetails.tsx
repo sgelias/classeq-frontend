@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
-import { CardTitle, CardText, Button, ListGroup, ListGroupItem } from 'reactstrap';
+import { CardText, Button, ListGroup } from 'reactstrap';
 import { v4 as uuid } from 'uuid/interfaces';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { treesActions as ta } from '../_reducers/trees.actions';
+import { treesActions as ta } from '../_reducers/_trees.actions';
 import { treesServices as ts } from '../_services/_trees.services';
-import { CreatedTrees } from '../../../_helpers/url-providers';
+import { CreatedTrees } from '../../../_helpers/_url-providers';
 import { Trasher } from '../../shared';
+import TreesListDetailsMapClades from './TreesListDetailsMapClades';
+import TreesListDetailsUploadAlignment from './TreesListDetailsUploadAlignment';
+import TreesListDetailsMapSequences from './TreesListDetailsMapSequences';
 
 
 interface Props {
@@ -62,55 +64,45 @@ export default (props: Props) => {
         <>
             <div>
                 <hr />
-                <CardTitle>
+                <CardText>
                     <span className="text-muted mr-2">Title:</span>{record.title}
-                </CardTitle>
+                </CardText>
                 <CardText>
                     <span className="text-muted mr-2">Description:</span>{record.description}
                 </CardText>
             </div>
 
-            <hr/>
+            <hr />
 
             <div>
-                <Button 
-                    onClick={() => toogleAdvancedOptions()} 
-                    color="link" 
+                <CardText>
+                    Validations
+                </CardText>
+                <ListGroup className="mt-3">
+                    {record.uuid && (
+                        <TreesListDetailsMapClades 
+                            project_id={props.project_id}
+                            tree_id={record.uuid}
+                        />
+                    )}
+                    <TreesListDetailsUploadAlignment />
+                    <TreesListDetailsMapSequences />
+                </ListGroup>
+            </div>
+
+            <br />
+
+            <div>
+                <Button
+                    onClick={() => toogleAdvancedOptions()}
+                    color="link"
                     className="py-0 px-1"
                 >
                     Advanced options
                 </Button>
 
-                <Button 
-                    onClick={() => {
-                        props.setList(); 
-                        toogleAdvancedOptions(false);
-                    }}
-                    color="link float-right" 
-                >
-                    <FontAwesomeIcon icon="arrow-left" size="xs" />
-                    &nbsp;&nbsp;&nbsp;
-                    Go back
-                </Button>
-
                 {advancedOptions && (
                     <ListGroup className="mt-3">
-                        <ListGroupItem>
-                            <details>
-                                <summary className="float-right">
-                                    <Button color="success" className="py-0 px-1">
-                                        Start mapping
-                                    </Button>
-                                </summary>
-                            </details>
-                            <strong>Map clades</strong>
-                            <hr />
-                            <p>
-                                Create clade representations ...<br />
-                                Internal nodes ...<br />
-                                Terminal Nodes ...
-                            </p>
-                        </ListGroupItem>
                         <Trasher
                             trashMethod={trashRecord}
                             deleteMethod={deleteRecord}
