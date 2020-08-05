@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
 import { v4 as uuid } from 'uuid/interfaces';
 
 import { BaseTrees } from '../../../_helpers/_url-providers';
@@ -19,7 +19,12 @@ export default (props: Props) => {
     const dispatch = useDispatch();
 
 
-    const record: BaseTrees = useSelector(() => ({}));
+    //const record: BaseTrees = useSelector(() => ({}));
+
+    
+    const record: BaseTrees = useSelector((state: RootStateOrAny) => (
+        state.treesDetailsReducer.record
+    ));
 
 
     const createTree = async (record: BaseTrees) => {
@@ -37,11 +42,6 @@ export default (props: Props) => {
 
     return (
         <TreesForm
-            title={record.title}
-            description={record.description}
-            gene={record.gene}
-            tree={record.tree}
-            related_tree={record.related_tree}
             handleSubmit={handleSubmit}
         />
     )

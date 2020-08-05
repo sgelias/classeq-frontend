@@ -53,11 +53,6 @@ export default (props: Props) => {
 
     return !record.uuid ? null : (
         <TreesForm
-            title={record.title}
-            description={record.description}
-            gene={record.gene}
-            tree={record.tree}
-            related_tree={record.related_tree}
             handleSubmit={handleSubmit}
         />
     )

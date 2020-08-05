@@ -37,8 +37,8 @@ export default (props: Props) => {
     const [animating, setAnimating] = useState<boolean>(false);
 
 
-    useAsyncEffect(async () => {
-        await ts.list(props.project_id, dispatch);
+    useAsyncEffect(() => {
+        ts.list(props.project_id, dispatch);
     }, []);
 
 

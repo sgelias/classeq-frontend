@@ -455,11 +455,36 @@ export const provideMapCladesUrl = (project_pk: uuid, args: HttpQueryParams): Cu
 }
 
 
+/**
+ * Provide url for test if outgroups are monophyletic.
+ * 
+ * @see `CustomRequestConfig` interface.
+ * @see `HttpQueryParams` interface.
+ * @param project_pk A project primary key.
+ * @param args An Object containing specific params as HttpQueryParams interface.
+ */
 export const provideTestCladesUrl = (project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
     return {
         headers: getCommonHeaders(true),
         method: "PATCH",
         url: `${baseUrl}/${project_pk}/trees/${args.id}/test-clade`,
+        data: args.data
+    }
+}
+
+
+/**
+ * Provide a url to send fasta file to be uploaded.
+ * 
+ * @see `CustomRequestConfig` interface.
+ * @see `HttpQueryParams` interface.
+ * @param args An Object containing specific params as HttpQueryParams interface.
+ */
+export const provideUploadAlignmentUrl = (args: HttpQueryParams): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "POST",
+        url: `${baseUrl}/seq/${args.id}/map-fasta`,
         data: args.data
     }
 }

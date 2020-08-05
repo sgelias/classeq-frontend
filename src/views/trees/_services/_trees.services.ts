@@ -13,6 +13,7 @@ import {
     provideGetLeavesUrl,
     provideMapCladesUrl,
     provideTestCladesUrl,
+    provideUploadAlignmentUrl,
 } from "../../../_helpers/_url-providers";
 
 
@@ -109,6 +110,13 @@ const getLeaves = async (project_pk: uuid, id: uuid): Promise<any> => {
 };
 
 
+/**
+ * Map tree clades to database representations.
+ * 
+ * @param project_pk A primary key of a reference tree.
+ * @param id The uuid of the target tree.
+ * @param data An array containing outgroups as strings.
+ */
 const mapClades = async (project_pk: uuid, id: uuid, data: Array<string>): Promise<any> => {
     let config: CustomRequestConfig = provideMapCladesUrl(project_pk, {
         id: id,
@@ -120,12 +128,32 @@ const mapClades = async (project_pk: uuid, id: uuid, data: Array<string>): Promi
 };
 
 
+/**
+ * Test outgroup monophyletism.
+ * 
+ * @param project_pk A primary key of a reference tree.
+ * @param id The uuid of the target tree.
+ * @param data An array containing outgroups as strings.
+ */
 const testClade = async (project_pk: uuid, id: uuid, data: Array<string>): Promise<any> => {
     let config: CustomRequestConfig = provideTestCladesUrl(project_pk, {
         id: id,
-        data: {
-            outgroup_list: data
-        }
+        data: { outgroup_list: data }
+    });
+    return await axios(config);
+};
+
+
+/**
+ * Send multiple sequence alignment to upload.
+ * 
+ * @param id The uuid of the target tree.
+ * @param data A fasta file as a string.
+ */
+const uploadAlignment = async (id: uuid, data: string): Promise<any> => {
+    let config: CustomRequestConfig = provideUploadAlignmentUrl({
+        id: id,
+        data: { fasta: data }
     });
     return await axios(config);
 };
@@ -141,4 +169,5 @@ export const treesServices = {
     getLeaves,
     mapClades,
     testClade,
+    uploadAlignment,
 };

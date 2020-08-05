@@ -3,9 +3,11 @@ import { ListGroup, ListGroupItem, Button, Modal, ModalBody, Input, FormGroup, F
 import { v4 as uuid } from 'uuid/interfaces';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { treesActions as ta } from '../_reducers/_trees.actions';
 import { treesServices as ts } from '../_services/_trees.services';
 import { CreatedTrees } from '../../../_helpers/_url-providers';
-import { useSelector, RootStateOrAny } from 'react-redux';
+import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
+import { useAsyncEffect } from 'use-async-effect';
 
 
 interface Props {
@@ -23,13 +25,16 @@ enum ViewTypeEnum {
 export default (props: Props) => {
 
 
+    const dispatch = useDispatch();
+
+
     const [modal, setModal] = useState(false);
 
 
     const [leaves, setLeaves] = useState<Array<string>>([]);
 
 
-    const [outgroupList, setOutgroupList] = useState<Array<string>>([])
+    const [outgroupList, setOutgroupList] = useState<Array<string>>([]);
 
 
     const [activeView, setActiveView] = useState<ViewTypeEnum>(0);
@@ -44,12 +49,26 @@ export default (props: Props) => {
     const [validatingClade, setValidatingClade] = useState<boolean>(false);
 
 
-    let [term, setTerm] = useState<string>('');
+    const [mappingClades, setMappingClades] = useState<boolean>(false);
+
+
+    const [term, setTerm] = useState<string>('');
 
 
     const record: CreatedTrees = useSelector((state: RootStateOrAny) => (
         state.treesDetailsReducer.record
     ));
+
+
+    const trees: Array<CreatedTrees> = useSelector((state: RootStateOrAny) => (
+        state.treesListReducer.results
+    ));
+
+
+    useAsyncEffect(() => {
+        const updatedRecord = trees.filter(item => item.uuid === record.uuid);
+        dispatch(ta.treesDetailsSuccess(updatedRecord[0]));
+    }, [trees]);
 
 
     const toggle = () => setModal(!modal);
@@ -81,8 +100,17 @@ export default (props: Props) => {
 
 
     const mapClades = () => {
+        setMappingClades(true);
         ts.mapClades(props.project_id, props.tree_id, outgroupList)
-            .then(res => console.log(res));
+            .then(() => setMappingClades(false))
+            .then(() => updateTreesListAndDetailsStatus())
+            .then(() => toggle())
+            .catch(err => console.log(err));
+    };
+
+
+    const updateTreesListAndDetailsStatus = async () => {
+        await ts.list(props.project_id, dispatch);
     };
 
 
@@ -219,8 +247,11 @@ export default (props: Props) => {
                             color="primary"
                             className="float-right btn-block"
                             onClick={mapClades}
+                            disabled={mappingClades}
                         >
-                            Map clades
+                            {!mappingClades
+                                ? "Map clades"
+                                : <Spinner type="grow" color="light" />}
                         </Button>
                     </p>
                 </Jumbotron>
