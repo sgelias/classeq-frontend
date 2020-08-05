@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
-import { ListGroup, ListGroupItem, Button, Modal, ModalBody, Input, FormGroup, Form } from 'reactstrap';
+import { ListGroup, ListGroupItem, Button, Modal, ModalBody, Input, FormGroup, Form, Badge, Carousel, CarouselItem, Jumbotron, Spinner } from 'reactstrap';
 import { v4 as uuid } from 'uuid/interfaces';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { treesServices as ts } from '../_services/_trees.services';
+import { CreatedTrees } from '../../../_helpers/_url-providers';
+import { useSelector, RootStateOrAny } from 'react-redux';
 
 
 interface Props {
     project_id: uuid,
     tree_id: uuid,
+};
+
+
+enum ViewTypeEnum {
+    List = 0,
+    Details = 1,
 };
 
 
@@ -24,10 +32,38 @@ export default (props: Props) => {
     const [outgroupList, setOutgroupList] = useState<Array<string>>([])
 
 
+    const [activeView, setActiveView] = useState<ViewTypeEnum>(0);
+
+
+    const [animating, setAnimating] = useState<boolean>(false);
+
+
+    const [canProceed, setCanProceed] = useState<boolean>(false);
+
+
+    const [validatingClade, setValidatingClade] = useState<boolean>(false);
+
+
     let [term, setTerm] = useState<string>('');
 
 
+    const record: CreatedTrees = useSelector((state: RootStateOrAny) => (
+        state.treesDetailsReducer.record
+    ));
+
+
     const toggle = () => setModal(!modal);
+
+
+    const goToMap = (): void => {
+        if (animating) return;
+        setActiveView(1);
+    };
+
+
+    const goToOutgroupSelection = (): void => {
+        setActiveView(0);
+    };
 
 
     const getLeaves = () => {
@@ -36,28 +72,59 @@ export default (props: Props) => {
     };
 
 
-    const selectModal = (
-        <Modal
-            isOpen={modal}
-            className="success"
-            scrollable={true}
-            size="xl"
+    const testClade = () => {
+        ts.testClade(props.project_id, props.tree_id, outgroupList)
+            .then(() => setCanProceed(true))
+            .then(() => setValidatingClade(false))
+            .catch(err => alert(err.data));
+    };
+
+
+    const mapClades = () => {
+        ts.mapClades(props.project_id, props.tree_id, outgroupList)
+            .then(res => console.log(res));
+    };
+
+
+    const modalValidationScreen = (
+        <CarouselItem
+            key={0}
+            onExiting={() => setAnimating(true)}
+            onExited={() => setAnimating(false)}
         >
             <div className="mb-2 p-3">
                 <div className="mb-3">
                     <Button
-                        color="link"
+                        color="danger"
                         onClick={() => toggle()}
                     >
                         &times;&nbsp;&nbsp;Cancel
                     </Button>
-                    <Button
-                        color="link"
-                        className="float-right"
-                        onClick={() => console.log("next")}
-                    >
-                        Next&nbsp;&nbsp;<FontAwesomeIcon icon="angle-double-right" />
-                    </Button>
+
+                    {canProceed
+                        ? (
+                            <Button
+                                color="success"
+                                className="float-right"
+                                onClick={() => goToMap()}
+                            >
+                                Next&nbsp;&nbsp;<FontAwesomeIcon icon="angle-double-right" />
+                            </Button>
+                        ) : (
+                            <Button
+                                color="warning"
+                                className="float-right"
+                                onClick={() => {
+                                    setValidatingClade(true)
+                                    testClade()
+                                }}
+                            >
+                                {!validatingClade
+                                    ? "Test clade"
+                                    : <Spinner type="grow" color="light" />}
+                            </Button>
+                        )
+                    }
                 </div>
 
                 <Form >
@@ -73,24 +140,38 @@ export default (props: Props) => {
                 </Form>
 
                 <div>
-                    {outgroupList.map((item, index) => (
-                        <Button
-                            key={index}
-                            onClick={() => {
-                                setOutgroupList([
-                                    ...outgroupList.filter(element => element !== item)
-                                ]);
-                            }}
-                            color="primary"
-                            className="m-1 py-0 px-1">
-                            {item}&nbsp;&nbsp;&times;
-                        </Button>
-                    ))}
+                    <span className="text-muted">
+                        Selected outgroups&nbsp;
+                        <Badge color="light">
+                            ({outgroupList.length})
+                        </Badge>:<br />
+                    </span>
+                    <div className="selection-box border bg-light-grey p-2">
+                        {outgroupList.length === 0
+                            ? (
+                                <span className="text-muted">
+                                    No outgroups selected
+                                </span>
+                            ) : (
+                                outgroupList.map((item, index) => (
+                                    <Button
+                                        key={index}
+                                        onClick={() => {
+                                            setOutgroupList([
+                                                ...outgroupList.filter(element => element !== item)
+                                            ]);
+                                        }}
+                                        color="secondary"
+                                        className="m-1 py-0 px-1 border">
+                                        {item}&nbsp;&nbsp;&times;
+                                    </Button>
+                                )))}
+                    </div>
                 </div>
             </div>
 
             <ModalBody className="border">
-                <ListGroup>
+                <ListGroup flush>
                     {leaves
                         .filter(item => item.toLowerCase().includes(term.toLowerCase()))
                         .map((item, index) => (
@@ -107,6 +188,62 @@ export default (props: Props) => {
                         ))}
                 </ListGroup>
             </ModalBody>
+        </CarouselItem>
+    );
+
+
+    const modalConfirmationScreen = (
+        <CarouselItem
+            key={1}
+            onExiting={() => setAnimating(true)}
+            onExited={() => setAnimating(false)}
+        >
+            <div className="mb-2 p-3">
+                <Button
+                    color="success"
+                    className="mb-3"
+                    onClick={() => goToOutgroupSelection()}
+                >
+                    <FontAwesomeIcon icon="angle-double-left" />
+                    &nbsp;&nbsp;Previous
+                </Button>
+                <Jumbotron>
+                    <p className="lead text-center">
+                        To start clades mapping click in "Map clades" button. This process can take a time.
+                        Do not reload the page before the process is finished.
+                    </p>
+                    <hr className="my-2" />
+                    <p className="text-center">After start the process can't be stoped!</p>
+                    <p className="lead">
+                        <Button
+                            color="primary"
+                            className="float-right btn-block"
+                            onClick={mapClades}
+                        >
+                            Map clades
+                        </Button>
+                    </p>
+                </Jumbotron>
+            </div>
+        </CarouselItem>
+    );
+
+
+    const selectModal = (
+        <Modal
+            isOpen={modal}
+            className="success"
+            scrollable={true}
+            size="xl"
+        >
+            <Carousel
+                activeIndex={activeView}
+                next={() => { }}
+                previous={() => { }}
+                interval={false}
+            >
+                {[modalValidationScreen, modalConfirmationScreen]}
+            </Carousel>
         </Modal>
     );
 
@@ -115,15 +252,22 @@ export default (props: Props) => {
         <ListGroupItem>
             <details>
                 <summary className="float-right">
-                    <Button
-                        onClick={() => {
-                            toggle();
-                            getLeaves();
-                        }}
-                        color="primary"
-                        className="py-0 px-1">
-                        Map clades
-                    </Button>
+                    {record.tree_utils?.map_clade_status
+                        ? (
+                            <Badge color="light">
+                                <FontAwesomeIcon icon="check" color="green" />
+                            </Badge>
+                        ) : (
+                            <Button
+                                onClick={() => {
+                                    toggle();
+                                    getLeaves();
+                                }}
+                                color="primary"
+                                className="py-0 px-1">
+                                Map clades
+                            </Button>
+                        )}
                     {selectModal}
                 </summary>
             </details>

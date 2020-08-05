@@ -11,6 +11,8 @@ import {
     faCodeBranch,
     faAngleDoubleRight,
     faAngleDoubleLeft,
+    faCheck,
+    faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -26,4 +28,6 @@ library.add(
     faCodeBranch,
     faAngleDoubleRight,
     faAngleDoubleLeft,
+    faCheck,
+    faTimes,
 );

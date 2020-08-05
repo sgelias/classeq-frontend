@@ -7,6 +7,7 @@ import { history } from './_helpers/_history';
 import DashboardLayout from './layouts/DashboardLayout';
 import './vibe/scss/styles.scss';
 
+
 export default function App() {
   return (
     <Provider store={store}>

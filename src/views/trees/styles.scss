@@ -29,3 +29,8 @@ ul.suggestion-list {
 details > summary::-webkit-details-marker {
     display: none;
 }
+
+.selection-box {
+    max-height: 150px;
+    overflow-y: auto;
+}

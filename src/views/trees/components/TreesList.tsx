@@ -47,13 +47,13 @@ export default (props: Props) => {
     ));
 
 
-    const setList = (): void => {
+    const goToItemList = (): void => {
         if (animating) return;
         setActiveView(0);
     };
 
 
-    const setItemDetails = (id: uuid): void => {
+    const goToItemDetails = (id: uuid): void => {
         if (animating) return;
         const record = trees.filter(item => item.uuid === id);
         dispatch(ta.treesDetailsSuccess(record[0]));
@@ -80,7 +80,7 @@ export default (props: Props) => {
                 <TreesListItems
                     project_id={props.project_id}
                     trees={trees}
-                    setItemDetails={setItemDetails}
+                    setItemDetails={goToItemDetails}
                 />
             </CarouselItem>
         ),
@@ -91,7 +91,7 @@ export default (props: Props) => {
                 onExited={() => setAnimating(false)}
             >
                 <TreesListDetails
-                    setList={setList}
+                    setList={goToItemList}
                     project_id={props.project_id}
                 />
             </CarouselItem>
@@ -111,7 +111,7 @@ export default (props: Props) => {
 
                             {activeView === 1 && (
                                 <Button
-                                    onClick={() => setList()}
+                                    onClick={() => goToItemList()}
                                     color="link float-right"
                                 >
                                     <FontAwesomeIcon icon="arrow-left" size="xs" />

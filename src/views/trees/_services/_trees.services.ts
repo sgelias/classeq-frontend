@@ -11,6 +11,8 @@ import {
     provideTreesUrl,
     provideGeneSearchUrl,
     provideGetLeavesUrl,
+    provideMapCladesUrl,
+    provideTestCladesUrl,
 } from "../../../_helpers/_url-providers";
 
 
@@ -107,6 +109,28 @@ const getLeaves = async (project_pk: uuid, id: uuid): Promise<any> => {
 };
 
 
+const mapClades = async (project_pk: uuid, id: uuid, data: Array<string>): Promise<any> => {
+    let config: CustomRequestConfig = provideMapCladesUrl(project_pk, {
+        id: id,
+        data: {
+            outgroup_list: data
+        }
+    });
+    return await axios(config);
+};
+
+
+const testClade = async (project_pk: uuid, id: uuid, data: Array<string>): Promise<any> => {
+    let config: CustomRequestConfig = provideTestCladesUrl(project_pk, {
+        id: id,
+        data: {
+            outgroup_list: data
+        }
+    });
+    return await axios(config);
+};
+
+
 export const treesServices = {
     list,
     get,
@@ -115,4 +139,6 @@ export const treesServices = {
     deleteRecord,
     searchGene,
     getLeaves,
+    mapClades,
+    testClade,
 };

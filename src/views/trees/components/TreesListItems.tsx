@@ -33,6 +33,13 @@ export default (props: Props) => {
     };
 
 
+    const getStatus = (item: boolean | undefined) => (
+        item
+            ? <FontAwesomeIcon icon="check" color="green" />
+            : <FontAwesomeIcon icon="times" color="red" />
+    );
+
+
     return props.trees && (
         <Table hover>
 
@@ -51,12 +58,42 @@ export default (props: Props) => {
 
                         <td>
                             {/* Title */}
-                            <Button
-                                onClick={() => listClades(item.uuid)}
-                                color="link"
-                            >
-                                {item.title}
-                            </Button>
+                            {(
+                                item?.tree_utils?.map_clade_status &&
+                                item?.tree_utils?.upload_sequences_status &&
+                                item?.tree_utils?.map_features_status
+                            )
+                                ? (
+                                    <Button
+                                        color="link"
+                                        className="p-0"
+                                        onClick={() => listClades(item.uuid)}
+                                    >
+                                        {item.title}
+                                    </Button>
+                                ) : (
+                                    item.title
+                                )}
+                            
+                            {/* Status badge */}
+                            <Badge
+                                color="light"
+                                className="float-right border"
+                                data-tip={!(
+                                    item?.tree_utils?.map_clade_status &&
+                                    item?.tree_utils?.upload_sequences_status &&
+                                    item?.tree_utils?.map_features_status
+                                )
+                                    ? "You have not concluded all validations. Go to tree details and validations window to solve this."
+                                    : "All validations were concluded."}>
+                                <small>Status</small><br />
+                                {getStatus(item?.tree_utils?.map_clade_status)}
+                                &nbsp;&nbsp;
+                                {getStatus(item?.tree_utils?.upload_sequences_status)}
+                                &nbsp;&nbsp;
+                                {getStatus(item?.tree_utils?.map_features_status)}
+                                <ReactTooltip />
+                            </Badge>
 
                             <br />
 

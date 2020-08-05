@@ -305,6 +305,13 @@ export interface GeneListObjects extends ListResponseInterface {
 }
 
 
+export interface TreesValidationSteps {
+    map_clade_status?: boolean,
+    upload_sequences_status?: boolean,
+    map_features_status?: boolean,
+}
+
+
 /**
  * Interface for not also created trees. It would be used in creation forms.
  */
@@ -314,6 +321,7 @@ export interface BaseTrees {
     gene?: Gene | undefined,
     tree?: string,
     related_tree?: any,
+    tree_utils?: TreesValidationSteps,
     [key: string]: any,
 }
 
@@ -345,9 +353,10 @@ export interface TreesListObjects extends ListResponseInterface {
  * @see `buildParamsForLists` method.
  * @see `Method` from axios package.
  * @see `CustomRequestConfig` interface.
+ * @see `HttpQueryParams` interface.
  * @param method A valid http verb of class Method from axios package.
  * @param project_pk A project primary key.
- * @param args An Object containing specific params as 
+ * @param args An Object containing specific params as HttpQueryParams interface.
  */
 export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
     
@@ -411,11 +420,47 @@ export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQuer
 }
 
 
+/**
+ * Get all clades of a specific phylogenetic tree.
+ * 
+ * @see `CustomRequestConfig` interface.
+ * @see `HttpQueryParams` interface.
+ * @param project_pk A project primary key.
+ * @param args An Object containing specific params as HttpQueryParams interface.
+ */
 export const provideGetLeavesUrl = (project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
     return {
-        headers: getCommonHeaders(),
+        headers: getCommonHeaders(true),
         method: "GET",
         url: `${baseUrl}/${project_pk}/trees/${args.id}/get-leaves`,
+    }
+}
+
+
+/**
+ * Map clades of tree.
+ * 
+ * @see `CustomRequestConfig` interface.
+ * @see `HttpQueryParams` interface.
+ * @param project_pk A project primary key.
+ * @param args An Object containing specific params as HttpQueryParams interface.
+ */
+export const provideMapCladesUrl = (project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "PATCH",
+        url: `${baseUrl}/${project_pk}/trees/${args.id}/map-clades`,
+        data: args.data
+    }
+}
+
+
+export const provideTestCladesUrl = (project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "PATCH",
+        url: `${baseUrl}/${project_pk}/trees/${args.id}/test-clade`,
+        data: args.data
     }
 }
 
