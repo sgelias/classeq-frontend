@@ -1,14 +1,13 @@
+import { Badge, Button, Carousel, CarouselItem, Form, FormGroup, Input, Jumbotron, ListGroup, ListGroupItem, Modal, ModalBody, Spinner } from 'reactstrap';
 import React, { useState } from 'react';
-import { ListGroup, ListGroupItem, Button, Modal, ModalBody, Input, FormGroup, Form, Badge, Carousel, CarouselItem, Jumbotron, Spinner } from 'reactstrap';
-import { v4 as uuid } from 'uuid/interfaces';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
+import { CreatedTrees } from '../../../_helpers/_url-providers';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { treesActions as ta } from '../_reducers/_trees.actions';
 import { treesServices as ts } from '../_services/_trees.services';
-import { CreatedTrees } from '../../../_helpers/_url-providers';
-import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { useAsyncEffect } from 'use-async-effect';
-
+import { v4 as uuid } from 'uuid/interfaces';
 
 interface Props {
     project_id: uuid,
@@ -81,8 +80,9 @@ export default (props: Props) => {
 
 
     const goToOutgroupSelection = (): void => {
+        if (animating) return;
         setActiveView(0);
-    };
+    }
 
 
     const getLeaves = () => {
@@ -155,7 +155,7 @@ export default (props: Props) => {
                     }
                 </div>
 
-                <Form >
+                <Form>
                     <FormGroup>
                         <Input
                             type="text"

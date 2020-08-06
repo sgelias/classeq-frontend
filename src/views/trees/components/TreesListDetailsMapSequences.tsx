@@ -1,11 +1,27 @@
-import React from 'react';
-import { ListGroupItem, Button } from 'reactstrap';
+import { Badge, Button, ListGroupItem, Modal, Spinner } from 'reactstrap';
+import React, { useState } from 'react';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import { CreatedTrees } from '../../../_helpers/_url-providers';
-import { useSelector, RootStateOrAny } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { treesServices as ts } from '../_services/_trees.services';
+import { v4 as uuid } from 'uuid/interfaces';
+
+interface Props {
+    project_id: uuid
+};
 
 
-export default () => {
+export default (props: Props) => {
+
+
+    const dispatch = useDispatch();
+
+
+    const [modal, setModal] = useState(false);
+
+
+    const [generatingSequenceFeatures, setGeneratingSequenceFeatures] = useState<boolean>(false);
 
 
     const record: CreatedTrees = useSelector((state: RootStateOrAny) => (
@@ -13,20 +29,73 @@ export default () => {
     ));
 
 
+    const toggle = () => setModal(!modal);
+
+
+    const handleSubmit = () => {
+        setGeneratingSequenceFeatures(true);
+        (record.uuid && ts.mapSequenceFeatures(record.uuid)
+            .then(() => setGeneratingSequenceFeatures(true))
+            .then(() => updateTreesListAndDetailsStatus())
+            .then(() => toggle())
+            .catch(err => console.log(err)));
+    };
+
+
+    const updateTreesListAndDetailsStatus = async () => {
+        await ts.list(props.project_id, dispatch);
+    };
+
+
+    const mapSequenceFeaturesModal = (
+        <Modal
+            isOpen={modal}
+            className="success"
+            scrollable={true}
+            size="xl"
+        >
+            <div className="mb-3">
+                <Button
+                    color="link"
+                    onClick={() => toggle()}
+                >
+                    &times;&nbsp;&nbsp;Cancel
+                </Button>
+            </div>
+            <Button
+                color="primary"
+                onClick={() => handleSubmit()}>
+                {!generatingSequenceFeatures
+                    ? "Map sequence features"
+                    : <Spinner type="grow" color="light" />}
+            </Button>
+        </Modal>
+    );
+
+
     return (
         <ListGroupItem>
             <details>
                 <summary className="float-right">
-                    <Button
-                        color="primary"
-                        className="py-0 px-1"
-                        disabled={(
-                            record.tree_utils?.map_clade_status === true &&
-                            record.tree_utils.upload_sequences_status === true
-                        ) ? false : true}
-                    >
-                        Map features
-                    </Button>
+                    {record.tree_utils?.map_features_status
+                        ? (
+                            <Badge color="light">
+                                <FontAwesomeIcon icon="check" color="green" />
+                            </Badge>
+                        ) : (
+                            <Button
+                                color="primary"
+                                className="py-0 px-1"
+                                onClick={() => toggle()}
+                                disabled={(
+                                    record.tree_utils?.map_clade_status === true &&
+                                    record.tree_utils.upload_sequences_status === true
+                                ) ? false : true}
+                            >
+                                Map features
+                            </Button>
+                        )}
+                    {mapSequenceFeaturesModal}
                 </summary>
             </details>
             <strong>

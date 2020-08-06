@@ -1,21 +1,21 @@
-import axios from 'axios';
-import { v4 as uuid } from 'uuid/interfaces';
-
-import { treesActions as ta } from '../_reducers/_trees.actions';
 import {
     BaseTrees,
     CreatedTrees,
     CustomRequestConfig,
     GeneListObjects,
     ListResponseInterface,
-    provideTreesUrl,
     provideGeneSearchUrl,
     provideGetLeavesUrl,
     provideMapCladesUrl,
+    provideSequenceFeatureGenerationUrl,
     provideTestCladesUrl,
+    provideTreesUrl,
     provideUploadAlignmentUrl,
 } from "../../../_helpers/_url-providers";
 
+import axios from 'axios';
+import { treesActions as ta } from '../_reducers/_trees.actions';
+import { v4 as uuid } from 'uuid/interfaces';
 
 /**
  * List all records.
@@ -159,6 +159,12 @@ const uploadAlignment = async (id: uuid, data: string): Promise<any> => {
 };
 
 
+const mapSequenceFeatures = async (id: uuid): Promise<any> => {
+    let config: CustomRequestConfig = provideSequenceFeatureGenerationUrl({ id: id });
+    return await axios(config);
+};
+
+
 export const treesServices = {
     list,
     get,
@@ -170,4 +176,5 @@ export const treesServices = {
     mapClades,
     testClade,
     uploadAlignment,
+    mapSequenceFeatures,
 };

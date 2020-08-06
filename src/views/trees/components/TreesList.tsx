@@ -1,18 +1,17 @@
+import { Alert, Card, CardBody, CardFooter, CardHeader, Col, Row } from 'reactstrap';
+import { Button, Carousel, CarouselItem } from 'reactstrap';
 import React, { useState } from 'react';
-import { useAsyncEffect } from 'use-async-effect';
-import { v4 as uuid } from 'uuid/interfaces';
-import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
-import { Carousel, CarouselItem, Button } from 'reactstrap';
-import { Alert, Col, Card, CardBody, CardFooter, CardHeader, Row } from 'reactstrap';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import { CreatedTrees } from '../../../_helpers/_url-providers';
-import { treesActions as ta } from '../_reducers/_trees.actions';
-import { treesServices as ts } from '../_services/_trees.services';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TreesListDetails from './TreesListDetails';
 import TreesListItems from './TreesListItems';
 import TreesModal from './TreesModal';
-import TreesListDetails from './TreesListDetails';
-
+import { treesActions as ta } from '../_reducers/_trees.actions';
+import { treesServices as ts } from '../_services/_trees.services';
+import { useAsyncEffect } from 'use-async-effect';
+import { v4 as uuid } from 'uuid/interfaces';
 
 interface Props {
     project_id: uuid

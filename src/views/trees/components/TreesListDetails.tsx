@@ -1,16 +1,15 @@
+import { Button, CardText, ListGroup } from 'reactstrap';
 import React, { useState } from 'react';
-import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
-import { CardText, Button, ListGroup } from 'reactstrap';
-import { v4 as uuid } from 'uuid/interfaces';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
-import { treesActions as ta } from '../_reducers/_trees.actions';
-import { treesServices as ts } from '../_services/_trees.services';
 import { CreatedTrees } from '../../../_helpers/_url-providers';
 import { Trasher } from '../../shared';
 import TreesListDetailsMapClades from './TreesListDetailsMapClades';
-import TreesListDetailsUploadAlignment from './TreesListDetailsUploadAlignment';
 import TreesListDetailsMapSequences from './TreesListDetailsMapSequences';
-
+import TreesListDetailsUploadAlignment from './TreesListDetailsUploadAlignment';
+import { treesActions as ta } from '../_reducers/_trees.actions';
+import { treesServices as ts } from '../_services/_trees.services';
+import { v4 as uuid } from 'uuid/interfaces';
 
 interface Props {
     setList: Function,
@@ -80,13 +79,17 @@ export default (props: Props) => {
                 </CardText>
                 <ListGroup className="mt-3">
                     {record.uuid && (
-                        <TreesListDetailsMapClades 
+                        <TreesListDetailsMapClades
                             project_id={props.project_id}
                             tree_id={record.uuid}
                         />
                     )}
-                    <TreesListDetailsUploadAlignment />
-                    <TreesListDetailsMapSequences />
+                    <TreesListDetailsUploadAlignment
+                        project_id={props.project_id}
+                    />
+                    <TreesListDetailsMapSequences
+                        project_id={props.project_id}
+                    />
                 </ListGroup>
             </div>
 

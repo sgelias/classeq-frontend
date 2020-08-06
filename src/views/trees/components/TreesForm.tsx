@@ -1,11 +1,10 @@
-import React from 'react';
-import { Button, Card, CardBody, Col, Form, FormGroup, Label, Input, Row } from 'reactstrap';
-
-import { treesActions as ta } from '../_reducers/_trees.actions';
+import { Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import { CreatedTrees, Gene } from '../../../_helpers/_url-providers';
-import TreesFormGeneInput from './TreesFormGeneInput';
-import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
+import React from 'react';
+import TreesFormGeneInput from './TreesFormGeneInput';
+import { treesActions as ta } from '../_reducers/_trees.actions';
 
 interface Props {
     handleSubmit: Function | any,
@@ -17,7 +16,7 @@ export default (props: Props) => {
 
     const dispatch = useDispatch();
 
-    
+
     const record: CreatedTrees = useSelector((state: RootStateOrAny) => (
         state.treesDetailsReducer.record
     ));
@@ -58,7 +57,7 @@ export default (props: Props) => {
                 <Card>
                     <CardBody>
                         <Form>
-                            
+
                             {/* title */}
                             <FormGroup>
                                 <Label for="title">Title</Label>
@@ -69,7 +68,7 @@ export default (props: Props) => {
                                     placeholder="A brief and concise phrase that described yout project"
                                     value={record.title || ''}
                                     onChange={handleChange('title')}
-                                    required={true} 
+                                    required={true}
                                 />
                             </FormGroup>
 
@@ -83,7 +82,7 @@ export default (props: Props) => {
                                     placeholder="A detailed description of the project"
                                     value={record.description || ''}
                                     onChange={handleChange('description')}
-                                    required={true} 
+                                    required={true}
                                 />
                             </FormGroup>
 
@@ -105,7 +104,7 @@ export default (props: Props) => {
                                     placeholder="Newick format tree (.tree, .tree, and .nwk)"
                                     value={record.tree || ''}
                                     onChange={handleChange('tree')}
-                                    required={true} 
+                                    required={true}
                                 />
                             </FormGroup>
 
@@ -121,7 +120,7 @@ export default (props: Props) => {
                             </FormGroup>
 
                             {/* Submit button */}
-                            <Button 
+                            <Button
                                 color="primary"
                                 disabled={isDisabled}
                                 onClick={props.handleSubmit}>

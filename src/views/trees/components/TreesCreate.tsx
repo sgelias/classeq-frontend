@@ -1,11 +1,10 @@
-import React from 'react';
-import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
-import { v4 as uuid } from 'uuid/interfaces';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import { BaseTrees } from '../../../_helpers/_url-providers';
-import { treesServices as ts } from '../_services/_trees.services';
+import React from 'react';
 import TreesForm from './TreesForm';
-
+import { treesServices as ts } from '../_services/_trees.services';
+import { v4 as uuid } from 'uuid/interfaces';
 
 interface Props {
     project_id: uuid,
@@ -21,7 +20,7 @@ export default (props: Props) => {
 
     //const record: BaseTrees = useSelector(() => ({}));
 
-    
+
     const record: BaseTrees = useSelector((state: RootStateOrAny) => (
         state.treesDetailsReducer.record
     ));

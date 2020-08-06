@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import Downshift from 'downshift'
 import { Badge, Input, Label } from 'reactstrap';
+import React, { useState } from 'react';
 
+import Downshift from 'downshift'
 import { Gene } from '../../../_helpers/_url-providers';
 import { treesServices as ts } from '../_services/_trees.services';
-
 
 interface Props {
     handleGeneInput: Function,
@@ -18,7 +17,7 @@ export default (props: Props) => {
     let is_selected: boolean = props.gene ? true : false;
 
 
-    const [ genes, setGenes ] = useState<Array<Gene>>([]);
+    const [genes, setGenes] = useState<Array<Gene>>([]);
 
 
     const handleGenes = (genes: Gene[]) => {
@@ -79,15 +78,15 @@ export default (props: Props) => {
                                                 listStyle: 'mone',
                                                 backgroundColor:
                                                     highlightedIndex === index ? 'lightgray' : 'white',
-                                                    fontWeight: selectedItem === item ? 'bold' : 'normal',
+                                                fontWeight: selectedItem === item ? 'bold' : 'normal',
                                             },
                                         })}
                                     >
-                                        <span>{item.name}</span><br/>
+                                        <span>{item.name}</span><br />
                                         {item.meta.terms.map((term, index) => (
                                             <small key={index}>
                                                 <Badge color="primary" className="m-1" pill>
-                                                    { term }
+                                                    {term}
                                                 </Badge>
                                             </small>
                                         ))}
@@ -100,7 +99,7 @@ export default (props: Props) => {
                             <>
                                 <small className="text-muted">Selected: </small>
                                 <Badge color="success" pill>
-                                    { props.gene?.name } | { props.gene?.name_slug }
+                                    {props.gene?.name} | {props.gene?.name_slug}
                                 </Badge>
                             </>
                         ) : null}

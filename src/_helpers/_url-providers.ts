@@ -1,7 +1,6 @@
-import { v4 as uuid } from 'uuid/interfaces';
-
 import { AxiosRequestConfig, Method } from 'axios';
 
+import { v4 as uuid } from 'uuid/interfaces';
 
 // *******************
 // Shared utilities.
@@ -26,7 +25,7 @@ const geneConnectorBaseUrl: string = 'https://lepiota.herokuapp.com/api';
  * 
  * @see `AxiosRequestConfig` of axios package.
  */
-export interface CustomRequestConfig extends AxiosRequestConfig {}
+export interface CustomRequestConfig extends AxiosRequestConfig { }
 
 
 /**
@@ -37,7 +36,7 @@ export interface CustomRequestConfig extends AxiosRequestConfig {}
  * p: the page to be shown;
  * ps: the expected size of the page to show.
  */
- export interface ListResponseInterface {
+export interface ListResponseInterface {
     count?: number,
     previous?: any,
     next?: any,
@@ -114,15 +113,15 @@ const buildParamsForLists = (qpars: any = {}) => {
     /* Page Size */
     if (!qpars.ps) qpars.ps = 10;
     params.ps = qpars.ps;
-    
+
     /* Filter term */
     if (qpars.q)
-    params.q = qpars.q;
-    
+        params.q = qpars.q;
+
     /* Current page */
     if (qpars.p)
-    params.p = qpars.p;
-    
+        params.p = qpars.p;
+
     return params;
 }
 
@@ -135,7 +134,7 @@ const buildParamsForLists = (qpars: any = {}) => {
 /**
  * Interface for minimal credentials object.
  */
- export interface AuthCredentials {
+export interface AuthCredentials {
     username: string | undefined,
     password: string | undefined,
     submitted?: boolean,
@@ -233,7 +232,7 @@ export interface ProjectsListObjects extends ListResponseInterface {
  * @param args An Object containing specific params as 
  */
 export const provideProjectsUrl = (method: Method, args: HttpQueryParams): CustomRequestConfig => {
-    
+
     let request: CustomRequestConfig = {
         headers: getCommonHeaders(true),
     };
@@ -241,39 +240,49 @@ export const provideProjectsUrl = (method: Method, args: HttpQueryParams): Custo
     switch (method) {
         case "GET":
             if (args.id && !args.query_params) {
-                return request = { ...request, ...{
-                    method: method,
-                    url: `${baseUrl}/projs/${args.id}`,
-                }};
+                return request = {
+                    ...request, ...{
+                        method: method,
+                        url: `${baseUrl}/projs/${args.id}`,
+                    }
+                };
             } else {
-                return request = { ...request, ...{
-                    method: method,
-                    url: `${baseUrl}/projs/`,
-                    params: buildParamsForLists(args.query_params),
-                }};
+                return request = {
+                    ...request, ...{
+                        method: method,
+                        url: `${baseUrl}/projs/`,
+                        params: buildParamsForLists(args.query_params),
+                    }
+                };
             };
-        
+
         case "POST":
-            return request = { ...request, ...{
-                method: method,
-                url: `${baseUrl}/projs/new`,
-                data: args.data,
-            }};
-        
+            return request = {
+                ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/projs/new`,
+                    data: args.data,
+                }
+            };
+
         case "PUT":
-            return request = { ...request, ...{
-                method: method,
-                url: `${baseUrl}/projs/${args.data.uuid}/edit`,
-                data: args.data,
-            }};
-        
+            return request = {
+                ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/projs/${args.data.uuid}/edit`,
+                    data: args.data,
+                }
+            };
+
         case "DELETE":
-            return request = { ...request, ...{
-                method: method,
-                url: `${baseUrl}/projs/${args.id}/delete`,
-            }};
-        
-        default: 
+            return request = {
+                ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/projs/${args.id}/delete`,
+                }
+            };
+
+        default:
             return request;
     }
 }
@@ -359,7 +368,7 @@ export interface TreesListObjects extends ListResponseInterface {
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
 export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
-    
+
     let request: CustomRequestConfig = {
         headers: getCommonHeaders(true),
     };
@@ -367,39 +376,49 @@ export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQuer
     switch (method) {
         case "GET":
             if (args.id && !args.query_params) {
-                return request = { ...request, ...{
-                    method: method,
-                    url: `${baseUrl}/${project_pk}/trees/${args.id}`,
-                }};
+                return request = {
+                    ...request, ...{
+                        method: method,
+                        url: `${baseUrl}/${project_pk}/trees/${args.id}`,
+                    }
+                };
             } else {
-                return request = { ...request, ...{
-                    method: method,
-                    url: `${baseUrl}/${project_pk}/trees/`,
-                    params: buildParamsForLists(args.query_params),
-                }};
+                return request = {
+                    ...request, ...{
+                        method: method,
+                        url: `${baseUrl}/${project_pk}/trees/`,
+                        params: buildParamsForLists(args.query_params),
+                    }
+                };
             };
-        
+
         case "POST":
-            return request = { ...request, ...{
-                method: method,
-                url: `${baseUrl}/${project_pk}/trees/new`,
-                data: args.data,
-            }};
-        
+            return request = {
+                ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/${project_pk}/trees/new`,
+                    data: args.data,
+                }
+            };
+
         case "PUT":
-            return request = { ...request, ...{
-                method: method,
-                url: `${baseUrl}/${project_pk}/trees/${args.data.uuid}/edit`,
-                data: args.data,
-            }};
-        
+            return request = {
+                ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/${project_pk}/trees/${args.data.uuid}/edit`,
+                    data: args.data,
+                }
+            };
+
         case "DELETE":
-            return request = { ...request, ...{
-                method: method,
-                url: `${baseUrl}/${project_pk}/trees/${args.id}/delete`,
-            }};
-        
-        default: 
+            return request = {
+                ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/${project_pk}/trees/${args.id}/delete`,
+                }
+            };
+
+        default:
             return request;
     }
 }
@@ -410,7 +429,7 @@ export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQuer
  * 
  * @param term A string containing a term to filter records.
  */
- export const provideGeneSearchUrl = (term: string): CustomRequestConfig => {
+export const provideGeneSearchUrl = (term: string): CustomRequestConfig => {
     return {
         headers: getCommonHeaders(),
         method: "GET",
@@ -490,6 +509,22 @@ export const provideUploadAlignmentUrl = (args: HttpQueryParams): CustomRequestC
 }
 
 
+/**
+ * Provide a url to start sequence features mapping.
+ * 
+ * @see `CustomRequestConfig` interface.
+ * @see `HttpQueryParams` interface.
+ * @param args An Object containing specific params as HttpQueryParams interface.
+ */
+export const provideSequenceFeatureGenerationUrl = (args: HttpQueryParams): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "PATCH",
+        url: `${baseUrl}/seq-features/${args.id}/map-features`
+    }
+}
+
+
 // *******************
 // Clades utilities.
 // *******************
@@ -498,7 +533,7 @@ export const provideUploadAlignmentUrl = (args: HttpQueryParams): CustomRequestC
 /**
  * Interface for created clades.
  */
- export interface CreatedClades extends CreatedRecords {
+export interface CreatedClades extends CreatedRecords {
     tree?: uuid,
     parent?: uuid,
     branch_type?: string,
@@ -535,7 +570,7 @@ export interface CladesListObjects extends ListResponseInterface {
  * @param args An Object containing specific params as 
  */
 export const provideCladesUrl = (method: Method, tree_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
-    
+
     let request: CustomRequestConfig = {
         headers: getCommonHeaders(true),
     };
@@ -543,19 +578,23 @@ export const provideCladesUrl = (method: Method, tree_pk: uuid, args: HttpQueryP
     switch (method) {
         case "GET":
             if (args.id && !args.query_params) {
-                return request = { ...request, ...{
-                    method: method,
-                    url: `${baseUrl}/${tree_pk}/clades/${args.id}`,
-                }};
+                return request = {
+                    ...request, ...{
+                        method: method,
+                        url: `${baseUrl}/${tree_pk}/clades/${args.id}`,
+                    }
+                };
             } else {
-                return request = { ...request, ...{
-                    method: method,
-                    url: `${baseUrl}/${tree_pk}/clades/`,
-                    params: buildParamsForLists(args.query_params),
-                }};
+                return request = {
+                    ...request, ...{
+                        method: method,
+                        url: `${baseUrl}/${tree_pk}/clades/`,
+                        params: buildParamsForLists(args.query_params),
+                    }
+                };
             };
-        
-        default: 
+
+        default:
             return request;
     }
 }
