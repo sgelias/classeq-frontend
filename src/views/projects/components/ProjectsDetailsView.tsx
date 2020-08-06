@@ -1,10 +1,10 @@
 import React from 'react';
-import { CardSubtitle, CardBody, CardHeader, CardText, Col, Row, Card } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NavLink } from 'react-router-dom';
 
-import { Dates, UserCredentials } from '../../shared/index';
+import { Card, CardBody, CardHeader, CardSubtitle, CardText, Col, Row } from 'reactstrap';
 import { CreatedProject } from '../../../_helpers/_url-providers';
+import { Dates, UserCredentials } from '../../shared/index';
 
 
 export default (props: CreatedProject) => {
