@@ -1,6 +1,5 @@
 import { cladesConstants, sequencesConstants } from './_clades.constants';
-import { CladesListObjects, CreatedClades } from '../../../_helpers/_url-providers';
-import { CreatedSequences } from '../../../../.history/src/_helpers/_url-providers_20200810205136';
+import { CladesListObjects, CreatedClades, CreatedSequences } from '../../../_helpers/_url-providers';
 
 
 // *******************
@@ -10,13 +9,6 @@ import { CreatedSequences } from '../../../../.history/src/_helpers/_url-provide
 
 interface CreatedCladesReducer {
     record: CreatedClades,
-    pending: boolean,
-    error: any,
-};
-
-
-interface CreatedSequencesReducer {
-    results: Array<CreatedSequences | any>,
     pending: boolean,
     error: any,
 };
@@ -33,6 +25,13 @@ const cladesCreatedInitialState: CreatedCladesReducer = {
     record: {},
     pending: false,
     error: null,
+};
+
+
+interface CreatedSequencesReducer {
+    results: Array<CreatedSequences | any>,
+    pending: boolean,
+    error: any,
 };
 
 
@@ -127,4 +126,4 @@ export const sequencesListReducer = (state = sequencesCreatedInitialState, actio
         default:
             return state;
     }
-}
+};

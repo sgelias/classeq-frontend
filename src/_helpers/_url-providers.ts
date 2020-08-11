@@ -531,23 +531,6 @@ export const provideSequenceFeatureGenerationUrl = (args: HttpQueryParams): Cust
 
 
 /**
- * Interface for created clades.
- */
-export interface CreatedClades extends CreatedRecords {
-    tree?: uuid,
-    parent?: uuid,
-    branch_type?: string,
-    name?: string,
-    branch_length?: number,
-    confidence?: number,
-    child?: Array<uuid>,
-    is_valid?: boolean,
-    is_active?: boolean,
-    [key: string]: any,
-}
-
-
-/**
  * Interface for created sequences.
  */
 export interface CreatedSequences {
@@ -558,6 +541,24 @@ export interface CreatedSequences {
     readonly fasta_sequence: string,
     readonly length: number,
     readonly source_clade: uuid,
+}
+
+
+/**
+ * Interface for created clades.
+ */
+ export interface CreatedClades extends CreatedRecords {
+    tree?: uuid,
+    parent?: uuid,
+    branch_type?: string,
+    name?: string,
+    branch_length?: number,
+    confidence?: number,
+    child?: Array<uuid>,
+    is_valid?: boolean,
+    is_active?: boolean,
+    sequence?: CreatedSequences,
+    [key: string]: any,
 }
 
 

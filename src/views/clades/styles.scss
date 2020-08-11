@@ -8,7 +8,8 @@
     max-height: 750px;
 
     .not-overflow {
-        overflow: hidden !important;
+        overflow-x: hidden !important;
+        overflow-y: hidden !important;
     }
     
     th {

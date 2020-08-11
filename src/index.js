@@ -1,16 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ThroughProvider } from 'react-through'
+import { PersistGate } from 'redux-persist/integration/react';
 
 import * as serviceWorker from './registerServiceWorker';
 import App from './App';
-import { store } from './_helpers/_store';
+import { store, persistor } from './_helpers/_store';
 import './assets/images/fontawesome/fontawesome';
 
 
 ReactDOM.render(
     <ThroughProvider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+            <App />
+        </PersistGate>
     </ThroughProvider>,
     document.getElementById('app')
 );

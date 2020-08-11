@@ -1,4 +1,6 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 
@@ -6,6 +8,16 @@ import { cladesDetailsReducer, cladesListReducer, sequencesListReducer } from '.
 import { treesDetailsReducer, treesListReducer } from '../views/trees/_reducers/_trees.reducers';
 import { alert } from '../views/alerts/_reducers/alerts.reducers';
 import { auth } from '../views/auth/index';
+
+
+const persistConfig = {
+    key: 'root',
+    storage,
+};
+
+
+const loggerMiddleware = createLogger();
+
 
 const rootReducer = combineReducers({
     alert,
@@ -18,13 +30,19 @@ const rootReducer = combineReducers({
 });
 
 
-const loggerMiddleware = createLogger();
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 
-export const store = createStore(
-    rootReducer,
+const store = createStore(
+    persistedReducer,
     applyMiddleware(
         thunkMiddleware,
         loggerMiddleware
     )
 );
+
+
+const persistor = persistStore(store);
+
+
+export { store, persistor };
