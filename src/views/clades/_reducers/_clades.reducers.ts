@@ -1,5 +1,6 @@
-import { cladesConstants } from './_clades.constants';
+import { cladesConstants, sequencesConstants } from './_clades.constants';
 import { CladesListObjects, CreatedClades } from '../../../_helpers/_url-providers';
+import { CreatedSequences } from '../../../../.history/src/_helpers/_url-providers_20200810205136';
 
 
 // *******************
@@ -11,7 +12,14 @@ interface CreatedCladesReducer {
     record: CreatedClades,
     pending: boolean,
     error: any,
-}
+};
+
+
+interface CreatedSequencesReducer {
+    results: Array<CreatedSequences | any>,
+    pending: boolean,
+    error: any,
+};
 
 
 const cladesListInitialState: CladesListObjects = {
@@ -23,6 +31,13 @@ const cladesListInitialState: CladesListObjects = {
 
 const cladesCreatedInitialState: CreatedCladesReducer = {
     record: {},
+    pending: false,
+    error: null,
+};
+
+
+const sequencesCreatedInitialState: CreatedSequencesReducer = {
+    results: [],
     pending: false,
     error: null,
 };
@@ -86,3 +101,30 @@ export const cladesDetailsReducer = (state = cladesCreatedInitialState, action: 
             return state;
     }
 };
+
+
+export const sequencesListReducer = (state = sequencesCreatedInitialState, action: any) => {
+    switch (action.type) {
+        
+        case sequencesConstants.LIST_PENDING:
+            return {
+                ...state,
+                pending: action.pending
+            };
+
+        case sequencesConstants.LIST_SUCCESS:
+            return {
+                ...state,
+                results: action.results
+            };
+
+        case sequencesConstants.LIST_FAIL:
+            return {
+                ...state,
+                error: action.error
+            };
+
+        default:
+            return state;
+    }
+}

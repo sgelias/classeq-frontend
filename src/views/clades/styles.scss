@@ -1,8 +1,26 @@
+.limited {
+    max-width: 100%;
+    min-height: 500px !important;
+}
+
 .clades-card {
-    max-height: 750px;
     overflow-y: scroll;
+    max-height: 750px;
+
+    .not-overflow {
+        overflow: hidden !important;
+    }
+    
+    th {
+        padding: 2px 8px !important;
+
+        &.nucleotide {
+            text-align: center;
+        }
+    }
 
     td {
+        padding: 2px 8px !important;
 
         &.not-null-cell {
             background: #e4eeff !important;
@@ -11,8 +29,33 @@
         &.selected {
             background: red;
         }
+
+        /* &.td-nowrap {
+            white-space: nowrap;
+        } */
+
+        &.nucleotide {
+            text-align: center;
+            color: black;
+
+            &.a {
+                background-color: rgb(100, 247, 63);
+            }
+
+            &.c {
+                background-color: rgb(255, 179, 64);
+            }
+
+            &.t {
+                background-color: rgb(60, 136, 238);
+            }
+
+            &.g {
+                background-color: rgb(235, 65, 60);
+            }
+        }
     }
-    
+
     table.tableBodyScroll tbody {
         overflow-y: scroll;
     }

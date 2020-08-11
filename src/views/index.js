@@ -22,6 +22,7 @@ import ProgressBars from './elements/ProgressBars';
 import PaginationPage from './elements/Pagination';
 import ErrorPage from './shared/404';
 
+import { CladesList } from './clades/index';
 import { ProjectsList, ProjectsDetails, ProjectsCreate, ProjectsUpdate } from './projects/index';
 import { LoginPage } from './auth/index';
 
@@ -159,19 +160,29 @@ const pageList = [
   },
   {
     name: 'Details',
-    path: '/projects/:rid',
+    path: '/projects/:pid',
     component: ProjectsDetails,
   },
   {
     name: 'Edit',
-    path: '/projects/:rid/edit',
+    path: '/projects/:pid/edit',
     component: ProjectsUpdate,
+  },
+
+
+  /**
+   * Clades routes.
+   */
+  {
+    name: 'Clades',
+    path: '/projects/:pid/:tid/clades',
+    component: CladesList,
   },
 
   /**
    * Auth routes.
    */
-   {
+  {
     name: 'Login',
     path: '/login',
     component: LoginPage,

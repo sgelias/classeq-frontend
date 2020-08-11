@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { BaseProject } from '../../../_helpers/_url-providers';
-import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
+import { BreadcrumbsItemBuilder } from '../../shared';
 import ProjectsForm from './ProjectsForm';
 import { projectServices as ps } from '../_services/_projects.services';
 
@@ -53,11 +53,10 @@ export default class ProjectsCreate extends React.Component<Props, State> {
 
     render() {
         const { title, description } = this.state;
-        const { match } = this.props;
-
+        
         return (
             <div>
-                <BreadcrumbsItemBuilder url={match.url} params={match.params} />
+                <BreadcrumbsItemBuilder/>
                 <ProjectsForm 
                     title={title}
                     description={description}

@@ -4,11 +4,10 @@ import { Button, Table, Badge } from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import ReactTooltip from "react-tooltip";
-import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { Dates } from '../../shared/index';
 import { CreatedTrees } from '../../../_helpers/_url-providers';
-import { cladesServices as cs } from '../../clades/_services/_clades.services';
 import TreesModal from './TreesModal';
 
 
@@ -22,14 +21,14 @@ interface Props {
 export default (props: Props) => {
 
 
-    const dispatch = useDispatch();
+    const history = useHistory();
 
 
     const max_text_size: number = 25;
 
 
-    const listClades = async (tree: uuid | undefined): Promise<void> => {
-        tree !== undefined && await cs.list(tree, dispatch);
+    const goToClades = async (tree: uuid | undefined): Promise<void> => {
+        history.push(`${history.location.pathname}/${tree}/clades`);
     };
 
 
@@ -67,14 +66,16 @@ export default (props: Props) => {
                                     <Button
                                         color="link"
                                         className="p-0"
-                                        onClick={() => listClades(item.uuid)}
+                                        onClick={() => {
+                                            goToClades(item.uuid);
+                                        }}
                                     >
                                         {item.title}
                                     </Button>
                                 ) : (
                                     item.title
                                 )}
-                            
+
                             {/* Status badge */}
                             <Badge
                                 color="light"

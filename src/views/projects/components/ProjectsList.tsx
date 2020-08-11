@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Row, Button, Col, Card, CardBody, CardFooter, CardText } from 'reactstrap';
 import { NavLink, RouteComponentProps } from 'react-router-dom';
 
-import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
+import { BreadcrumbsItemBuilder } from '../../shared';
 import { ProjectsListObjects } from '../../../_helpers/_url-providers';
 import { projectServices as ps } from '../_services/_projects.services';
 import { Dates } from '../../shared/index';
@@ -34,7 +34,7 @@ export default class ProjectsList extends Component<Props, State> {
         
         return (
             <div>
-                <BreadcrumbsItemBuilder url={match.url} params={match.params} />
+                <BreadcrumbsItemBuilder/>
                 <Row>
                     {
                         this.state.results.map((item, index) => (

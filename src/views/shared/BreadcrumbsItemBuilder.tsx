@@ -1,43 +1,55 @@
-import React from 'react';
-import { matchPath } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { matchPath, useLocation, useParams } from 'react-router-dom';
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
 
 import routes from '../index';
 
 
-interface BreadcrumbsItemProps {
-    url: string,
-    params: Object | any;
-}
+interface CurrentRoute {
+    url: any,
+    params: any,
+};
 
 
-export const BreadcrumbsItemBuilder = (props: BreadcrumbsItemProps) => {
+export default () => {
 
 
-    const { url, params } = props;
+    const location = useLocation();
 
 
-    let parent_routes = routes
-        .filter(({ path }: any) => matchPath(url, { path: path }))
-        .map(({ path, ...rest }: any) => ({
-            path: Object.keys(params).length
-                ? Object.keys(params).reduce(
-                    (path, param) => path.replace(
-                        `:${param}`, params[param]
-                    ), path
-                ) : path,
-            name: '',
-            ...rest
-        }));
+    const params = useParams();
+
+
+    const [parentRoutes, setParentRoutes] = useState<Array<any>>([]);
+
+
+    const [currentRoute] = useState<CurrentRoute>({
+        url: location,
+        params: params,
+    });
+
+
+    useEffect(() => {
+        setParentRoutes(routes
+            .filter(({ path }: any) => matchPath(currentRoute.url.pathname, { path: path }))
+            .map(({ path, ...rest }: any) => ({
+                name: '',
+                path: Object.keys(currentRoute.params).length
+                    ? Object.keys(currentRoute.params).reduce(
+                        (path: any, param: string) => path.replace(`:${param}`, currentRoute.params[param]), path)
+                    : path,
+                ...rest
+            })))
+    }, [currentRoute]);
 
 
     return (
-        <div>
-            {parent_routes.map(({ path, name }, key) => (
+        <>
+            {parentRoutes.map(({ path, name }, key) => (
                 <BreadcrumbsItem to={path} key={key}>
                     {name}
                 </BreadcrumbsItem>
             ))}
-        </div>
+        </>
     )
-}
+};

@@ -548,6 +548,20 @@ export interface CreatedClades extends CreatedRecords {
 
 
 /**
+ * Interface for created sequences.
+ */
+export interface CreatedSequences {
+    readonly uuid: uuid,
+    readonly created: Date,
+    readonly updated: Date,
+    readonly fasta_head: string,
+    readonly fasta_sequence: string,
+    readonly length: number,
+    readonly source_clade: uuid,
+}
+
+
+/**
  * Interface for Clades list.
  */
 export interface CladesListObjects extends ListResponseInterface {
@@ -596,5 +610,22 @@ export const provideCladesUrl = (method: Method, tree_pk: uuid, args: HttpQueryP
 
         default:
             return request;
+    }
+}
+
+
+/**
+ * Provide a url to get all sequences from clades.
+ * 
+ * @see `CustomRequestConfig` interface.
+ * @see `HttpQueryParams` interface.
+ * @param args An Object containing specific params as HttpQueryParams interface.
+ */
+export const provideSequencesUrl = (clades_list: Array<uuid | undefined>): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "GET",
+        url: `${baseUrl}/seq/`,
+        params: { clades_list: clades_list.join(',') }
     }
 }

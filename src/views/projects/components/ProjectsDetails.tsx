@@ -1,18 +1,17 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { BreadcrumbsItemBuilder } from '../../shared/BreadcrumbsItemBuilder';
-import { CladesList } from '../../clades';
+import { BreadcrumbsItemBuilder } from '../../shared';
 import { CreatedProject } from '../../../_helpers/_url-providers';
 import ProjectsDetailsView from './ProjectsDetailsView';
 import { TreesList } from '../../trees/index';
 import { projectServices as ps } from '../_services/_projects.services';
 
 
-interface State extends CreatedProject { }
+interface State extends CreatedProject { };
 
 
-interface Props extends RouteComponentProps { }
+interface Props extends RouteComponentProps { };
 
 
 export default class ProjectsDetails extends React.Component<Props, State> {
@@ -25,7 +24,7 @@ export default class ProjectsDetails extends React.Component<Props, State> {
         super(props)
 
         this.state = {
-            uuid: (this.props.match.params as any).rid
+            uuid: (this.props.match.params as any).pid
         };
     };
 
@@ -43,10 +42,7 @@ export default class ProjectsDetails extends React.Component<Props, State> {
 
         return (
             <>
-                <BreadcrumbsItemBuilder 
-                    url={match.url} 
-                    params={match.params} 
-                />
+                <BreadcrumbsItemBuilder/>
 
                 <ProjectsDetailsView
                     title={title}
@@ -60,8 +56,6 @@ export default class ProjectsDetails extends React.Component<Props, State> {
                 <TreesList
                     project_id={uuid}
                 />
-
-                <CladesList />
             </>
         )
     }

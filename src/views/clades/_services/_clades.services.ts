@@ -4,9 +4,11 @@ import { v4 as uuid } from 'uuid/interfaces';
 import { cladesActions as ca } from '../_reducers/_clades.actions';
 import {
     CreatedClades,
+    CreatedSequences,
     CustomRequestConfig,
     ListResponseInterface,
     provideCladesUrl,
+    provideSequencesUrl,
 } from "../../../_helpers/_url-providers";
 
 
@@ -46,7 +48,14 @@ const get = async (tree_pk: uuid, id: uuid): Promise<{ data: CreatedClades }> =>
 };
 
 
+const getSequences = async (clades_list: Array<uuid | undefined>): Promise<{ data: Array<CreatedSequences> }> => {
+    let config: CustomRequestConfig = provideSequencesUrl(clades_list);
+    return await axios(config);
+};
+
+
 export const cladesServices = {
     list,
     get,
+    getSequences,
 };
