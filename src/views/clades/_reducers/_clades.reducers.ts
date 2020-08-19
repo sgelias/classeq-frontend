@@ -8,7 +8,7 @@ import { CladesListObjects, CreatedClades, CreatedSequences } from '../../../_he
 
 
 interface CreatedCladesReducer {
-    record: CreatedClades,
+    record: CreatedClades
     pending: boolean,
     error: any,
 };

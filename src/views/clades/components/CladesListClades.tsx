@@ -1,23 +1,30 @@
 import React from 'react';
-import { Col, Card, CardHeader, CardBody, Table, CardFooter, Button } from 'reactstrap';
+import { Col, Card, CardHeader, CardBody, ListGroup, ListGroupItem } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useSelector, RootStateOrAny } from 'react-redux';
+import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 
 import { CreatedClades } from '../../../_helpers/_url-providers';
+import { cladesActions as ca } from '../_reducers/_clades.actions';
 
 
-interface Props {
-    setIndexToRef: Function,
-    setSubItems: Function,
-};
+export default () => {
 
 
-export default (props: Props) => {
+    const dispatch = useDispatch();
 
 
     const clades: Array<CreatedClades> = useSelector((state: RootStateOrAny) => (
         state.cladesListReducer.results
     ));
+
+
+    const setSingleClade = async (item: CreatedClades) => {
+        await Promise.resolve()
+            .then(() => dispatch(ca.cladesDetailsPending(true)))
+            .then(() => dispatch(ca.cladesDetailsSuccess(item)))
+            .then(() => dispatch(ca.cladesDetailsPending(false)))
+            .catch(err => dispatch(ca.cladesDetailsFail(err)));
+    };
 
 
     const internalClade = (item: CreatedClades, index: number) => {
@@ -27,32 +34,39 @@ export default (props: Props) => {
         ));
 
         return (
-            <tr key={index}>
-                <td ref={el => item.uuid && props.setIndexToRef(item.uuid, el)}>
-                    <Button
-                        color="link"
-                        className="p-0 text-left"
-                        onClick={() => {
-                            props.setSubItems(item);
-                        }}
-                    >
-                        Uuid: {item.uuid}<br />
-                        Parent: {item.parent}
-                    </Button>
-                </td>
-
-                <td className={item?.child?.length ? "not-null-cell" : ""}>
-                    {(item?.child?.length && item?.child?.length > 0)
-                        ? item?.child?.length
-                        : null}
-                </td>
-
-                <td className={filteredClades.length ? 'not-null-cell' : ""}>
-                    {filteredClades?.length
-                        ? filteredClades?.length
-                        : null}
-                </td>
-            </tr>
+            <ListGroupItem 
+                key={index}
+                tag="a"
+                onClick={() => {
+                    setSingleClade(item);
+                }}
+            >
+                <span className="float-right text-muted">
+                    {item.branch_type === "R" ? "Root" : "Internal"}
+                </span>
+                <details>
+                    <summary className={`${item.nodedescriptionsmodel && "annotated"} text-muted`}>
+                        <FontAwesomeIcon icon="leaf" />
+                        &nbsp;&nbsp;
+                        {(item?.child?.length && item?.child?.length > 0) && (
+                            `${item?.child?.length} leaves`)}
+                        &nbsp;&nbsp;
+                        {filteredClades?.length > 0 && (
+                            <>
+                                <FontAwesomeIcon icon="code-branch" />
+                                &nbsp;&nbsp;
+                                {filteredClades?.length} child
+                            </>
+                        )}
+                        {!item.nodedescriptionsmodel ? null : (
+                            <>
+                                &nbsp;&nbsp;
+                                <FontAwesomeIcon icon="pencil-alt" />
+                            </>
+                        )}
+                    </summary>
+                </details>
+            </ListGroupItem >
         )
     };
 
@@ -72,23 +86,58 @@ export default (props: Props) => {
                 </CardHeader>
 
                 <CardBody className="pt-1 clades-card">
-                    <Table hover className="tableBodyScroll">
-                        <thead>
-                            <tr>
-                                <th>Identification</th>
-                                <th>Leaves</th>
-                                <th>Clades</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {clades
-                                .filter(item => item.branch_type === "B" || item.branch_type === "R")
-                                .map((item, index) => internalClade(item, index))}
-                        </tbody>
-                    </Table>
-                </CardBody>
 
-                <CardFooter />
+                    {/* Larger and medium clades */}
+                    <div className="my-5">
+                        <h4 className="text-muted">
+                            Mediun/Larger clades (&gt;= 10 leaves)
+                        </h4>
+
+                        <br className="mb-3" />
+
+                        <ListGroup className="shadow">
+                            {!(clades.length > 0) ? null : clades
+                                .filter(item => (
+                                    (item.child && item?.child?.length >= 10) &&
+                                    (item.branch_type === "B" || item.branch_type === "R"))
+                                )
+                                .sort((a: CreatedClades, b: CreatedClades) => {
+                                    return (
+                                        (a && b) &&
+                                        (a.child && b.child) &&
+                                        (a.child?.length > b.child?.length)
+                                    ) ? -1 : 1
+                                })
+                                .map((item, index) => internalClade(item, index))}
+                        </ListGroup>
+                    </div>
+
+                    {/* Small clades */}
+                    <div className="my-5">
+                        <h4 className="text-muted">
+                            Small clades (&lt; 10 leaves)
+                        </h4>
+
+                        <br />
+
+                        <ListGroup className="shadow">
+                            {!(clades.length > 0) ? null : clades
+                                .filter(item => (
+                                    (item.child && item?.child?.length < 10) &&
+                                    (item.branch_type === "B" || item.branch_type === "R"))
+                                )
+                                .sort((a: CreatedClades, b: CreatedClades) => {
+                                    return (
+                                        (a && b) &&
+                                        (a.child && b.child) &&
+                                        (a.child?.length > b.child?.length)
+                                    ) ? -1 : 1
+                                })
+                                .map((item, index) => internalClade(item, index))}
+                        </ListGroup>
+                    </div>
+
+                </CardBody>
             </Card>
         </Col>
     )

@@ -7,11 +7,11 @@
     overflow-y: scroll;
     max-height: 750px;
 
-    .not-overflow {
+    &.not-overflow {
         overflow-x: hidden !important;
         overflow-y: hidden !important;
     }
-    
+
     th {
         padding: 2px 8px !important;
 
@@ -60,4 +60,48 @@
     table.tableBodyScroll tbody {
         overflow-y: scroll;
     }
+}
+
+.full-width-modal {
+    width: 100% !important;
+    height: 100% !important;
+    /* margin: 0;
+    padding: 0; */
+
+    &.modal-content {
+        height: auto;
+        min-height: 100% !important;
+        border-radius: 0;
+    }    
+}
+
+.sumburst-viz {
+    height: 2000 !important;
+}
+
+.node circle {
+    fill: rgb(247, 106, 214);
+    stroke: rgb(184, 37, 81);
+    stroke-width: 1.5px;
+}
+
+.node text {
+    font-size: 11px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: black;
+    fill: black;
+}
+
+.node {
+    cursor: pointer;
+}
+
+path.link {
+    fill: none;
+    stroke: #2593b8;
+    stroke-width: 1.5px;
+}
+
+.annotated {
+    color: green !important;
 }

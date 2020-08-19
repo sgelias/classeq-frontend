@@ -3,13 +3,12 @@ import { Row } from 'reactstrap';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAsyncEffect } from 'use-async-effect';
-import { v4 as uuid } from 'uuid/interfaces';
 
 import { CreatedClades, CreatedSequences } from '../../../_helpers/_url-providers';
 import { BreadcrumbsItemBuilder } from '../../shared';
 import { sequencesActions as sa } from '../_reducers/_clades.actions';
 import { cladesServices as cs } from '../_services/_clades.services';
-import CladesListLeaves from './CladesListLeaves';
+import CladesListMsa from './CladesListMsa';
 import CladesListClades from './CladesListClades';
 import CladesListManagement from './CladesListManagement';
 
@@ -23,10 +22,10 @@ export default () => {
     const params = useParams<any>();
 
 
+    const [modal, setModal] = useState(false);
+
+
     const [childClades, setChildClades] = useState<Array<CreatedClades>>([]);
-
-
-    const [itemRefs] = useState<{ [key: string]: any }>({});
 
 
     const clades: Array<CreatedClades> = useSelector((state: RootStateOrAny) => (
@@ -37,6 +36,9 @@ export default () => {
     const sequences: Array<CreatedSequences> = useSelector((state: RootStateOrAny) => (
         state.sequencesListReducer.results
     ));
+
+
+    const toggle = () => setModal(!modal);
 
 
     const listClades = async (): Promise<void> => {
@@ -56,7 +58,7 @@ export default () => {
     const listSequences = async () => {
         dispatch(sa.sequencesListPending(true));
         (clades.length > 0) && (
-            cs.getSequences(clades.map(item => item.uuid && item?.uuid))
+            cs.getSequences(params.tid)
                 .then(res => dispatch(sa.sequencesListSuccess(res.data)))
                 .then(() => dispatch(sa.sequencesListPending(false)))
         );
@@ -78,16 +80,6 @@ export default () => {
     }, [sequences.length]);
 
 
-    const scrollTo = (id: string) => {
-        itemRefs[id].scrollIntoView({ block: 'start', behavior: 'smooth' });
-    };
-
-
-    const setIndexToRef = (index: uuid, element: any) => {
-        itemRefs[index.toString()] = element;
-    };
-
-
     const setSubItems = (item: CreatedClades) => {
         setChildClades([
             ...clades.filter(clade => (
@@ -104,17 +96,18 @@ export default () => {
         <>
             <BreadcrumbsItemBuilder />
             <Row className="limited">
-                
-                <CladesListClades 
-                    setIndexToRef={setIndexToRef}
+
+                <CladesListClades/>
+
+                <CladesListManagement
                     setSubItems={setSubItems}
+                    toggle={toggle}
                 />
 
-                <CladesListManagement />
-
-                <CladesListLeaves 
-                    childClades={childClades} 
-                    scrollTo={scrollTo}
+                <CladesListMsa
+                    childClades={childClades}
+                    modal={modal}
+                    toggle={toggle}
                 />
             </Row>
         </>

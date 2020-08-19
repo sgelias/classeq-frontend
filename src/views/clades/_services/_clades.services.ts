@@ -9,6 +9,7 @@ import {
     ListResponseInterface,
     provideCladesUrl,
     provideSequencesUrl,
+    provideNodesDescriptionUrl,
 } from "../../../_helpers/_url-providers";
 
 
@@ -38,7 +39,8 @@ const list = async (tree_pk: uuid, dispacher: any, params?: ListResponseInterfac
 /**
  * Get a single record.
  * 
- * @see `ListResponseInterface`
+ * @see `CustomRequestConfig`
+ * @see `CreatedClades`
  * @param tree_pk A primary key of a reference tree.
  * @param id The clade primary key.
  */
@@ -48,8 +50,27 @@ const get = async (tree_pk: uuid, id: uuid): Promise<{ data: CreatedClades }> =>
 };
 
 
-const getSequences = async (clades_list: Array<uuid | undefined>): Promise<{ data: Array<CreatedSequences> }> => {
-    let config: CustomRequestConfig = provideSequencesUrl(clades_list);
+/**
+ * Get sequence list associated with the tree.
+ * 
+ * @see `CustomRequestConfig`
+ * @see `CreatedSequences`
+ * @param tree_pk 
+ */
+const getSequences = async (tree_pk: uuid): Promise<{ data: Array<CreatedSequences> }> => {
+    let config: CustomRequestConfig = provideSequencesUrl(tree_pk);
+    return await axios(config);
+};
+
+
+/* const listNodeDescriotions = async (clade: uuid, params?: ListResponseInterface): Promise<any> => {
+    let config: CustomRequestConfig = provideNodesDescriptionUrl("GET", clade, { query_params: params });
+    return await axios(config);
+}; */
+
+
+const getNodeDescription = async (clade: uuid): Promise<any> => {
+    let config: CustomRequestConfig = provideNodesDescriptionUrl("GET", clade);
     return await axios(config);
 };
 
@@ -58,4 +79,6 @@ export const cladesServices = {
     list,
     get,
     getSequences,
+    //listNodeDescriotions,
+    getNodeDescription,
 };

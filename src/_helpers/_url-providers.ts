@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, Method } from 'axios';
-
 import { v4 as uuid } from 'uuid/interfaces';
+
 
 // *******************
 // Shared utilities.
@@ -503,7 +503,7 @@ export const provideUploadAlignmentUrl = (args: HttpQueryParams): CustomRequestC
     return {
         headers: getCommonHeaders(true),
         method: "POST",
-        url: `${baseUrl}/seq/${args.id}/map-fasta`,
+        url: `${baseUrl}/${args.id}/seq/map-fasta`,
         data: args.data
     }
 }
@@ -547,7 +547,7 @@ export interface CreatedSequences {
 /**
  * Interface for created clades.
  */
- export interface CreatedClades extends CreatedRecords {
+export interface CreatedClades extends CreatedRecords {
     tree?: uuid,
     parent?: uuid,
     branch_type?: string,
@@ -558,6 +558,7 @@ export interface CreatedSequences {
     is_valid?: boolean,
     is_active?: boolean,
     sequence?: CreatedSequences,
+    nodedescriptionsmodel?: uuid,
     [key: string]: any,
 }
 
@@ -576,10 +577,11 @@ export interface CladesListObjects extends ListResponseInterface {
  * type to be used in axios requests. See example below.
  * 
  * @example axios(provideProjectsUrl("GET", { id: id }))
- * @see `getCommonHeaders` method.
  * @see `buildParamsForLists` method.
- * @see `Method` from axios package.
  * @see `CustomRequestConfig` interface.
+ * @see `HttpQueryParams`
+ * @see `getCommonHeaders` method.
+ * @see `Method` from axios package.
  * @param method A valid http verb of class Method from axios package.
  * @param tree_pk A tree primary key.
  * @param args An Object containing specific params as 
@@ -622,11 +624,85 @@ export const provideCladesUrl = (method: Method, tree_pk: uuid, args: HttpQueryP
  * @see `HttpQueryParams` interface.
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
-export const provideSequencesUrl = (clades_list: Array<uuid | undefined>): CustomRequestConfig => {
+export const provideSequencesUrl = (tree_pk: uuid): CustomRequestConfig => {
     return {
         headers: getCommonHeaders(true),
         method: "GET",
-        url: `${baseUrl}/seq/`,
-        params: { clades_list: clades_list.join(',') }
+        url: `${baseUrl}/${tree_pk}/seq/`,
+    }
+}
+
+
+/**
+ * Interface for base Node descriptions.
+ */
+export interface BaseNodeDescription {
+    description: string,
+    node_type: string,
+    external_links: Object,
+    is_active: boolean,
+}
+
+
+/**
+ * Interface for created Node descriptions.
+ */
+export interface CreatedNodeDescrription extends BaseNodeDescription {
+    readonly clade: uuid,
+    readonly created: Date,
+    readonly updated: Date,
+}
+
+
+/**
+ * Return an appropriated http config object of CustomRequestConfig
+ * type to be used in axios requests. See example below.
+ * 
+ * @example axios(provideProjectsUrl("GET", { id: id }))
+ * @see `buildParamsForLists` method.
+ * @see `CustomRequestConfig` interface.
+ * @see `HttpQueryParams`
+ * @see `getCommonHeaders` method.
+ * @see `Method` from axios package.
+ * @param method A valid http verb of class Method from axios package.
+ * @param clade A clade primary key.
+ * @param args An Object containing specific params as 
+ */
+export const provideNodesDescriptionUrl = (method: Method, clade: uuid, args?: HttpQueryParams): CustomRequestConfig => {
+
+    let request: CustomRequestConfig = {
+        headers: getCommonHeaders(true),
+    };
+
+    switch (method) {
+        case "GET":
+            if (!args?.query_params) {
+                return request = {
+                    ...request, ...{
+                        method: method,
+                        url: `${baseUrl}/${clade}/nodes/`,
+                    }
+                };
+            } else {
+                return request = {
+                    ...request, ...{
+                        method: method,
+                        url: `${baseUrl}/${clade}/nodes/`,
+                        params: buildParamsForLists(args.query_params),
+                    }
+                };
+            };
+        
+        case "POST":
+            return request = {
+                ...request, ...{
+                    method: method,
+                    url: `${baseUrl}/${clade}/nodes/annotate-clade/`,
+                    data: args?.data,
+                }
+            };
+
+        default:
+            return request;
     }
 }

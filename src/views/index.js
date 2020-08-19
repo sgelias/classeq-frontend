@@ -149,21 +149,25 @@ const pageList = [
    * Projects routes.
    */
   {
+    is_private: true,
     name: 'Projects',
     path: '/projects',
     component: ProjectsList,
   },
   {
+    is_private: true,
     name: 'Create',
     path: '/projects/new',
     component: ProjectsCreate,
   },
   {
+    is_private: true,
     name: 'Details',
     path: '/projects/:pid',
     component: ProjectsDetails,
   },
   {
+    is_private: true,
     name: 'Edit',
     path: '/projects/:pid/edit',
     component: ProjectsUpdate,
@@ -174,6 +178,7 @@ const pageList = [
    * Clades routes.
    */
   {
+    is_private: true,
     name: 'Clades',
     path: '/projects/:pid/:tid/clades',
     component: CladesList,

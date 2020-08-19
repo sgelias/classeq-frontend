@@ -1,4 +1,5 @@
 import {
+    faAlignLeft,
     faAngleDoubleLeft,
     faAngleDoubleRight,
     faArrowLeft,
@@ -18,6 +19,7 @@ import {
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 library.add(
+    faAlignLeft,
     faAngleDoubleLeft,
     faAngleDoubleRight,
     faArrowLeft,

@@ -21,8 +21,12 @@
     "jsx": "react",
     "noImplicitAny": false,
   },
+  "typeRoots": [
+    "./src/types"
+  ],
   "include": [
-    "src", "setupProxy.js", 
+    "src",
+    "setupProxy.js",
     "setupProxy.js"
   ]
 }
