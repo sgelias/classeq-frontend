@@ -341,6 +341,7 @@ export interface BaseTrees {
  */
 export interface CreatedTrees extends BaseTrees, CreatedRecords {
     is_active?: boolean,
+    feature_set?: CreatedRecords,
 }
 
 
@@ -516,13 +517,22 @@ export const provideUploadAlignmentUrl = (args: HttpQueryParams): CustomRequestC
  * @see `HttpQueryParams` interface.
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
-export const provideSequenceFeatureGenerationUrl = (args: HttpQueryParams): CustomRequestConfig => {
+export const provideSequenceFeatureGenerationUrl = (tree_pk: uuid): CustomRequestConfig => {
     return {
         headers: getCommonHeaders(true),
         method: "PATCH",
-        url: `${baseUrl}/seq-features/${args.id}/map-features`
+        url: `${baseUrl}/${tree_pk}/seq-features/map-features`
     }
 }
+
+
+export const provideSequenceFeatureListUrl = (project_pk: uuid): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "GET",
+        url: `${baseUrl}/${project_pk}/seq-features/`
+    }
+};
 
 
 // *******************
@@ -533,14 +543,47 @@ export const provideSequenceFeatureGenerationUrl = (args: HttpQueryParams): Cust
 /**
  * Interface for created sequences.
  */
-export interface CreatedSequences {
-    readonly uuid: uuid,
+export interface CreatedSequence {
     readonly created: Date,
     readonly updated: Date,
     readonly fasta_head: string,
     readonly fasta_sequence: string,
     readonly length: number,
-    readonly source_clade: uuid,
+    readonly sequence_clade: uuid,
+}
+
+
+/**
+ * Interface for created machine learning models.
+ */
+export interface CreatedModel {
+    readonly created: Date,
+    readonly updated: Date,
+    readonly feature_set: uuid,
+    readonly model_clade: uuid,
+    readonly test_score: Array<any>,
+    readonly ml_model: string,
+}
+
+
+/**
+ * Interface for base Node descriptions.
+ */
+export interface BaseNodeDescription {
+    description: string,
+    node_type: string,
+    external_links: Object,
+    is_active: boolean,
+}
+
+
+/**
+ * Interface for created Node descriptions.
+ */
+export interface CreatedNodeDescrription extends BaseNodeDescription {
+    readonly clade: uuid,
+    readonly created: Date,
+    readonly updated: Date,
 }
 
 
@@ -557,8 +600,17 @@ export interface CreatedClades extends CreatedRecords {
     child?: Array<uuid>,
     is_valid?: boolean,
     is_active?: boolean,
-    sequence?: CreatedSequences,
-    nodedescriptionsmodel?: uuid,
+    
+    /* Fasta fields */
+    sequence?: CreatedSequence,
+
+    /* Node description fields */
+    annotation?: CreatedNodeDescrription,
+
+    /* Node classifier fields */
+    model?: CreatedModel,
+
+    /* Allow custom field */
     [key: string]: any,
 }
 
@@ -618,43 +670,6 @@ export const provideCladesUrl = (method: Method, tree_pk: uuid, args: HttpQueryP
 
 
 /**
- * Provide a url to get all sequences from clades.
- * 
- * @see `CustomRequestConfig` interface.
- * @see `HttpQueryParams` interface.
- * @param args An Object containing specific params as HttpQueryParams interface.
- */
-export const provideSequencesUrl = (tree_pk: uuid): CustomRequestConfig => {
-    return {
-        headers: getCommonHeaders(true),
-        method: "GET",
-        url: `${baseUrl}/${tree_pk}/seq/`,
-    }
-}
-
-
-/**
- * Interface for base Node descriptions.
- */
-export interface BaseNodeDescription {
-    description: string,
-    node_type: string,
-    external_links: Object,
-    is_active: boolean,
-}
-
-
-/**
- * Interface for created Node descriptions.
- */
-export interface CreatedNodeDescrription extends BaseNodeDescription {
-    readonly clade: uuid,
-    readonly created: Date,
-    readonly updated: Date,
-}
-
-
-/**
  * Return an appropriated http config object of CustomRequestConfig
  * type to be used in axios requests. See example below.
  * 
@@ -706,3 +721,57 @@ export const provideNodesDescriptionUrl = (method: Method, clade: uuid, args?: H
             return request;
     }
 }
+
+
+/**
+ * Return an appropriated http config object of CustomRequestConfig
+ * type to be used in axios requests. See example below.
+ * 
+ * @example axios(provideProjectsUrl("GET", { id: id }))
+ * @see `buildParamsForLists` method.
+ * @see `CustomRequestConfig` interface.
+ * @see `HttpQueryParams`
+ * @see `getCommonHeaders` method.
+ * @see `Method` from axios package.
+ * @param method A valid http verb of class Method from axios package.
+ * @param tree A tree primary key.
+ * @param args An Object containing specific params as 
+ */
+ export const provideNodeClassifierDescriptionUrl = (method: Method, tree: uuid, args?: HttpQueryParams): CustomRequestConfig => {
+
+    let request: CustomRequestConfig = {
+        headers: getCommonHeaders(true),
+    };
+
+    switch (method) {
+        case "GET":
+            if (args?.id) {
+                return request = {
+                    ...request, ...{
+                        method: method,
+                        url: `${baseUrl}/${tree}/models/`,
+                    }
+                };
+            } else {
+                return request = {
+                    ...request, ...{
+                        method: method,
+                        url: `${baseUrl}/${tree}/models/`,
+                        params: buildParamsForLists(args?.query_params),
+                    }
+                };
+            };
+
+        default:
+            return request;
+    }
+}
+
+
+export const provideSingleCladeTrainUrl = (source_clade: uuid, feature_set: uuid): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "PATCH",
+        url: `${baseUrl}/${source_clade}/models/${feature_set}/train`,
+    }
+};

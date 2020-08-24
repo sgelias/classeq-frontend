@@ -1,5 +1,5 @@
-import { cladesConstants, sequencesConstants } from './_clades.constants';
-import { CreatedClades, CreatedSequences } from '../../../_helpers/_url-providers';
+import { cladesConstants } from './_clades.constants';
+import { CreatedClades } from '../../../_helpers/_url-providers';
 
 
 const cladesListActions = {
@@ -37,25 +37,4 @@ const cladesSingleActions = {
 export const cladesActions = {
     ...cladesListActions,
     ...cladesSingleActions,
-};
-
-
-const sequencesListActions = {
-
-    sequencesListPending(pending: boolean) {
-        return { type: sequencesConstants.LIST_PENDING, pending: pending }
-    },
-
-    sequencesListSuccess(results: Array<CreatedSequences>) {
-        return { type: sequencesConstants.LIST_SUCCESS, results: results }
-    },
-
-    sequencesListFail(error: any) {
-        return { type: sequencesConstants.LIST_FAIL, error: error }
-    },
-};
-
-
-export const sequencesActions = {
-    ...sequencesListActions,
 };

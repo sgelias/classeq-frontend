@@ -9,6 +9,8 @@ import { useHistory } from 'react-router-dom';
 import { Dates } from '../../shared/index';
 import { CreatedTrees } from '../../../_helpers/_url-providers';
 import TreesModal from './TreesModal';
+import { useDispatch } from 'react-redux';
+import { treesActions as ta } from '../_reducers/_trees.actions';
 
 
 interface Props {
@@ -21,14 +23,18 @@ interface Props {
 export default (props: Props) => {
 
 
+    const dispatch = useDispatch();
+
+
     const history = useHistory();
 
 
     const max_text_size: number = 25;
 
 
-    const goToClades = async (tree: uuid | undefined): Promise<void> => {
-        history.push(`${history.location.pathname}/${tree}/clades`);
+    const goToClades = async (tree: CreatedTrees): Promise<void> => {
+        dispatch(ta.treesDetailsSuccess(tree));
+        history.push(`${history.location.pathname}/${tree.uuid}/clades`);
     };
 
 
@@ -67,7 +73,7 @@ export default (props: Props) => {
                                         color="link"
                                         className="p-0"
                                         onClick={() => {
-                                            goToClades(item.uuid);
+                                            goToClades(item);
                                         }}
                                     >
                                         {item.title}

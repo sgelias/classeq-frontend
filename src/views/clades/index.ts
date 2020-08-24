@@ -1,1 +1,1 @@
-export { default as CladesList } from './components/CladesList';
+export { default as Clades } from './components/Clades';

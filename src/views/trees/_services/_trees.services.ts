@@ -11,11 +11,13 @@ import {
     provideTestCladesUrl,
     provideTreesUrl,
     provideUploadAlignmentUrl,
+    provideSequenceFeatureListUrl,
 } from "../../../_helpers/_url-providers";
 
 import axios from 'axios';
 import { treesActions as ta } from '../_reducers/_trees.actions';
 import { v4 as uuid } from 'uuid/interfaces';
+
 
 /**
  * List all records.
@@ -159,8 +161,14 @@ const uploadAlignment = async (id: uuid, data: string): Promise<any> => {
 };
 
 
-const mapSequenceFeatures = async (id: uuid): Promise<any> => {
-    let config: CustomRequestConfig = provideSequenceFeatureGenerationUrl({ id: id });
+const mapSequenceFeatures = async (tree_pk: uuid): Promise<any> => {
+    let config: CustomRequestConfig = provideSequenceFeatureGenerationUrl(tree_pk);
+    return await axios(config);
+};
+
+
+const listSequenceFeatures = async (project_pk: uuid): Promise<any> => {
+    let config: CustomRequestConfig = provideSequenceFeatureListUrl(project_pk);
     return await axios(config);
 };
 
@@ -177,4 +185,5 @@ export const treesServices = {
     testClade,
     uploadAlignment,
     mapSequenceFeatures,
+    listSequenceFeatures,
 };

@@ -36,11 +36,6 @@ export default (props: Props) => {
     const [animating, setAnimating] = useState<boolean>(false);
 
 
-    useAsyncEffect(() => {
-        ts.list(props.project_id, dispatch);
-    }, []);
-
-
     const trees: Array<CreatedTrees> = useSelector((state: RootStateOrAny) => (
         state.treesListReducer.results
     ));
@@ -67,6 +62,11 @@ export default (props: Props) => {
             color={color}
         />
     };
+
+
+    useAsyncEffect(() => {
+        ts.list(props.project_id, dispatch);
+    }, []);
 
 
     const cards = [

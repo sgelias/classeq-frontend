@@ -22,7 +22,7 @@ import ProgressBars from './elements/ProgressBars';
 import PaginationPage from './elements/Pagination';
 import ErrorPage from './shared/404';
 
-import { CladesList } from './clades/index';
+import { Clades } from './clades/index';
 import { ProjectsList, ProjectsDetails, ProjectsCreate, ProjectsUpdate } from './projects/index';
 import { LoginPage } from './auth/index';
 
@@ -181,7 +181,7 @@ const pageList = [
     is_private: true,
     name: 'Clades',
     path: '/projects/:pid/:tid/clades',
-    component: CladesList,
+    component: Clades,
   },
 
   /**

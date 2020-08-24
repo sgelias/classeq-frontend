@@ -16,15 +16,3 @@ export const cladesConstants = {
     ...cladesListConstants,
     ...cladesDetailsConstants,
 };
-
-
-const sequencesListConstants = {
-    LIST_PENDING: 'SEQUENCES_LIST_PENDING',
-    LIST_SUCCESS: 'SEQUENCES_LIST_SUCCESS',
-    LIST_FAIL: 'SEQUENCES_LIST_FAIL',
-};
-
-
-export const sequencesConstants = {
-    ...sequencesListConstants,
-}

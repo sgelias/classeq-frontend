@@ -4,12 +4,12 @@ import { v4 as uuid } from 'uuid/interfaces';
 import { cladesActions as ca } from '../_reducers/_clades.actions';
 import {
     CreatedClades,
-    CreatedSequences,
     CustomRequestConfig,
     ListResponseInterface,
     provideCladesUrl,
-    provideSequencesUrl,
     provideNodesDescriptionUrl,
+    provideNodeClassifierDescriptionUrl,
+    provideSingleCladeTrainUrl,
 } from "../../../_helpers/_url-providers";
 
 
@@ -21,7 +21,7 @@ import {
  * @param dispacher A dispach object of redux.
  * @param params An object of type ListResponseInterface.
  */
-const list = async (tree_pk: uuid, dispacher: any, params?: ListResponseInterface): Promise<any> => {
+const listClades = async (tree_pk: uuid, dispacher: any, params?: ListResponseInterface): Promise<any> => {
     let config: CustomRequestConfig = provideCladesUrl("GET", tree_pk, { query_params: params });
 
     await dispacher(ca.cladesListPending(true));
@@ -44,21 +44,8 @@ const list = async (tree_pk: uuid, dispacher: any, params?: ListResponseInterfac
  * @param tree_pk A primary key of a reference tree.
  * @param id The clade primary key.
  */
-const get = async (tree_pk: uuid, id: uuid): Promise<{ data: CreatedClades }> => {
+const getClade = async (tree_pk: uuid, id: uuid): Promise<{ data: CreatedClades }> => {
     let config: CustomRequestConfig = provideCladesUrl("GET", tree_pk, { id: id });
-    return await axios(config);
-};
-
-
-/**
- * Get sequence list associated with the tree.
- * 
- * @see `CustomRequestConfig`
- * @see `CreatedSequences`
- * @param tree_pk 
- */
-const getSequences = async (tree_pk: uuid): Promise<{ data: Array<CreatedSequences> }> => {
-    let config: CustomRequestConfig = provideSequencesUrl(tree_pk);
     return await axios(config);
 };
 
@@ -75,10 +62,23 @@ const getNodeDescription = async (clade: uuid): Promise<any> => {
 };
 
 
+const listNodeClassifierDescriptions = async (tree: uuid): Promise<any> => {
+    let config: CustomRequestConfig = provideNodeClassifierDescriptionUrl("GET", tree);
+    return await axios(config);
+};
+
+
+const startSingleCladeTrain = async (source_clade: uuid, feature_set: uuid): Promise<any> => {
+    let config: CustomRequestConfig = provideSingleCladeTrainUrl(source_clade, feature_set);
+    return await axios(config);
+};
+
+
 export const cladesServices = {
-    list,
-    get,
-    getSequences,
+    listClades,
+    getClade,
     //listNodeDescriotions,
     getNodeDescription,
+    listNodeClassifierDescriptions,
+    startSingleCladeTrain,
 };

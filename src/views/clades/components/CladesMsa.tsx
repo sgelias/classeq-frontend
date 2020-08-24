@@ -3,8 +3,8 @@ import { Alert, Table, Modal, ModalBody, Button } from 'reactstrap';
 import { MapInteractionCSS } from 'react-map-interaction';
 //import ReactApexChart from 'react-apexcharts';
 
-import { CreatedClades } from '../../../_helpers/_url-providers';
 import { useAsyncEffect } from 'use-async-effect';
+import { CreatedClades } from '../../../_helpers/_url-providers';
 
 
 interface Props {
@@ -56,10 +56,10 @@ export default (props: Props) => {
 
     const compileMatrix = async () => {
         setNucleotideMatrix([...props.childClades
-            .filter(item => item.branch_type === "L")
-            .map((item: CreatedClades) => item.sequence && {
+            .filter((item: CreatedClades) => item.branch_type === "L")
+            .map(item => item.sequence && {
                 name: item.name,
-                sequence: item.sequence.fasta_sequence.toLowerCase().split('')
+                sequence: item?.sequence?.fasta_sequence.toLowerCase().split('')
             })
         ]);
     };
@@ -78,11 +78,11 @@ export default (props: Props) => {
 
 
     const childElements = () => {
-        return props.childClades.filter(item => item.branch_type === "L").map((item, index) => (
+        return props.childClades.filter(item => item.branch_type === "L").map((item: CreatedClades, index) => (
             <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{item.name}</td>
-                {item?.sequence && gotTdNucleotides(item?.sequence?.fasta_sequence.toLowerCase().split(''))}
+                {item?.sequence?.fasta_sequence && gotTdNucleotides(item?.sequence?.fasta_sequence.toLowerCase().split(''))}
             </tr>
         ))
     };

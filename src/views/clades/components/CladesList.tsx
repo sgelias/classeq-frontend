@@ -1,31 +1,21 @@
-import React, { useState } from 'react';
-import { Row } from 'reactstrap';
+import React from 'react';
+import { Col, Card, CardHeader, CardBody, ListGroup, ListGroupItem } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { useAsyncEffect } from 'use-async-effect';
 
-import { CreatedClades, CreatedSequences } from '../../../_helpers/_url-providers';
-import { BreadcrumbsItemBuilder } from '../../shared';
-import { sequencesActions as sa } from '../_reducers/_clades.actions';
-import { cladesServices as cs } from '../_services/_clades.services';
-import CladesListMsa from './CladesListMsa';
-import CladesListClades from './CladesListClades';
-import CladesListManagement from './CladesListManagement';
+import { CreatedClades } from '../../../_helpers/_url-providers';
+import { cladesActions as ca } from '../_reducers/_clades.actions';
 
 
-export default () => {
+interface Props {
+    min_clade_length: number,
+};
+
+
+export default (props: Props) => {
 
 
     const dispatch = useDispatch();
-
-
-    const params = useParams<any>();
-
-
-    const [modal, setModal] = useState(false);
-
-
-    const [childClades, setChildClades] = useState<Array<CreatedClades>>([]);
 
 
     const clades: Array<CreatedClades> = useSelector((state: RootStateOrAny) => (
@@ -33,83 +23,134 @@ export default () => {
     ));
 
 
-    const sequences: Array<CreatedSequences> = useSelector((state: RootStateOrAny) => (
-        state.sequencesListReducer.results
-    ));
-
-
-    const toggle = () => setModal(!modal);
-
-
-    const listClades = async (): Promise<void> => {
-        (params.pid && params.tid) && await cs.list(params.tid, dispatch);
+    const setSingleClade = async (item: CreatedClades) => {
+        await Promise.resolve()
+            .then(() => dispatch(ca.cladesDetailsPending(true)))
+            .then(() => dispatch(ca.cladesDetailsSuccess(item)))
+            .then(() => dispatch(ca.cladesDetailsPending(false)))
+            .catch(err => dispatch(ca.cladesDetailsFail(err)));
     };
 
 
-    const mapSequencesToClades = async (): Promise<void> => {
-        clades
-            .filter(item => item.branch_type === "L")
-            .map(item => item.sequence = sequences.filter(sequence => (
-                sequence.source_clade === item.uuid
-            ))[0]);
+    const internalClade = (item: CreatedClades, index: number) => {
+
+        const filteredClades = clades.filter(clade => (
+            clade.parent === item.uuid && clade.branch_type === "B"
+        ));
+
+        return (
+            <ListGroupItem 
+                key={index}
+                tag="a"
+                onClick={() => {
+                    setSingleClade(item);
+                }}
+            >
+                <span className="float-right text-muted">
+                    {item.branch_type === "R" ? "Root" : "Internal"}
+                </span>
+                <details>
+                    <summary className={`${item.nodedescriptionsmodel && "annotated"} text-muted`}>
+                        <FontAwesomeIcon icon="leaf" />
+                        &nbsp;&nbsp;
+                        {(item?.child?.length && item?.child?.length > 0) && (
+                            `${item?.child?.length} leaves`)}
+                        &nbsp;&nbsp;
+                        {filteredClades?.length > 0 && (
+                            <>
+                                <FontAwesomeIcon icon="code-branch" />
+                                &nbsp;&nbsp;
+                                {filteredClades?.length} child
+                            </>
+                        )}
+                        &nbsp;&nbsp;
+                        {!item.nodedescriptionsmodel ? null : (
+                            <>
+                                &nbsp;&nbsp;
+                                <FontAwesomeIcon icon="pencil-alt" />
+                            </>
+                        )}
+                        {!item.model ? null : (
+                            <>
+                                &nbsp;&nbsp;
+                                <FontAwesomeIcon icon="brain" />
+                            </>
+                        )}
+                    </summary>
+                </details>
+            </ListGroupItem >
+        )
     };
 
 
-    const listSequences = async () => {
-        dispatch(sa.sequencesListPending(true));
-        (clades.length > 0) && (
-            cs.getSequences(params.tid)
-                .then(res => dispatch(sa.sequencesListSuccess(res.data)))
-                .then(() => dispatch(sa.sequencesListPending(false)))
-        );
-    };
+    return (
+        <Col
+            sm={{ size: 12 }}
+            md={{ size: 6 }}
+        >
+            <Card>
+                <CardHeader className="border-bottom">
+                    <h3>
+                        <FontAwesomeIcon icon="code-branch" size="xs" />
+                        &nbsp;&nbsp;&nbsp;
+                        Clades
+                    </h3>
+                </CardHeader>
 
+                <CardBody className="pt-1 clades-card">
 
-    useAsyncEffect(async () => {
-        (clades.length === 0) && await listClades();
-    }, []);
+                    {/* Larger and medium clades */}
+                    <div className="my-5">
+                        <h4 className="text-muted">
+                            Mediun/Larger clades (&gt;= {props.min_clade_length} leaves)
+                        </h4>
 
+                        <br className="mb-3" />
 
-    useAsyncEffect(async () => {
-        await listSequences();
-    }, [clades.length]);
+                        <ListGroup className="shadow">
+                            {!(clades.length > 0) ? null : clades
+                                .filter(item => (
+                                    (item.child && item?.child?.length >= props.min_clade_length) &&
+                                    (item.branch_type === "B" || item.branch_type === "R"))
+                                )
+                                .sort((a: CreatedClades, b: CreatedClades) => {
+                                    return (
+                                        (a && b) &&
+                                        (a.child && b.child) &&
+                                        (a.child?.length > b.child?.length)
+                                    ) ? -1 : 1
+                                })
+                                .map((item, index) => internalClade(item, index))}
+                        </ListGroup>
+                    </div>
 
+                    {/* Small clades */}
+                    <div className="my-5">
+                        <h4 className="text-muted">
+                            Small clades (&lt; {props.min_clade_length} leaves)
+                        </h4>
 
-    useAsyncEffect(async () => {
-        await mapSequencesToClades();
-    }, [sequences.length]);
+                        <br />
 
+                        <ListGroup className="shadow">
+                            {!(clades.length > 0) ? null : clades
+                                .filter(item => (
+                                    (item.child && item?.child?.length < props.min_clade_length) &&
+                                    (item.branch_type === "B" || item.branch_type === "R"))
+                                )
+                                .sort((a: CreatedClades, b: CreatedClades) => {
+                                    return (
+                                        (a && b) &&
+                                        (a.child && b.child) &&
+                                        (a.child?.length > b.child?.length)
+                                    ) ? -1 : 0
+                                })
+                                .map((item, index) => internalClade(item, index))}
+                        </ListGroup>
+                    </div>
 
-    const setSubItems = (item: CreatedClades) => {
-        setChildClades([
-            ...clades.filter(clade => (
-                clade.parent === item.uuid && clade.branch_type === "B"
-            )),
-            ...clades.filter(clade => (
-                clade.uuid && item.child?.includes(clade.uuid)
-            ))
-        ]);
-    };
-
-
-    return !(clades && clades.length > 0) ? null : (
-        <>
-            <BreadcrumbsItemBuilder />
-            <Row className="limited">
-
-                <CladesListClades/>
-
-                <CladesListManagement
-                    setSubItems={setSubItems}
-                    toggle={toggle}
-                />
-
-                <CladesListMsa
-                    childClades={childClades}
-                    modal={modal}
-                    toggle={toggle}
-                />
-            </Row>
-        </>
+                </CardBody>
+            </Card>
+        </Col>
     )
 };
