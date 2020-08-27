@@ -28,10 +28,10 @@ export default () => {
 
     const nodeDescriptionDetailsView = (
         <h4 className="text-center my-3">
-            {record.annotation?.description}
+            {record.annotation?.external_links?.node?.scientificName}
             &nbsp;&nbsp;
             <small className="text-muted">
-                {record.annotation?.node_type}
+                {record.annotation?.external_links?.node?.taxonRank}
             </small>
         </h4>
     );
@@ -54,7 +54,9 @@ export default () => {
                 </Button>
             </div>
             <ModalBody>
-                <CladesManagementNodeInput/>
+                <CladesManagementNodeInput
+                    toggle={toggle}
+                />
             </ModalBody>
         </Modal>
     );

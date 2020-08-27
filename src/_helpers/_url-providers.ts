@@ -572,7 +572,9 @@ export interface CreatedModel {
 export interface BaseNodeDescription {
     description: string,
     node_type: string,
-    external_links: Object,
+    external_links: {
+        [key: string]: any
+    },
     is_active: boolean,
 }
 
@@ -787,15 +789,24 @@ export const provideGetNodeListUrl = (term: string): CustomRequestConfig => {
 };
 
 
-export const provideNodeAnnotationUrl = (graph_node: number, clade_pk: uuid, tree_pk: uuid, project_pk: uuid): CustomRequestConfig => {
+export const provideNodeAnnotationCreateUrl = (graph_node: number, clade_pk: uuid, tree_pk: uuid, project_pk: uuid): CustomRequestConfig => {
     return {
         headers: getCommonHeaders(true),
-        method: "POST",
+        method: "PATCH",
         url: `${baseUrl}/nodes/${graph_node}/annotate-node`,
         params: {
             clade_id: clade_pk,
             tree_id: tree_pk,
             project_id: project_pk,
         }
+    }
+};
+
+
+export const provideNodeAnnotationDeleteUrl = (graph_node: number): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "DELETE",
+        url: `${baseUrl}/nodes/${graph_node}/delete`,
     }
 };

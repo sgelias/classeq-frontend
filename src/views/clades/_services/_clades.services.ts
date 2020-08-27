@@ -10,8 +10,9 @@ import {
     provideNodesDescriptionUrl,
     provideNodeClassifierDescriptionUrl,
     provideSingleCladeTrainUrl,
-    provideNodeAnnotationUrl,
+    provideNodeAnnotationCreateUrl,
     provideGetNodeListUrl,
+    provideNodeAnnotationDeleteUrl,
 } from "../../../_helpers/_url-providers";
 
 
@@ -31,7 +32,6 @@ const listClades = async (tree_pk: uuid, dispacher: any, params?: ListResponseIn
         .then(async res => {
             await dispacher(ca.cladesListSuccess(res.data));
             await dispacher(ca.cladesListPending(false));
-            console.log(res.data.filter(item => item.branch_type === "B" && item.annotation));
         })
         .catch(err => dispacher(ca.cladesListFail(err)));
 
@@ -51,12 +51,6 @@ const getClade = async (tree_pk: uuid, id: uuid): Promise<{ data: CreatedClades 
     let config: CustomRequestConfig = provideCladesUrl("GET", tree_pk, { id: id });
     return await axios(config);
 };
-
-
-/* const listNodeDescriotions = async (clade: uuid, params?: ListResponseInterface): Promise<any> => {
-    let config: CustomRequestConfig = provideNodesDescriptionUrl("GET", clade, { query_params: params });
-    return await axios(config);
-}; */
 
 
 const getNodeDescription = async (clade: uuid): Promise<any> => {
@@ -84,8 +78,13 @@ const getNodeList = async (term: string) => {
 
 
 const annotateClade = async (graph_node: number, clade_pk: uuid, tree_pk: uuid, project_pk: uuid) => {
-    console.log(graph_node, clade_pk, tree_pk, project_pk);
-    let config: CustomRequestConfig = provideNodeAnnotationUrl(graph_node, clade_pk, tree_pk, project_pk);
+    let config: CustomRequestConfig = provideNodeAnnotationCreateUrl(graph_node, clade_pk, tree_pk, project_pk);
+    return await axios(config);
+};
+
+
+const deleteAnnotatedClade = async (graph_node: number) => {
+    let config: CustomRequestConfig = provideNodeAnnotationDeleteUrl(graph_node);
     return await axios(config);
 };
 
@@ -93,10 +92,10 @@ const annotateClade = async (graph_node: number, clade_pk: uuid, tree_pk: uuid, 
 export const cladesServices = {
     listClades,
     getClade,
-    //listNodeDescriotions,
     getNodeDescription,
     listNodeClassifierDescriptions,
     startSingleCladeTrain,
-    annotateClade,
     getNodeList,
+    annotateClade,
+    deleteAnnotatedClade,
 };
