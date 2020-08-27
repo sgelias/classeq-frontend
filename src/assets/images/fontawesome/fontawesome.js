@@ -2,6 +2,7 @@ import {
     faAlignLeft,
     faAngleDoubleLeft,
     faAngleDoubleRight,
+    faArrowDown,
     faArrowLeft,
     faBrain,
     faCheck,
@@ -15,6 +16,7 @@ import {
     faProjectDiagram,
     faTimes,
     faTree,
+    faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -23,6 +25,7 @@ library.add(
     faAlignLeft,
     faAngleDoubleLeft,
     faAngleDoubleRight,
+    faArrowDown,
     faArrowLeft,
     faBrain,
     faCheck,
@@ -36,4 +39,5 @@ library.add(
     faProjectDiagram,
     faTimes,
     faTree,
+    faExclamationTriangle,
 );

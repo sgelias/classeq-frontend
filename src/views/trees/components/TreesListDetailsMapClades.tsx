@@ -151,8 +151,7 @@ export default (props: Props) => {
                                     ? "Test clade"
                                     : <Spinner type="grow" color="light" />}
                             </Button>
-                        )
-                    }
+                        )}
                 </div>
 
                 <Form>

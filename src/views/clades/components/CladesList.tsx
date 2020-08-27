@@ -50,7 +50,7 @@ export default (props: Props) => {
                     {item.branch_type === "R" ? "Root" : "Internal"}
                 </span>
                 <details>
-                    <summary className={`${item.nodedescriptionsmodel && "annotated"} text-muted`}>
+                    <summary className={`${item.annotation && "annotated"} text-muted`}>
                         <FontAwesomeIcon icon="leaf" />
                         &nbsp;&nbsp;
                         {(item?.child?.length && item?.child?.length > 0) && (
@@ -64,18 +64,19 @@ export default (props: Props) => {
                             </>
                         )}
                         &nbsp;&nbsp;
-                        {!item.nodedescriptionsmodel ? null : (
-                            <>
-                                &nbsp;&nbsp;
-                                <FontAwesomeIcon icon="pencil-alt" />
-                            </>
-                        )}
                         {!item.model ? null : (
                             <>
                                 &nbsp;&nbsp;
                                 <FontAwesomeIcon icon="brain" />
                             </>
                         )}
+                        {!item.annotation ? null : (
+                            <>
+                                &nbsp;&nbsp;
+                                <FontAwesomeIcon icon="pencil-alt" />
+                            </>
+                        )}
+                        
                     </summary>
                 </details>
             </ListGroupItem >

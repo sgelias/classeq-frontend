@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Card, CardHeader, CardBody, Button, CardSubtitle } from 'reactstrap';
+import { Col, Card, CardHeader, CardBody, Button, ListGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, RootStateOrAny } from 'react-redux';
 
@@ -37,17 +37,15 @@ export default (props: Props) => {
                     </h3>
                 </CardHeader>
 
-                <CardBody className="pt-1 clades-card">
+                <CardBody className="pt-4 clades-card">
                     
-                    <CladesManagementAnnotations />
-                    <hr />
-                    
-                    <CardSubtitle className="text-muted">
+                    <ListGroup>
+                        <CladesManagementAnnotations />
                         <CladesManagementModels 
                             min_clade_length={props.min_clade_length}
                         />
-                    </CardSubtitle>
-
+                    </ListGroup>
+                    
                     <hr />
 
                     <div>

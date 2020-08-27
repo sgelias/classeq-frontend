@@ -10,6 +10,8 @@ import {
     provideNodesDescriptionUrl,
     provideNodeClassifierDescriptionUrl,
     provideSingleCladeTrainUrl,
+    provideNodeAnnotationUrl,
+    provideGetNodeListUrl,
 } from "../../../_helpers/_url-providers";
 
 
@@ -29,6 +31,7 @@ const listClades = async (tree_pk: uuid, dispacher: any, params?: ListResponseIn
         .then(async res => {
             await dispacher(ca.cladesListSuccess(res.data));
             await dispacher(ca.cladesListPending(false));
+            console.log(res.data.filter(item => item.branch_type === "B" && item.annotation));
         })
         .catch(err => dispacher(ca.cladesListFail(err)));
 
@@ -74,6 +77,19 @@ const startSingleCladeTrain = async (source_clade: uuid, feature_set: uuid): Pro
 };
 
 
+const getNodeList = async (term: string) => {
+    let config: CustomRequestConfig = provideGetNodeListUrl(term);
+    return await axios(config);
+};
+
+
+const annotateClade = async (graph_node: number, clade_pk: uuid, tree_pk: uuid, project_pk: uuid) => {
+    console.log(graph_node, clade_pk, tree_pk, project_pk);
+    let config: CustomRequestConfig = provideNodeAnnotationUrl(graph_node, clade_pk, tree_pk, project_pk);
+    return await axios(config);
+};
+
+
 export const cladesServices = {
     listClades,
     getClade,
@@ -81,4 +97,6 @@ export const cladesServices = {
     getNodeDescription,
     listNodeClassifierDescriptions,
     startSingleCladeTrain,
+    annotateClade,
+    getNodeList,
 };

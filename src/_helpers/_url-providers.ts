@@ -775,3 +775,27 @@ export const provideSingleCladeTrainUrl = (source_clade: uuid, feature_set: uuid
         url: `${baseUrl}/${source_clade}/models/${feature_set}/train`,
     }
 };
+
+
+export const provideGetNodeListUrl = (term: string): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "GET",
+        url: `${baseUrl}/nodes/`,
+        params: { q: term, t: "full" },
+    }
+};
+
+
+export const provideNodeAnnotationUrl = (graph_node: number, clade_pk: uuid, tree_pk: uuid, project_pk: uuid): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "POST",
+        url: `${baseUrl}/nodes/${graph_node}/annotate-node`,
+        params: {
+            clade_id: clade_pk,
+            tree_id: tree_pk,
+            project_id: project_pk,
+        }
+    }
+};

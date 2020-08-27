@@ -16,8 +16,8 @@ const persistConfig = {
     blacklist: [
         'cladesListReducer',
         'cladesDetailsReducer',
-        'treesListReducer',
-        'treesDetailsReducer',
+        //'treesListReducer',
+        //'treesDetailsReducer',
     ]
 };
 
