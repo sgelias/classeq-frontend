@@ -13,6 +13,7 @@ import {
     provideNodeAnnotationCreateUrl,
     provideGetNodeListUrl,
     provideNodeAnnotationDeleteUrl,
+    provideGetNodeByIdUrl,
 } from "../../../_helpers/_url-providers";
 
 
@@ -77,14 +78,20 @@ const getNodeList = async (term: string) => {
 };
 
 
+const getNodeById = async (node: number) => {
+    let config: CustomRequestConfig = provideGetNodeByIdUrl(node);
+    return await axios(config);
+};
+
+
 const annotateClade = async (graph_node: number, clade_pk: uuid, tree_pk: uuid, project_pk: uuid) => {
     let config: CustomRequestConfig = provideNodeAnnotationCreateUrl(graph_node, clade_pk, tree_pk, project_pk);
     return await axios(config);
 };
 
 
-const deleteAnnotatedClade = async (graph_node: number) => {
-    let config: CustomRequestConfig = provideNodeAnnotationDeleteUrl(graph_node);
+const deleteAnnotatedClade = async (graph_node: number, clade_pk: uuid) => {
+    let config: CustomRequestConfig = provideNodeAnnotationDeleteUrl(graph_node, clade_pk);
     return await axios(config);
 };
 
@@ -96,6 +103,7 @@ export const cladesServices = {
     listNodeClassifierDescriptions,
     startSingleCladeTrain,
     getNodeList,
+    getNodeById,
     annotateClade,
     deleteAnnotatedClade,
 };

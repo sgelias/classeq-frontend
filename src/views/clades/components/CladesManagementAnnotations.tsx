@@ -5,6 +5,7 @@ import { useSelector, RootStateOrAny } from 'react-redux';
 import { CreatedClades } from '../../../_helpers/_url-providers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CladesManagementNodeInput from './CladesManagementNodeInput';
+import CladesManagementDeleteAnnotation from './CladesManagementDeleteAnnotation';
 
 
 export default () => {
@@ -23,18 +24,10 @@ export default () => {
     ));
 
 
+    const [showAdvancedOptions, setShowAdvancedOptions] = useState<boolean>(false);
+
+
     const toggle = () => setModal(!modal);
-
-
-    const nodeDescriptionDetailsView = (
-        <h4 className="text-center my-3">
-            {record.annotation?.external_links?.node?.scientificName}
-            &nbsp;&nbsp;
-            <small className="text-muted">
-                {record.annotation?.external_links?.node?.taxonRank}
-            </small>
-        </h4>
-    );
 
 
     const annotationModal = (
@@ -62,7 +55,7 @@ export default () => {
     );
 
 
-    const nodeDescriptionCreateOrEdit = (
+    const nodeDescriptionCreate = (
         <ListGroupItem>
             <details>
                 <summary className="float-right">
@@ -84,9 +77,53 @@ export default () => {
                 Pending annotation
             </strong>
             <p className="mt-4 mb-1">
-                Each clade would be connected to a node of the backbone tree. 
+                Each clade would be connected to a node of the backbone tree.
                 Click in Annotate to connect this node to backbone.
             </p>
+        </ListGroupItem>
+    );
+
+
+    const formatedDate = () => {
+        const date = record.annotation?.external_links?.annotation.created;
+        return date && new Date(date).toLocaleDateString("en-US");
+    };
+
+
+    const nodeDescriptionDetailsView = (
+        <ListGroupItem>
+            <details>
+                <summary className="float-right p-0 m-0">
+                    <Button
+                        color="link"
+                        className="py-0 px-1"
+                        onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
+                    >
+                        <small className="p-0">
+                            Advanced
+                        </small>
+                    </Button>
+                </summary>
+            </details>
+            <strong>
+                {record.annotation?.external_links?.node?.scientificName}
+                &nbsp;&nbsp;
+                <small className="text-muted">
+                    {record.annotation?.external_links?.node?.taxonRank}
+                </small>
+                <div>
+                    <small>
+                        Created:&nbsp;&nbsp;
+                        {formatedDate()}
+                    </small>
+                </div>
+            </strong>
+            {showAdvancedOptions && (
+                <CladesManagementDeleteAnnotation
+                    modal={modal}
+                    toggle={toggle}
+                />
+            )}
         </ListGroupItem>
     );
 
@@ -95,11 +132,9 @@ export default () => {
         <>
             {status
                 ? <Spinner color="success" />
-                : (
-                    record.annotation
-                        ? nodeDescriptionDetailsView
-                        : nodeDescriptionCreateOrEdit
-                )}
+                : record.annotation
+                    ? nodeDescriptionDetailsView
+                    : nodeDescriptionCreate}
         </>
     )
 };

@@ -105,3 +105,16 @@ path.link {
 .annotated {
     color: green !important;
 }
+
+.clade-items:hover {
+    cursor: pointer;
+
+    &.valid {
+        background-color: #d7ffae;
+    }
+
+    &.invalid {
+        background-color: #f0d5d5;
+    }
+    
+}

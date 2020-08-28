@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Col, CardTitle, CardText, Badge, Spinner } from 'reactstrap';
+import { Button, CardTitle, Badge, Spinner, ListGroupItem } from 'reactstrap';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 
 import { cladesServices as cs } from '../_services/_clades.services';
@@ -16,8 +16,8 @@ export default (props: Props) => {
 
 
     const dispatch = useDispatch();
-    
-    
+
+
     const params = useParams<any>();
 
 
@@ -33,7 +33,7 @@ export default (props: Props) => {
         state.treesDetailsReducer.record
     ));
 
-    
+
     const listClades = async (): Promise<void> => {
         (params.tid) && await cs.listClades(params.tid, dispatch);
     };
@@ -66,48 +66,50 @@ export default (props: Props) => {
 
 
     return (
-        <Col>
-            <Card body>
-                {record.model
-                    ? (
-                        <>
-                            <CardTitle>
+        <ListGroupItem>
+            {record.model
+                ? (
+                    <>
+                        <p className="mb-2">
+                            <span className="text-muted">
                                 Model:&nbsp;&nbsp;
-                                {record?.model?.ml_model}
-                            </CardTitle>
-                            <CardText>
+                            </span>
+                            {record?.model?.ml_model}
+                        </p>
+                        <p className="mb-2">
+                            <span className="text-muted">
                                 Scores:&nbsp;&nbsp;
-                                {record?.model?.test_score.map((score, index) => (
-                                    <Badge
-                                        key={index}
-                                        color={setScoreColor(score)}
-                                        className="m-1">
-                                        {round(score, 2)}
-                                    </Badge>
-                                ))}
-                            </CardText>
-                        </>
-                    ) : (
-                        <CardTitle>
-                            {record.child && (record.child?.length > props.min_clade_length || record.branch_type !== "R")
-                                ? <>Select a not root branch to train.</> 
-                                : (
-                                    <Button
-                                        color="primary"
-                                        className="btn-block"
-                                        disabled={trainingStatus}
-                                        onClick={() => {
-                                            startSingleCladeTrain();
-                                        }}
-                                    >
-                                        {trainingStatus 
-                                            ? <Spinner />
-                                            : "Start train"}
-                                    </Button>
-                                )}
-                        </CardTitle>
-                    )}
-            </Card>
-        </Col>
+                            </span>
+                            {record?.model?.test_score.map((score, index) => (
+                                <Badge
+                                    key={index}
+                                    color={setScoreColor(score)}
+                                    className="m-1">
+                                    {round(score, 2)}
+                                </Badge>
+                            ))}
+                        </p>
+                    </>
+                ) : (
+                    <CardTitle>
+                        {record.child && (record.child?.length > props.min_clade_length || record.branch_type !== "R")
+                            ? <>Select a not root branch to train.</>
+                            : (
+                                <Button
+                                    color="primary"
+                                    className="btn-block"
+                                    disabled={trainingStatus}
+                                    onClick={() => {
+                                        startSingleCladeTrain();
+                                    }}
+                                >
+                                    {trainingStatus
+                                        ? <Spinner />
+                                        : "Start train"}
+                                </Button>
+                            )}
+                    </CardTitle>
+                )}
+        </ListGroupItem>
     )
 };

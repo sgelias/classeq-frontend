@@ -566,13 +566,71 @@ export interface CreatedModel {
 }
 
 
+export interface i4lifeRecord {
+    id: number, //346690,
+    identifier?: string, //"b2470ac3416863e7d4ce5976811edbd6",
+    taxonID?: number, //42160514,
+    datasetID?: number, //"28",
+    datasetName?: string, //"Species Fungorum in Species 2000 & ITIS Catalogue of Life: 2019",
+    scientificNameID?: string, //"SF-159197",
+    parentNameUsageID?: number, //54881956,
+    modified?: Date, //"27-Oct-2017",
+    
+    // Taxonomy
+    kingdom?: string, //"Fungi",
+    phylum?: string, //"Ascomycota",
+    class?: string, //"Sordariomycetes",
+    order?: string, //"Hypocreales",
+    family?: string, //"Nectriaceae",
+    genus?: string, //"Fusarium",
+    genericName?: string, //"Fusarium",
+    scientificName?: string, //"Fusarium anguioides Sherb., 1915",
+    specificEpithet?: string, //"anguioides",
+    scientificNameAuthorship?: string, //"Sherb., 1915",
+    
+    // Taxonomic metadata
+    nameAccordingTo?: string, //"Kew Mycology",
+    taxonRank?: string, //"species",
+    taxonomicStatus?: string, //"accepted name",
+    isExtinct?: boolean, //false,
+    references?: string, //"http://www.catalogueoflife.org/col/details/species/id/b2470ac3416863e7d4ce5976811edbd6",
+
+    [key: string]: any
+}
+
+
+export interface BasicGraphAnnotation {
+    id: number,
+    created: Date,
+    user_id: number,
+    user_name: string,
+    project_id: uuid,
+    tree_id: uuid,
+    clade_id: uuid,
+
+    [key: string]: any
+}
+
+
+export interface GraphAnnotation {
+    target: i4lifeRecord,
+    parent: BasicGraphAnnotation,
+    child: Array<i4lifeRecord>,
+
+    [key: string]: any
+}
+
+
 /**
  * Interface for base Node descriptions.
  */
-export interface BaseNodeDescription {
+ export interface BaseNodeDescription {
     description: string,
     node_type: string,
     external_links: {
+        annotation: BasicGraphAnnotation,
+        node: i4lifeRecord,
+
         [key: string]: any
     },
     is_active: boolean,
@@ -789,6 +847,15 @@ export const provideGetNodeListUrl = (term: string): CustomRequestConfig => {
 };
 
 
+export const provideGetNodeByIdUrl = (node: number): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "GET",
+        url: `${baseUrl}/nodes/${node}`,
+    }
+};
+
+
 export const provideNodeAnnotationCreateUrl = (graph_node: number, clade_pk: uuid, tree_pk: uuid, project_pk: uuid): CustomRequestConfig => {
     return {
         headers: getCommonHeaders(true),
@@ -803,10 +870,10 @@ export const provideNodeAnnotationCreateUrl = (graph_node: number, clade_pk: uui
 };
 
 
-export const provideNodeAnnotationDeleteUrl = (graph_node: number): CustomRequestConfig => {
+export const provideNodeAnnotationDeleteUrl = (graph_node: number, clade_pk: uuid): CustomRequestConfig => {
     return {
         headers: getCommonHeaders(true),
         method: "DELETE",
-        url: `${baseUrl}/nodes/${graph_node}/delete`,
+        url: `${baseUrl}/nodes/${graph_node}/${clade_pk}/delete`,
     }
 };

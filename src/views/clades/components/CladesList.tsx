@@ -18,6 +18,11 @@ export default (props: Props) => {
     const dispatch = useDispatch();
 
 
+    const clade: CreatedClades = useSelector((state: RootStateOrAny) => (
+        state.cladesDetailsReducer.record
+    ));
+
+
     const clades: Array<CreatedClades> = useSelector((state: RootStateOrAny) => (
         state.cladesListReducer.results
     ));
@@ -45,40 +50,46 @@ export default (props: Props) => {
                 onClick={() => {
                     setSingleClade(item);
                 }}
+                className={
+                    `clade-items \
+                    ${clade.uuid === item.uuid && "border border-2 border-success"} \
+                    ${item.child 
+                        && (item.child.length < props.min_clade_length || item.branch_type === "R") 
+                            ? "invalid" : "valid"}`
+                }
             >
+                {item.child && console.log(item.child.length, props.min_clade_length)}
                 <span className="float-right text-muted">
                     {item.branch_type === "R" ? "Root" : "Internal"}
                 </span>
-                <details>
-                    <summary className={`${item.annotation && "annotated"} text-muted`}>
-                        <FontAwesomeIcon icon="leaf" />
-                        &nbsp;&nbsp;
-                        {(item?.child?.length && item?.child?.length > 0) && (
-                            `${item?.child?.length} leaves`)}
-                        &nbsp;&nbsp;
-                        {filteredClades?.length > 0 && (
-                            <>
-                                <FontAwesomeIcon icon="code-branch" />
-                                &nbsp;&nbsp;
-                                {filteredClades?.length} child
-                            </>
-                        )}
-                        &nbsp;&nbsp;
-                        {!item.model ? null : (
-                            <>
-                                &nbsp;&nbsp;
-                                <FontAwesomeIcon icon="brain" />
-                            </>
-                        )}
-                        {!item.annotation ? null : (
-                            <>
-                                &nbsp;&nbsp;
-                                <FontAwesomeIcon icon="pencil-alt" />
-                            </>
-                        )}
-                        
-                    </summary>
-                </details>
+                <div className={`${item.annotation && "annotated"} text-muted`}>
+                    <FontAwesomeIcon icon="leaf" />
+                    &nbsp;&nbsp;
+                    {(item?.child?.length && item?.child?.length > 0) && (
+                        `${item?.child?.length} leaves`)}
+                    &nbsp;&nbsp;
+                    {filteredClades?.length > 0 && (
+                        <>
+                            <FontAwesomeIcon icon="code-branch" />
+                            &nbsp;&nbsp;
+                            {filteredClades?.length} child
+                        </>
+                    )}
+                    &nbsp;&nbsp;
+                    {!item.model ? null : (
+                        <>
+                            &nbsp;&nbsp;
+                            <FontAwesomeIcon icon="brain" />
+                        </>
+                    )}
+                    {!item.annotation ? null : (
+                        <>
+                            &nbsp;&nbsp;
+                            <FontAwesomeIcon icon="pencil-alt" />
+                        </>
+                    )}
+                    
+                </div>
             </ListGroupItem >
         )
     };
