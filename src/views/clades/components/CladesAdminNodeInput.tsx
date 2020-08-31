@@ -7,7 +7,7 @@ import { cladesServices as cs } from '../_services/_clades.services';
 import { cladesActions as ca } from '../_reducers/_clades.actions';
 import { CreatedTrees, CreatedClades } from '../../../_helpers/_url-providers';
 import { useAsyncEffect } from 'use-async-effect';
-import CladesManagementNodeDetailsView from './CladesManagementNodeDetailsView';
+import CladesAdminNodeDetailsView from './CladesAdminNodeDetailsView';
 
 
 const MAX_CHILD_LENGTH = 10;
@@ -80,8 +80,8 @@ export default (props: Props) => {
     const annotateClade = (targed_id: number) => {
         (clade.uuid && tree.uuid) &&
             cs.annotateClade(targed_id, clade.uuid, tree.uuid, tree.project)
-                .then(() => props.toggle())
                 .then(() => listClades())
+                .then(() => props.toggle())
                 .catch(err => console.log(err));
     };
 
@@ -127,7 +127,7 @@ export default (props: Props) => {
                         : waitingRequest
                             ? <Progress animated color="success" className="mt-3" value="100" />
                             : (
-                                <CladesManagementNodeDetailsView
+                                <CladesAdminNodeDetailsView
                                     maxChildLength={MAX_CHILD_LENGTH}
                                     nodes={nodes}
                                     annotateClade={annotateClade}

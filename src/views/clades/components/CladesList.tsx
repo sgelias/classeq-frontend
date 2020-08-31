@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Card, CardHeader, CardBody, ListGroup, ListGroupItem } from 'reactstrap';
+import { Col, Card, CardHeader, CardBody, ListGroup, ListGroupItem, Badge } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 
@@ -30,9 +30,7 @@ export default (props: Props) => {
 
     const setSingleClade = async (item: CreatedClades) => {
         await Promise.resolve()
-            .then(() => dispatch(ca.cladesDetailsPending(true)))
             .then(() => dispatch(ca.cladesDetailsSuccess(item)))
-            .then(() => dispatch(ca.cladesDetailsPending(false)))
             .catch(err => dispatch(ca.cladesDetailsFail(err)));
     };
 
@@ -52,14 +50,19 @@ export default (props: Props) => {
                 }}
                 className={
                     `clade-items \
-                    ${clade.uuid === item.uuid && "border border-2 border-success"} \
+                    ${clade.uuid === item.uuid && "selected"} \
                     ${item.child 
                         && (item.child.length < props.min_clade_length || item.branch_type === "R") 
                             ? "invalid" : "valid"}`
                 }
             >
-                {item.child && console.log(item.child.length, props.min_clade_length)}
                 <span className="float-right text-muted">
+                    <small>
+                        <Badge color="light" className="bg-transparent border">
+                            {item.uuid && item.uuid.toString().split('-')[0]}
+                        </Badge>
+                    </small>
+                    &nbsp;&nbsp;
                     {item.branch_type === "R" ? "Root" : "Internal"}
                 </span>
                 <div className={`${item.annotation && "annotated"} text-muted`}>
@@ -88,7 +91,6 @@ export default (props: Props) => {
                             <FontAwesomeIcon icon="pencil-alt" />
                         </>
                     )}
-                    
                 </div>
             </ListGroupItem >
         )
@@ -96,11 +98,8 @@ export default (props: Props) => {
 
 
     return (
-        <Col
-            sm={{ size: 12 }}
-            md={{ size: 6 }}
-        >
-            <Card>
+        <Col>
+            <Card className="shadow">
                 <CardHeader className="border-bottom">
                     <h3>
                         <FontAwesomeIcon icon="code-branch" size="xs" />
@@ -119,7 +118,7 @@ export default (props: Props) => {
 
                         <br className="mb-3" />
 
-                        <ListGroup className="shadow">
+                        <ListGroup>
                             {!(clades.length > 0) ? null : clades
                                 .filter(item => (
                                     (item.child && item?.child?.length >= props.min_clade_length) &&

@@ -1,11 +1,6 @@
-.limited {
-    max-width: 100%;
-    min-height: 500px !important;
-}
-
 .clades-card {
     overflow-y: scroll;
-    max-height: 750px;
+    max-height: 820px;
 
     &.not-overflow {
         overflow-x: hidden !important;
@@ -72,7 +67,7 @@
         height: auto;
         min-height: 100% !important;
         border-radius: 0;
-    }    
+    }
 }
 
 .sumburst-viz {
@@ -106,15 +101,30 @@ path.link {
     color: green !important;
 }
 
-.clade-items:hover {
-    cursor: pointer;
+.clade-items {
+    &.selected {
+        &.valid {
+            background-color: #d7ffae;
+        }
 
-    &.valid {
-        background-color: #d7ffae;
+        &.invalid {
+            background-color: #f0d5d5;
+        }
     }
 
-    &.invalid {
-        background-color: #f0d5d5;
+    &:hover {
+        cursor: pointer;
+
+        &.valid {
+            background-color: #d7ffae;
+        }
+
+        &.invalid {
+            background-color: #f0d5d5;
+        }
     }
-    
+}
+
+.sister-leaves {
+    color: green !important;
 }

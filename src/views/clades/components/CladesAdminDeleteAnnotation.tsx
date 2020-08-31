@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Button, ModalBody, Label, Input, Form } from 'reactstrap';
+import { Modal, Button, ModalBody, Label, Input, Form, Spinner } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { CreatedClades } from '../../../_helpers/_url-providers';
 interface Props {
     modal: boolean
     toggle: Function,
+    setShowAdvancedOptions: Function,
 };
 
 
@@ -26,6 +27,9 @@ export default (props: Props) => {
 
 
     const [term, setTerm] = useState<string>('');
+
+
+    const [deleting, setDeleting] = useState<boolean>(false);
 
 
     const handleChange = (element) => setTerm(element.target.value);
@@ -53,9 +57,12 @@ export default (props: Props) => {
 
 
     const deleteAnnotatedClade = () => {
+        setDeleting(true);
         const clade_id = clade.annotation?.external_links?.annotation.id;
         (clade_id && clade.uuid) && cs.deleteAnnotatedClade(clade_id, clade.uuid)
             .then(() => listClades())
+            .then(() => props.setShowAdvancedOptions(false))
+            .then(() => setDeleting(false))
             .then(() => props.toggle());
     };
 
@@ -106,10 +113,11 @@ export default (props: Props) => {
                                 color="danger"
                                 className="mt-5 btn-block"
                                 onClick={() => deleteAnnotatedClade()}
+                                disabled={deleting}
                             >
-                                <strong>
-                                    Permanently delete
-                                </strong>
+                                {deleting
+                                    ? <Spinner/>
+                                    : <strong>Permanently delete</strong>}
                             </Button>
                         )}
                     </Form>

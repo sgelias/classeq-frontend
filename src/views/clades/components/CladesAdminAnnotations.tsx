@@ -4,8 +4,8 @@ import { useSelector, RootStateOrAny } from 'react-redux';
 
 import { CreatedClades } from '../../../_helpers/_url-providers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CladesManagementNodeInput from './CladesManagementNodeInput';
-import CladesManagementDeleteAnnotation from './CladesManagementDeleteAnnotation';
+import CladesAdminNodeInput from './CladesAdminNodeInput';
+import CladesAdminDeleteAnnotation from './CladesAdminDeleteAnnotation';
 
 
 export default () => {
@@ -47,7 +47,7 @@ export default () => {
                 </Button>
             </div>
             <ModalBody>
-                <CladesManagementNodeInput
+                <CladesAdminNodeInput
                     toggle={toggle}
                 />
             </ModalBody>
@@ -119,9 +119,10 @@ export default () => {
                 </div>
             </strong>
             {showAdvancedOptions && (
-                <CladesManagementDeleteAnnotation
+                <CladesAdminDeleteAnnotation
                     modal={modal}
                     toggle={toggle}
+                    setShowAdvancedOptions={setShowAdvancedOptions}
                 />
             )}
         </ListGroupItem>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAsyncEffect } from 'use-async-effect';
@@ -9,7 +9,8 @@ import { BreadcrumbsItemBuilder } from '../../shared';
 import { cladesServices as cs } from '../_services/_clades.services';
 import CladesMsa from './CladesMsa';
 import CladesList from './CladesList';
-import CladesManagement from './CladesManagement';
+import CladesAdmin from './CladesAdmin';
+import CladesSister from './CladesSister';
 
 
 export default () => {
@@ -22,6 +23,9 @@ export default () => {
 
 
     const params = useParams<any>();
+
+
+    const [divHeight, setDivHeight] = useState<number>(0);
 
 
     const [modal, setModal] = useState(false);
@@ -63,17 +67,33 @@ export default () => {
     return !(clades && clades.length > 0) ? null : (
         <>
             <BreadcrumbsItemBuilder />
-            <Row className="limited">
+            <Row className="p-0">
 
-                <CladesList 
-                    min_clade_length={min_clade_length}
-                />
+                <Col
+                    md={{ size: 12 }}
+                    lg={{ size: 6 }}
+                    className="p-0"
+                >
+                    <CladesList
+                        min_clade_length={min_clade_length}
+                    />
+                </Col>
 
-                <CladesManagement
-                    min_clade_length={min_clade_length}
-                    setSubItems={setSubItems}
-                    toggle={toggle}
-                />
+                <Col
+                    md={{ size: 12 }}
+                    lg={{ size: 6 }}
+                    className="p-0"
+                >
+                    <CladesAdmin
+                        min_clade_length={min_clade_length}
+                        setSubItems={setSubItems}
+                        toggle={toggle}
+                        setDimensions={setDivHeight}
+                    />
+                    <CladesSister
+                        height={divHeight}
+                    />
+                </Col>
 
                 <CladesMsa
                     childClades={childClades}

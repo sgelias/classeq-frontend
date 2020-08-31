@@ -24,7 +24,7 @@ export default (props: Props) => {
     const [trainingStatus, setTrainingStatus] = useState<boolean>(false);
 
 
-    const record: CreatedClades = useSelector((state: RootStateOrAny) => (
+    const clade: CreatedClades = useSelector((state: RootStateOrAny) => (
         state.cladesDetailsReducer.record
     ));
 
@@ -41,8 +41,8 @@ export default (props: Props) => {
 
     const startSingleCladeTrain = () => {
         setTrainingStatus(true);
-        (record.uuid && tree.feature_set?.uuid) && (
-            cs.startSingleCladeTrain(record.uuid, tree?.feature_set?.uuid)
+        (clade.uuid && tree.feature_set?.uuid) && (
+            cs.startSingleCladeTrain(clade.uuid, tree?.feature_set?.uuid)
                 .then(() => listClades())
                 .then(() => setTrainingStatus(false))
         )
@@ -67,20 +67,20 @@ export default (props: Props) => {
 
     return (
         <ListGroupItem>
-            {record.model
+            {clade.model
                 ? (
                     <>
                         <p className="mb-2">
                             <span className="text-muted">
                                 Model:&nbsp;&nbsp;
                             </span>
-                            {record?.model?.ml_model}
+                            {clade?.model?.ml_model}
                         </p>
                         <p className="mb-2">
                             <span className="text-muted">
                                 Scores:&nbsp;&nbsp;
                             </span>
-                            {record?.model?.test_score.map((score, index) => (
+                            {clade?.model?.test_score.map((score, index) => (
                                 <Badge
                                     key={index}
                                     color={setScoreColor(score)}
@@ -92,7 +92,7 @@ export default (props: Props) => {
                     </>
                 ) : (
                     <CardTitle>
-                        {record.child && (record.child?.length > props.min_clade_length || record.branch_type !== "R")
+                        {clade.child && (clade.child?.length > props.min_clade_length || clade.branch_type !== "R")
                             ? <>Select a not root branch to train.</>
                             : (
                                 <Button

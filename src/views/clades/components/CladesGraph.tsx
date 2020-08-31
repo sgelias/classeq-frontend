@@ -5,6 +5,15 @@ import { useSelector, RootStateOrAny } from 'react-redux';
 //import Tree from 'react-hierarchy-tree-graph';
 import arrayToTree from 'array-to-tree';
 
+
+/* 
+
+USE INSTEAD:
+    npm i --save react-d3-tree
+
+*/
+
+
 /* Graph */
 import Sunburst, { Node } from 'sunburst-chart';
 import Icicle from 'icicle-chart';
@@ -85,7 +94,7 @@ export default () => {
         <Col
             md={{ size: 12 }}
         >
-            <Card className="clades-card">
+            <Card>
                 <CardHeader className="border-bottom">
                     <h3>
                         <FontAwesomeIcon icon="leaf" size="xs" />
@@ -93,7 +102,7 @@ export default () => {
                         Leaves
                     </h3>
                 </CardHeader>
-                <CardBody className="pt-1">
+                <CardBody className="pt-1 clades-card">
                     {graphData()}
                 </CardBody>
                 <CardFooter />
