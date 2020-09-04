@@ -72,7 +72,7 @@ const startSingleCladeTrain = async (source_clade: uuid, feature_set: uuid): Pro
 };
 
 
-const getNodeList = async (term: string) => {
+export const getNodeList = async (term: string) => {
     let config: CustomRequestConfig = provideGetNodeListUrl(term);
     return await axios(config);
 };

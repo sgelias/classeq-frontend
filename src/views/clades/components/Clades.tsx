@@ -7,10 +7,10 @@ import { useAsyncEffect } from 'use-async-effect';
 import { CreatedClades } from '../../../_helpers/_url-providers';
 import { BreadcrumbsItemBuilder } from '../../shared';
 import { cladesServices as cs } from '../_services/_clades.services';
-import CladesMsa from './CladesMsa';
-import CladesList from './CladesList';
-import CladesAdmin from './CladesAdmin';
-import CladesSister from './CladesSister';
+import CladesMsa from './MSA/CladesMsa';
+import CladesList from './List/CladesList';
+import Admin from './Admin/Admin';
+import CladesSister from './Sister/CladesSister';
 
 
 export default () => {
@@ -84,7 +84,7 @@ export default () => {
                     lg={{ size: 6 }}
                     className="p-0"
                 >
-                    <CladesAdmin
+                    <Admin
                         min_clade_length={min_clade_length}
                         setSubItems={setSubItems}
                         toggle={toggle}

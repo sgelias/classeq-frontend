@@ -20,7 +20,7 @@ import Icicle from 'icicle-chart';
 import CirclePack from 'circlepack-chart';
 
 
-import { CreatedClades } from '../../../_helpers/_url-providers';
+import { CreatedClades } from '../../../../_helpers/_url-providers';
 import { useAsyncEffect } from 'use-async-effect';
 
 

@@ -12,7 +12,14 @@ const cladesDetailsConstants = {
 };
 
 
+const modelsTrainConstants = {
+    MODELS_TRAIN_INCLUDE_ITEM: 'MODELS_TRAIN_INCLUDE_ITEM',
+    MODELS_TRAIN_REMOVE_ITEM: 'MODELS_TRAIN_REMOVE_ITEM',
+};
+
+
 export const cladesConstants = {
     ...cladesListConstants,
     ...cladesDetailsConstants,
+    ...modelsTrainConstants,
 };

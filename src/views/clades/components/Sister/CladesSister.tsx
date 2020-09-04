@@ -4,7 +4,7 @@ import { Col, Card, CardHeader, CardBody, ListGroup, ListGroupItem, Badge } from
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAsyncEffect } from 'use-async-effect';
 
-import { CreatedClades } from '../../../_helpers/_url-providers';
+import { CreatedClades } from '../../../../_helpers/_url-providers';
 
 
 declare type BranchType = "B" | "R" | "L";
@@ -101,10 +101,15 @@ export default (props: Props) => {
                         <h3>
                             <FontAwesomeIcon icon="code-branch" size="xs" />
                             &nbsp;&nbsp;&nbsp;
-                            Sister branches/leaves
+                            Sister branches & leaves
                         </h3>
                     </CardHeader>
-                    <CardBody className="pt-1 clades-card" style={{ maxHeight: `${800 - props.height}px` }}>
+                    <CardBody
+                        className="pt-1 clades-card"
+                        style={{
+                            maxHeight: `${800 - props.height}px`
+                        }}
+                    >
                         <ListGroup className="my-3">
                             <h4 className="text-muted">
                                 Branches

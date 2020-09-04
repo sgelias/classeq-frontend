@@ -3,8 +3,8 @@ import { Col, Card, CardHeader, CardBody, ListGroup, ListGroupItem, Badge } from
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 
-import { CreatedClades } from '../../../_helpers/_url-providers';
-import { cladesActions as ca } from '../_reducers/_clades.actions';
+import { CreatedClades } from '../../../../_helpers/_url-providers';
+import { cladesActions as ca } from '../../_reducers/_clades.actions';
 
 
 interface Props {
@@ -78,7 +78,6 @@ export default (props: Props) => {
                             {filteredClades?.length} child
                         </>
                     )}
-                    &nbsp;&nbsp;
                     {!item.model ? null : (
                         <>
                             &nbsp;&nbsp;

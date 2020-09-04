@@ -553,6 +553,9 @@ export interface CreatedSequence {
 }
 
 
+declare type ServerTrainStatusType = "unapplicable" | "started" | "finished" | "undefined";
+
+
 /**
  * Interface for created machine learning models.
  */
@@ -563,6 +566,7 @@ export interface CreatedModel {
     readonly model_clade: uuid,
     readonly test_score: Array<any>,
     readonly ml_model: string,
+    readonly train_status?: ServerTrainStatusType,
 }
 
 
@@ -660,7 +664,6 @@ export interface CreatedClades extends CreatedRecords {
     child?: Array<uuid>,
     is_valid?: boolean,
     is_active?: boolean,
-    
     /* Fasta fields */
     sequence?: CreatedSequence,
 

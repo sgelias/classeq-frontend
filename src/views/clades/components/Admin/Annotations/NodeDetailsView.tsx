@@ -41,7 +41,7 @@ export default (props: Props) => {
             <>
                 {elements.map((child, index) => (
                     <Badge key={index} color="light border" className="m-1 px-2">
-                        {child.scientificName}
+                        {child}
                     </Badge>
                 ))}
             </>
@@ -78,7 +78,7 @@ export default (props: Props) => {
                             </CardTitle>
                         </CardBody>
                     )}
-                    {node.child.length > 0 && (
+                    {!(node.child[0] !== null && node.child.length > 0) ? null : (
                         <CardBody className="p-1">
                             <CardTitle className="m-0">
                                 Childs:&nbsp;&nbsp;
@@ -87,8 +87,7 @@ export default (props: Props) => {
                                 {populateNodes(node.child)}
                                 {showAllButton(node.child, false)}
                             </CardTitle>
-                        </CardBody>
-                    )}
+                        </CardBody>)}
                 </Card>
             ))}
         </>

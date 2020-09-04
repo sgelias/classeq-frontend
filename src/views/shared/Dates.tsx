@@ -8,7 +8,6 @@ interface Props extends CreatedProject {}
 export default (props: Props) => {
 
     const { created, updated } = props;
-    console.log(created)
 
     if (created && updated) {
         return (

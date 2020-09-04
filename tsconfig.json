@@ -19,14 +19,13 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "noImplicitAny": false,
+    "noImplicitAny": false
   },
   "typeRoots": [
     "./src/types"
   ],
   "include": [
     "src",
-    "setupProxy.js",
     "setupProxy.js"
   ]
 }

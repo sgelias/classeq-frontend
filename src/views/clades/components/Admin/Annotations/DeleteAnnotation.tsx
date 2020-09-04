@@ -1,23 +1,21 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { Modal, Button, ModalBody, Label, Input, Form, Spinner } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAsyncEffect } from 'use-async-effect';
 
-import { cladesServices as cs } from '../_services/_clades.services';
-import { cladesActions as ca } from '../_reducers/_clades.actions';
-import { CreatedClades } from '../../../_helpers/_url-providers';
+import { cladesServices as cs } from '../../../_services/_clades.services';
+import { cladesActions as ca } from '../../../_reducers/_clades.actions';
+import { CreatedClades } from '../../../../../_helpers/_url-providers';
 
 
-interface Props {
-    modal: boolean
-    toggle: Function,
-    setShowAdvancedOptions: Function,
+export interface DeleteAnnotationHandle {
+    showAdvancedOptions: () => void,
 };
 
 
-export default (props: Props) => {
+const DeleteAnnotation: React.RefForwardingComponent<DeleteAnnotationHandle> = (_, ref) => {
 
 
     const dispatch = useDispatch();
@@ -30,6 +28,25 @@ export default (props: Props) => {
 
 
     const [deleting, setDeleting] = useState<boolean>(false);
+
+
+    const [deleteModal, setDeleteModal] = useState(false);
+
+
+    const [advancedOptions, setAdvancedOptions] = useState<boolean>(false);
+
+
+    const showAdvancedOptions = () => {
+        setAdvancedOptions(!advancedOptions);
+    };
+
+
+    const toggle = () => setDeleteModal(!deleteModal);
+
+
+    useImperativeHandle(ref, () => {
+        return { showAdvancedOptions };
+    });
 
 
     const handleChange = (element) => setTerm(element.target.value);
@@ -61,25 +78,29 @@ export default (props: Props) => {
         const clade_id = clade.annotation?.external_links?.annotation.id;
         (clade_id && clade.uuid) && cs.deleteAnnotatedClade(clade_id, clade.uuid)
             .then(() => listClades())
-            .then(() => props.setShowAdvancedOptions(false))
+            .then(() => setAdvancedOptions(false))
             .then(() => setDeleting(false))
-            .then(() => props.toggle());
+            .then(() => toggle())
+            .catch(() => {
+                alert("Some error occurred. Please try again.")
+                setDeleting(false);
+            });
     };
 
 
-    return (
-        <div className="mt-5 p-2 bg-light-grey border border-danger">
+    return !advancedOptions ? null : (
+        <div className="my-4 p-4 bg-light-grey border border-danger">
             Delete annotation.
             <Button
                 color="danger"
                 className="py-0 px-1 float-right"
-                onClick={() => props.toggle()}
+                onClick={() => toggle()}
             >
                 Delete&nbsp;&nbsp;
                 <FontAwesomeIcon icon="trash" />
             </Button>
             <Modal
-                isOpen={props.modal}
+                isOpen={deleteModal}
                 className="success"
                 scrollable={true}
             >
@@ -87,7 +108,7 @@ export default (props: Props) => {
                     <Button
                         color="link"
                         className="float-right"
-                        onClick={() => props.toggle()}
+                        onClick={() => toggle()}
                     >
                         &times;&nbsp;&nbsp;Cancel
                     </Button>
@@ -126,3 +147,6 @@ export default (props: Props) => {
         </div>
     )
 };
+
+
+export default forwardRef(DeleteAnnotation);

@@ -59,11 +59,10 @@ export default (props: Props) => {
                 scrollable={true}
                 size="xl"
             >
-                <ModalHeader toggle={toggle}>
-                    <span className="text-muted">
-                        Upload a new phylogenetic tree
-                    </span>
-                </ModalHeader>
+                <ModalHeader 
+                    toggle={toggle} 
+                    className="py-0"
+                />
 
                 <ModalBody>
                     {getComponent()}

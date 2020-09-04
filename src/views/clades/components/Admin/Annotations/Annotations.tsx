@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
-import { Spinner, Modal, Button, ModalBody, ListGroupItem } from 'reactstrap';
+import React, { createRef } from 'react';
+import { Spinner, Button, ListGroupItem } from 'reactstrap';
 import { useSelector, RootStateOrAny } from 'react-redux';
-
-import { CreatedClades } from '../../../_helpers/_url-providers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CladesAdminNodeInput from './CladesAdminNodeInput';
-import CladesAdminDeleteAnnotation from './CladesAdminDeleteAnnotation';
+
+import { CreatedClades } from '../../../../../_helpers/_url-providers';
+import DeleteAnnotation, { DeleteAnnotationHandle } from './DeleteAnnotation';
+import NodeInput, { NodeInputHandle } from './NodeInput';
+
+
+/* 
+
+https://github.com/alewin/useWorker
+https://www.npmjs.com/package/react-use-queue
+https://kentcdodds.com/blog/speed-up-your-app-with-web-workers
+
+
+*/
 
 
 export default () => {
 
 
-    const [modal, setModal] = useState(false);
+    const deleteModalRef = createRef<DeleteAnnotationHandle>();
 
 
-    const record: CreatedClades = useSelector((state: RootStateOrAny) => (
+    const nodeInputRef = createRef<NodeInputHandle>();
+
+
+    const clade: CreatedClades = useSelector((state: RootStateOrAny) => (
         state.cladesDetailsReducer.record
     ));
 
@@ -23,38 +36,7 @@ export default () => {
         state.cladesDetailsReducer.pending
     ));
 
-
-    const [showAdvancedOptions, setShowAdvancedOptions] = useState<boolean>(false);
-
-
-    const toggle = () => setModal(!modal);
-
-
-    const annotationModal = (
-        <Modal
-            isOpen={modal}
-            className="success"
-            scrollable={true}
-            size="xl"
-        >
-            <div>
-                <Button
-                    color="link"
-                    className="float-right"
-                    onClick={() => toggle()}
-                >
-                    &times;&nbsp;&nbsp;Cancel
-                </Button>
-            </div>
-            <ModalBody>
-                <CladesAdminNodeInput
-                    toggle={toggle}
-                />
-            </ModalBody>
-        </Modal>
-    );
-
-
+    
     const nodeDescriptionCreate = (
         <ListGroupItem>
             <details>
@@ -62,13 +44,12 @@ export default () => {
                     <Button
                         color="primary"
                         className="py-0 px-1"
-                        onClick={() => toggle()}
+                        onClick={() => nodeInputRef.current?.showAnnotationModal()}
                     >
-                        Annotate
+                        ANNOTATE
                         &nbsp;&nbsp;
                         <FontAwesomeIcon icon="pencil-alt" />
                     </Button>
-                    {annotationModal}
                 </summary>
             </details>
             <strong>
@@ -80,12 +61,13 @@ export default () => {
                 Each clade would be connected to a node of the backbone tree.
                 Click in Annotate to connect this node to backbone.
             </p>
+            <NodeInput ref={nodeInputRef} />
         </ListGroupItem>
     );
 
 
     const formatedDate = () => {
-        const date = record.annotation?.external_links?.annotation.created;
+        const date = clade.annotation?.external_links?.annotation.created;
         return date && new Date(date).toLocaleDateString("en-US");
     };
 
@@ -97,7 +79,7 @@ export default () => {
                     <Button
                         color="link"
                         className="py-0 px-1"
-                        onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
+                        onClick={() => deleteModalRef.current?.showAdvancedOptions()}
                     >
                         <small className="p-0">
                             Advanced
@@ -106,10 +88,10 @@ export default () => {
                 </summary>
             </details>
             <strong>
-                {record.annotation?.external_links?.node?.scientificName}
+                {clade.annotation?.external_links?.node?.scientificName}
                 &nbsp;&nbsp;
                 <small className="text-muted">
-                    {record.annotation?.external_links?.node?.taxonRank}
+                    {clade.annotation?.external_links?.node?.taxonRank}
                 </small>
                 <div>
                     <small>
@@ -118,13 +100,7 @@ export default () => {
                     </small>
                 </div>
             </strong>
-            {showAdvancedOptions && (
-                <CladesAdminDeleteAnnotation
-                    modal={modal}
-                    toggle={toggle}
-                    setShowAdvancedOptions={setShowAdvancedOptions}
-                />
-            )}
+            <DeleteAnnotation ref={deleteModalRef} />
         </ListGroupItem>
     );
 
@@ -133,7 +109,7 @@ export default () => {
         <>
             {status
                 ? <Spinner color="success" />
-                : record.annotation
+                : clade.annotation
                     ? nodeDescriptionDetailsView
                     : nodeDescriptionCreate}
         </>

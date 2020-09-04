@@ -1,3 +1,6 @@
+import { v4 as uuid } from 'uuid/interfaces';
+
+
 import { cladesConstants } from './_clades.constants';
 import { CladesListObjects, CreatedClades } from '../../../_helpers/_url-providers';
 
@@ -26,6 +29,15 @@ const cladesCreatedInitialState: CreatedCladesReducer = {
     pending: false,
     error: null,
 };
+
+
+export interface ModelsTrainQueue {
+    clade_id: uuid,
+    task_id: uuid,
+};
+
+
+const modelsTrainInitialState: Array<ModelsTrainQueue> = [];
 
 
 // *******************
@@ -84,5 +96,23 @@ export const cladesDetailsReducer = (state = cladesCreatedInitialState, action: 
 
         default:
             return state;
+    }
+};
+
+
+export const modelsTrainReducer = (state = modelsTrainInitialState, action: any) => {
+    switch (action.type) {
+
+        case cladesConstants.MODELS_TRAIN_INCLUDE_ITEM:
+            return {
+                ...state,
+                item: state.push(action.item)
+            }
+        
+        case cladesConstants.MODELS_TRAIN_REMOVE_ITEM:
+            return {
+                ...state,
+                item: state.shift()
+            }
     }
 };

@@ -1,3 +1,4 @@
+import { ModelsTrainQueue } from './_clades.reducers';
 import { cladesConstants } from './_clades.constants';
 import { CreatedClades } from '../../../_helpers/_url-providers';
 
@@ -34,7 +35,19 @@ const cladesSingleActions = {
 };
 
 
+const modelsTrainActions = {
+    includeItem(item: ModelsTrainQueue) {
+        return { type: cladesConstants.MODELS_TRAIN_INCLUDE_ITEM, item: item }
+    },
+
+    removeItem(item: ModelsTrainQueue) {
+        return { type: cladesConstants.MODELS_TRAIN_REMOVE_ITEM, item: item }
+    },
+};
+
+
 export const cladesActions = {
     ...cladesListActions,
     ...cladesSingleActions,
+    ...modelsTrainActions,
 };

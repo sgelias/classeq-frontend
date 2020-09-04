@@ -4,7 +4,7 @@ import { MapInteractionCSS } from 'react-map-interaction';
 //import ReactApexChart from 'react-apexcharts';
 
 import { useAsyncEffect } from 'use-async-effect';
-import { CreatedClades } from '../../../_helpers/_url-providers';
+import { CreatedClades } from '../../../../_helpers/_url-providers';
 
 
 interface Props {

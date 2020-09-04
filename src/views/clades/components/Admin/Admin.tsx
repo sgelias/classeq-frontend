@@ -1,14 +1,14 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef } from 'react';
 import { v4 as uuid } from 'uuid/interfaces';
 import { Col, Card, CardHeader, CardBody, Button, ListGroup, ListGroupItem, ButtonGroup } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
-
-import { CreatedClades } from '../../../_helpers/_url-providers';
-import CladesAdminModels from './CladesAdminModels';
-import CladesAdminAnnotations from './CladesAdminAnnotations';
-import { cladesActions as ca } from '../_reducers/_clades.actions';
 import { useAsyncEffect } from 'use-async-effect';
+
+import { CreatedClades } from '../../../../_helpers/_url-providers';
+import { cladesActions as ca } from '../../_reducers/_clades.actions';
+import Models from './Models/Models';
+import Annotations from './Annotations/Annotations';
 
 
 interface Props {
@@ -25,7 +25,7 @@ export default (props: Props) => {
     const dispatch = useDispatch();
 
 
-    const targetRef = useRef(null);
+    const targetRef = useRef<any>(null);
 
 
     const clade: CreatedClades = useSelector((state: RootStateOrAny) => (
@@ -49,11 +49,7 @@ export default (props: Props) => {
 
 
     useAsyncEffect(() => {
-        console.log(targetRef)
-        if (targetRef?.current) {
-            //@ts-ignore
-            props.setDimensions(targetRef.current.offsetHeight)
-        }
+        targetRef?.current && props.setDimensions(targetRef.current.offsetHeight)
     }, [clade]);
 
 
@@ -100,8 +96,8 @@ export default (props: Props) => {
                                     ? invalidCladesSelected
                                     : (
                                         <>
-                                            <CladesAdminAnnotations />
-                                            <CladesAdminModels
+                                            <Annotations />
+                                            <Models
                                                 min_clade_length={props.min_clade_length}
                                             />
                                         </>
