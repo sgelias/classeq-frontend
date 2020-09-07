@@ -571,33 +571,33 @@ export interface CreatedModel {
 
 
 export interface i4lifeRecord {
-    id: number, //346690,
-    identifier?: string, //"b2470ac3416863e7d4ce5976811edbd6",
-    taxonID?: number, //42160514,
-    datasetID?: number, //"28",
-    datasetName?: string, //"Species Fungorum in Species 2000 & ITIS Catalogue of Life: 2019",
-    scientificNameID?: string, //"SF-159197",
-    parentNameUsageID?: number, //54881956,
-    modified?: Date, //"27-Oct-2017",
+    readonly id: number, //346690,
+    readonly identifier?: string, //"b2470ac3416863e7d4ce5976811edbd6",
+    readonly taxonID?: number, //42160514,
+    readonly datasetID?: number, //"28",
+    readonly datasetName?: string, //"Species Fungorum in Species 2000 & ITIS Catalogue of Life: 2019",
+    readonly scientificNameID?: string, //"SF-159197",
+    readonly parentNameUsageID?: number, //54881956,
+    readonly modified?: Date, //"27-Oct-2017",
     
     // Taxonomy
-    kingdom?: string, //"Fungi",
-    phylum?: string, //"Ascomycota",
-    class?: string, //"Sordariomycetes",
-    order?: string, //"Hypocreales",
-    family?: string, //"Nectriaceae",
-    genus?: string, //"Fusarium",
-    genericName?: string, //"Fusarium",
-    scientificName?: string, //"Fusarium anguioides Sherb., 1915",
-    specificEpithet?: string, //"anguioides",
-    scientificNameAuthorship?: string, //"Sherb., 1915",
+    readonly kingdom?: string, //"Fungi",
+    readonly phylum?: string, //"Ascomycota",
+    readonly class?: string, //"Sordariomycetes",
+    readonly order?: string, //"Hypocreales",
+    readonly family?: string, //"Nectriaceae",
+    readonly genus?: string, //"Fusarium",
+    readonly genericName?: string, //"Fusarium",
+    readonly scientificName?: string, //"Fusarium anguioides Sherb., 1915",
+    readonly specificEpithet?: string, //"anguioides",
+    readonly scientificNameAuthorship?: string, //"Sherb., 1915",
     
     // Taxonomic metadata
-    nameAccordingTo?: string, //"Kew Mycology",
-    taxonRank?: string, //"species",
-    taxonomicStatus?: string, //"accepted name",
-    isExtinct?: boolean, //false,
-    references?: string, //"http://www.catalogueoflife.org/col/details/species/id/b2470ac3416863e7d4ce5976811edbd6",
+    readonly nameAccordingTo?: string, //"Kew Mycology",
+    readonly taxonRank?: string, //"species",
+    readonly taxonomicStatus?: string, //"accepted name",
+    readonly isExtinct?: boolean, //false,
+    readonly references?: string, //"http://www.catalogueoflife.org/col/details/species/id/b2470ac3416863e7d4ce5976811edbd6",
 
     [key: string]: any
 }
@@ -836,6 +836,15 @@ export const provideSingleCladeTrainUrl = (source_clade: uuid, feature_set: uuid
         headers: getCommonHeaders(true),
         method: "PATCH",
         url: `${baseUrl}/${source_clade}/models/${feature_set}/train`,
+    }
+};
+
+
+export const provideSingleCladeTrainStatusUrl = (task_id: uuid): CustomRequestConfig => {
+    return {
+        headers: getCommonHeaders(true),
+        method: "GET",
+        url: `${baseUrl}/${task_id}/models/get-status`
     }
 };
 

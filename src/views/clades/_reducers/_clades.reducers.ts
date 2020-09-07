@@ -105,14 +105,16 @@ export const modelsTrainReducer = (state = modelsTrainInitialState, action: any)
 
         case cladesConstants.MODELS_TRAIN_INCLUDE_ITEM:
             return {
-                ...state,
-                item: state.push(action.item)
+                item: [action.item]
             }
         
         case cladesConstants.MODELS_TRAIN_REMOVE_ITEM:
             return {
                 ...state,
-                item: state.shift()
+                state : state.shift()
             }
+        
+        default:
+            return state;
     }
 };

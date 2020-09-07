@@ -10,6 +10,7 @@ import {
     provideNodesDescriptionUrl,
     provideNodeClassifierDescriptionUrl,
     provideSingleCladeTrainUrl,
+    provideSingleCladeTrainStatusUrl,
     provideNodeAnnotationCreateUrl,
     provideGetNodeListUrl,
     provideNodeAnnotationDeleteUrl,
@@ -72,7 +73,13 @@ const startSingleCladeTrain = async (source_clade: uuid, feature_set: uuid): Pro
 };
 
 
-export const getNodeList = async (term: string) => {
+const getSingleCladeTrainStatus = async (task_id: uuid): Promise<any> => {
+    let config: CustomRequestConfig = provideSingleCladeTrainStatusUrl(task_id);
+    return await axios(config);
+};
+
+
+const getNodeList = async (term: string) => {
     let config: CustomRequestConfig = provideGetNodeListUrl(term);
     return await axios(config);
 };
@@ -102,6 +109,7 @@ export const cladesServices = {
     getNodeDescription,
     listNodeClassifierDescriptions,
     startSingleCladeTrain,
+    getSingleCladeTrainStatus,
     getNodeList,
     getNodeById,
     annotateClade,

@@ -3,6 +3,7 @@ import { Button, Badge, Spinner, ListGroupItem } from 'reactstrap';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import { cladesActions as ca } from '../../../_reducers/_clades.actions';
 import { cladesServices as cs } from '../../../_services/_clades.services';
 import { CreatedClades, CreatedTrees } from '../../../../../_helpers/_url-providers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -50,6 +51,14 @@ export default (props: Props) => {
     };
 
 
+    const setTaskListElement = (task_id) => {
+        clade.uuid && dispatch(ca.includeItem({
+            task_id: task_id,
+            clade_id: clade.uuid,
+        }));
+    };
+
+
     const startSingleCladeTrain = () => {
         setTrainingStatus("PENDING");
         (clade.uuid && tree.feature_set?.uuid) && (
@@ -57,6 +66,7 @@ export default (props: Props) => {
                 //.then(res => console.log(res.data))
                 .then(res => {
                     console.log(res);
+                    setTaskListElement(res.data.id);
                     switch (res.status) {
                         case "PENDING": setTrainingStatus("SUBMITTED"); break;
                         case "SUCCESS": evaluateListCladesResponse(); break;
