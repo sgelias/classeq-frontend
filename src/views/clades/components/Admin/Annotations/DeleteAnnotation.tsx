@@ -15,7 +15,7 @@ export interface DeleteAnnotationHandle {
 };
 
 
-const DeleteAnnotation: React.RefForwardingComponent<DeleteAnnotationHandle> = (_, ref) => {
+const DeleteAnnotation: React.ForwardRefRenderFunction<DeleteAnnotationHandle> = (_, ref) => {
 
 
     const dispatch = useDispatch();

@@ -18,7 +18,7 @@ export interface NodeInputHandle {
 };
 
 
-const NodeInput: React.RefForwardingComponent<NodeInputHandle> = (_, ref) => {
+const NodeInput: React.ForwardRefRenderFunction<NodeInputHandle> = (_, ref) => {
 
 
     const dispatch = useDispatch();

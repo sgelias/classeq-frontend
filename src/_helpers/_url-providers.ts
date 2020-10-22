@@ -180,11 +180,11 @@ export const provideAuthLoginUrl = (data: AuthCredentials): CustomRequestConfig 
  * Basic user interface.
  */
 export interface User {
-    id: number,
-    email: string,
-    username: string,
-    first_name: string,
-    last_name: string,
+    readonly id: number,
+    readonly email: string,
+    readonly username: string,
+    readonly first_name: string,
+    readonly last_name: string,
 }
 
 
@@ -297,10 +297,10 @@ export const provideProjectsUrl = (method: Method, args: HttpQueryParams): Custo
  * Interface for genes.
  */
 export interface Gene {
-    id: uuid,
-    name: string,
-    name_slug: string,
-    meta: {
+    readonly id: uuid,
+    readonly name: string,
+    readonly name_slug: string,
+    readonly meta: {
         terms: Array<string>
     }
 }
@@ -315,9 +315,9 @@ export interface GeneListObjects extends ListResponseInterface {
 
 
 export interface TreesValidationSteps {
-    map_clade_status?: boolean,
-    upload_sequences_status?: boolean,
-    map_features_status?: boolean,
+    readonly map_clade_status?: boolean,
+    readonly upload_sequences_status?: boolean,
+    readonly map_features_status?: boolean,
 }
 
 
@@ -341,7 +341,7 @@ export interface BaseTrees {
  */
 export interface CreatedTrees extends BaseTrees, CreatedRecords {
     is_active?: boolean,
-    feature_set?: CreatedRecords,
+    readonly feature_set?: CreatedRecords,
 }
 
 
