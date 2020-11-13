@@ -1,85 +1,74 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { createRef, useState } from 'react';
+import { useAsyncEffect } from 'use-async-effect';
+import queryString from 'query-string';
+import { useCookies } from 'react-cookie'
+import { keys } from 'ts-transformer-keys';
 
-import { authActions } from '../_reducers/auth.actions';
-import LoginPageView from './LoginPageView';
-import { RouteComponentProps } from 'react-router-dom';
-import { AuthCredentials } from '../../../_helpers/_url-providers';
-
-
-interface Props extends RouteComponentProps {
-    dispatch: (method: any) => void,
-    authentication?: any,
-}
+import OauthPopup from './OauthPopup';
 
 
-interface State extends AuthCredentials {
-    loggingIn?: any,
-}
+interface AuthResponse {
+    access_token: string
+    expires_in: number
+    refresh_token: string
+    scope: "read write groups introspection"
+    token_type: "Bearer"
+};
 
 
-class LoginPage extends React.Component<Props, State | {}> {
+export default () => {
 
 
-    public state: any = {
-        username: undefined,
-        password: undefined,
-        submitted: false,
-    };
+    const [, setCookie] = useCookies();
 
 
-    constructor(props: any) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    };
+    /**
+     * Validate if all keys of the authentication object exists.
+     * @param params An object containing all keys of the `AuthResponse`
+     * interface.
+     */
+    const validate_auth_query_params = (params: any) => {
+        const {
+            access_token, expires_in, refresh_token, scope, token_type
+        } = params;
 
-
-    private handleSubmit(event: any) {
-        event.preventDefault();
-        this.setState({ submitted: true });
-        const { username, password } = this.state;
-        const { dispatch } = this.props;
-        if (username && password) {
-            dispatch(authActions.login(username, password));
+        if (
+            [access_token, expires_in, refresh_token, scope, token_type]
+                .every((key) => key !== undefined)
+        ) {
+            return true
+        } else {
+            return undefined
         }
     };
 
 
-    private handleChange(input: any) {
-        return (event: any) => {
-            this.setState({
-                [input]: event.target.value,
-            })
+    useAsyncEffect(() => {
+
+        //@ts-ignore
+        const params: AuthResponse = queryString.parse(window.location.search);
+
+        if (validate_auth_query_params(params)) {
+            if (params.expires_in) {
+                const expires_in = params.expires_in;
+                console.log(expires_in);
+                const expires = new Date(Date.now() + expires_in * 200);
+                localStorage.setItem("pas_auth", JSON.stringify(params));
+                setCookie("pas_auth", params, { path: "/", expires: expires });
+            }
         }
-    };
+    }, [])
 
 
-    render() {
-        const { username, password, submitted } = this.state;
-
-        return (
-            <LoginPageView 
-                username={username}
-                password={password}
-                submitted={submitted}
-                handleChange={this.handleChange}
-                handleSubmit={this.handleSubmit}
-            />
-        );
-    };
-}
-
-
-const mapStateToProps = (props: Props) => ({
-    loggingIn: props.authentication,
-    dispatch: props.dispatch,
-});
-
-
-const connectedLoginPage = connect(
-    mapStateToProps
-)(LoginPage);
-
-
-export { connectedLoginPage as LoginPage };
+    return (
+        <OauthPopup
+            url={"http://0.0.0.0:8000/api/auth/authorize/"}
+            width={600}
+            height={600}
+            title={"OauthPopup"}
+            onClose={() => console.log('closed')}
+        >
+            <button>Enter</button>
+        </OauthPopup>
+    );
+};

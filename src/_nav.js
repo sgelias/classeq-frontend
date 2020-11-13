@@ -73,7 +73,7 @@ export default {
       children: [
         {
           name: 'Login',
-          url: '/login',
+          url: '/auth',
         },
         {
           name: 'Projects',

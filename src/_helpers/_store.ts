@@ -7,7 +7,7 @@ import thunkMiddleware from 'redux-thunk';
 import { cladesDetailsReducer, cladesListReducer, modelsTrainReducer } from '../views/clades/_reducers/_clades.reducers';
 import { treesDetailsReducer, treesListReducer } from '../views/trees/_reducers/_trees.reducers';
 import { alert } from '../views/alerts/_reducers/alerts.reducers';
-import { auth } from '../views/auth/index';
+import { authReducer } from '../views/auth/index';
 
 
 const persistConfig = {
@@ -27,7 +27,7 @@ const loggerMiddleware = createLogger();
 
 const rootReducer = combineReducers({
     alert,
-    auth,
+    authReducer,
     treesListReducer,
     treesDetailsReducer,
     cladesListReducer,

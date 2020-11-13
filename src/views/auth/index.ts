@@ -1,2 +1,2 @@
-export * from './components/LoginPage';
-export { default as auth } from './_reducers/auth.reducers';
+export { default as LoginPage } from './components/LoginPage';
+export { default as authReducer } from './_reducers/auth.reducers';

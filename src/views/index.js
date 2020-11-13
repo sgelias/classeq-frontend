@@ -189,7 +189,7 @@ const pageList = [
    */
   {
     name: 'Login',
-    path: '/login',
+    path: '/auth',
     component: LoginPage,
   },
 ];

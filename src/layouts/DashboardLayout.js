@@ -15,7 +15,10 @@ import handleKeyAccessibility, { handleClickAccessibility } from '../vibe/helper
 
 const MOBILE_SIZE = 992;
 
+
 export default class DashboardLayout extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
@@ -25,6 +28,7 @@ export default class DashboardLayout extends Component {
     };
   }
 
+
   handleResize = () => {
     if (window.innerWidth <= MOBILE_SIZE) {
       this.setState({ sidebarCollapsed: false, isMobile: true });
@@ -33,11 +37,13 @@ export default class DashboardLayout extends Component {
     }
   };
 
+
   componentDidUpdate(prev) {
     if (this.state.isMobile && prev.location.pathname !== this.props.location.pathname) {
       this.toggleSideCollapse();
     }
   }
+
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize);
@@ -45,17 +51,21 @@ export default class DashboardLayout extends Component {
     document.addEventListener('click', handleClickAccessibility);
   }
 
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
+
 
   toggleSideCollapse = () => {
     this.setState(prevState => ({ sidebarCollapsed: !prevState.sidebarCollapsed }));
   };
 
+
   closeChat = () => {
     this.setState({ showChat1: false });
   };
+
 
   render() {
     const { sidebarCollapsed } = this.state;
@@ -85,7 +95,7 @@ export default class DashboardLayout extends Component {
               <PageContent>
                 <Switch>
                   {routes.map((page, key) => (
-                    <Route exact path={page.path} component={page.component} key={key}/>
+                    <Route exact path={page.path} component={page.component} key={key} />
                   ))}
                   {/* <PrivateRoute exact path={page.path} component={page.component} key={key}/> */}
                 </Switch>
