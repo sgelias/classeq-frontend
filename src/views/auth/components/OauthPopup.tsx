@@ -3,13 +3,13 @@ import { useAsyncEffect } from 'use-async-effect';
 import { useCookies } from 'react-cookie'
 
 import { getOAuthAuthorizationUrl } from '../../../_helpers/_url-providers';
+import { Redirect } from 'react-router-dom';
 
 
 interface Props {
   width: number,
   height: number,
   title: string,
-  onClose: Function,
   children?: ReactChild,
 };
 
@@ -18,7 +18,7 @@ export default (props: Props) => {
 
 
   /**
-   * 
+   * @description Create a read-only hook for cookies.
    */
   const [cookie] = useCookies();
 
@@ -65,25 +65,38 @@ export default (props: Props) => {
     setExternalWindow(window.open(
       getOAuthAuthorizationUrl(), title, windowFeatures
     ));
+  };
 
-    console.log(cookie.pas_auth)
 
-    /**
-     * @description Start a EventListener using the `storageListener` function.
-     */
-    if (externalWindow) {
-      cookie.pas_auth && externalWindow.close()
-      localStorage.getItem('pas_auth') && externalWindow.close();
-    }
+  /**
+   * @description Perform all providences to finish the authorization process.
+   * Currently, close the window is the unique task, but additional tasks should
+   * be included, like clear some variable of session of local storages and
+   * cookies for example.
+   */
+  const finishAuthorizationProcess = () => {
+    window.close();
   };
 
 
   return (
     <>
-      {/* <Router /> */}
-      <div onClick={createPopup}>
-        {props.children}
-      </div>
+      {cookie.pas_auth
+        ? (
+          <button className="btn btn-primary btn-block p-2">
+            Samuel Elias
+            {finishAuthorizationProcess()}
+          </button>
+        ) 
+        : (
+          <button
+            onClick={createPopup}
+            type="button"
+            className="btn btn-primary btn-block p-2"
+          >
+            {props.children}
+          </button>
+        )}
     </>
   );
-}
+};

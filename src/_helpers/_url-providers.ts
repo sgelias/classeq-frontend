@@ -34,7 +34,7 @@ const geneConnectorBaseUrl: string = 'https://lepiota.herokuapp.com/api';
 
 
 /**
- * A custom request interface to abstract AxiosRequestConfig.
+ * @description A custom request interface to abstract AxiosRequestConfig.
  * 
  * @see `AxiosRequestConfig` of axios package.
  */
@@ -42,7 +42,7 @@ export interface CustomRequestConfig extends AxiosRequestConfig { }
 
 
 /**
- * This is a common interface for list requests. Keys denotes:
+ * @description This is a common interface for list requests. Keys denotes:
  * count: the total number of records;
  * previous and next: navigation links;
  * tp: total records at the current page;
@@ -61,7 +61,7 @@ export interface ListResponseInterface {
 
 
 /**
- * Define the basic interface for http requests.
+ * @description Define the basic interface for http requests.
  */
 export interface HttpQueryParams {
     id?: uuid,
@@ -71,7 +71,7 @@ export interface HttpQueryParams {
 
 
 /**
- * Interface for also created records.
+ * @description Interface for also created records.
  */
 export interface CreatedRecords {
     readonly uuid?: uuid,
@@ -82,7 +82,7 @@ export interface CreatedRecords {
 
 
 /**
- * Return authorization header with jwt token.
+ * @description Return authorization header with jwt token.
  */
 const authHeader = (): Object => {
     // @ts-ignore
@@ -97,12 +97,14 @@ const authHeader = (): Object => {
 
 
 /**
- * Get common headers.
+ * @description Return general purpose headers for http requests.
  * 
  * @param add_headers Additional headers to include on final header object.
  * @param is_authenticated If true the authentication token is also provided.
  */
-const getCommonHeadersResourceServer = (is_authenticated: boolean = false, add_headers?: Object): Object => {
+const getCommonHeadersResourceServer = (
+    is_authenticated: boolean = false, add_headers?: Object
+): Object => {
     let headers = {
         'Access-Control-Allow-Origin': `${backendUrl}/*`,
         'Content-Type': 'application/json'
@@ -115,7 +117,15 @@ const getCommonHeadersResourceServer = (is_authenticated: boolean = false, add_h
 }
 
 
-const getCommonHeadersAuthServer = (is_authenticated: boolean = false, add_headers?: Object): Object => {
+/**
+ * @description Return a http header for the single sign-on authorization flow.
+ * 
+ * @param add_headers Additional headers to include on final header object.
+ * @param is_authenticated If true the authentication token is also provided.
+ */
+const getCommonHeadersAuthServer = (
+    is_authenticated: boolean = false, add_headers?: Object
+): Object => {
     let headers = {
         'Access-Control-Allow-Origin': `${authUrl}/*`,
         'Cache-Control': 'no-cache',
@@ -130,7 +140,8 @@ const getCommonHeadersAuthServer = (is_authenticated: boolean = false, add_heade
 
 
 /**
- * Validate query parameters for queries performed with a list as a response.
+ * @description Validate query parameters for queries performed with a list as a
+ * response.
  * 
  * @param qpars The query parameter object.
  */
@@ -159,7 +170,7 @@ const buildParamsForLists = (qpars: any = {}) => {
 
 
 /**
- * Interface for minimal credentials object.
+ * @description Interface for minimal credentials object.
  */
 export interface AuthCredentials {
     username: string | undefined,
@@ -169,7 +180,8 @@ export interface AuthCredentials {
 
 
 /**
- * Interface for payload variables (variables decoded from auth token).
+ * @description Interface for payload variables (variables decoded from auth
+ * token).
  */
 export interface Payload {
     email: string,
@@ -181,7 +193,7 @@ export interface Payload {
 
 
 /**
- * Interface for Oauth2 credentials.
+ * @description Interface for Oauth2 credentials.
  */
 export interface OAuthCredentials {
     readonly grant_type: string
@@ -193,14 +205,16 @@ export interface OAuthCredentials {
 
 
 /**
- * Provide a configured URL for create requests.
+ * @description Provide a configured URL for create requests.
  * 
  * @see `AuthCredentials`
  * @see `Method` from axios package.
  * @param method An http method.
  * @param data Data to be submited as a new record.
  */
-export const provideAuthLoginUrl = (data: AuthCredentials): CustomRequestConfig => {
+export const provideAuthLoginUrl = (
+    data: AuthCredentials
+): CustomRequestConfig => {
     return {
         method: "POST",
         url: `${baseUrl}/auth/get-token/`,
@@ -210,6 +224,10 @@ export const provideAuthLoginUrl = (data: AuthCredentials): CustomRequestConfig 
 }
 
 
+/**
+ * @description Build and return the single sigh-up authorization url as a
+ * string.
+ */
 export const getOAuthAuthorizationUrl = () => {
     const url = new URL(oAuthAuthorizeUrl);
     
@@ -223,6 +241,14 @@ export const getOAuthAuthorizationUrl = () => {
 }
 
 
+/**
+ * @description Provide the axios configuration to request the authorization
+ * token during single sign-on process. This function is called during the final
+ * step of the authorization flow.
+ * 
+ * @param code A string returned during the first step of the single sign-on
+ * authorization process
+ */
 export const provideAuthGetTokenUrl = (code: string): CustomRequestConfig => {
     
     const data: OAuthCredentials = {
@@ -248,7 +274,7 @@ export const provideAuthGetTokenUrl = (code: string): CustomRequestConfig => {
 
 
 /**
- * Basic user interface.
+ * @description Basic user interface.
  */
 export interface User {
     readonly id: number,
@@ -265,7 +291,8 @@ export interface User {
 
 
 /**
- * Interface for not also created projects. It would be used in creation forms.
+ * @description Interface for not also created projects. It would be used in
+ * creation forms.
  */
 export interface BaseProject {
     title?: string,
@@ -274,8 +301,8 @@ export interface BaseProject {
 
 
 /**
- * Interface for also created projects. It would be used in projects lists,
- * updates and delete.
+ * @description Interface for also created projects. It would be used in
+ * projects lists, updates and delete.
  */
 export interface CreatedProject extends BaseProject, CreatedRecords {
     user?: User,
@@ -283,7 +310,7 @@ export interface CreatedProject extends BaseProject, CreatedRecords {
 
 
 /**
- * Interface for Projects list.
+ * @description Interface for Projects list.
  */
 export interface ProjectsListObjects extends ListResponseInterface {
     results: Array<CreatedProject>
@@ -291,7 +318,7 @@ export interface ProjectsListObjects extends ListResponseInterface {
 
 
 /**
- * Return an appropriated http config object of CustomRequestConfig
+ * @description Return an appropriated http config object of CustomRequestConfig
  * type to be used in axios requests. See example below.
  * 
  * @example axios(provideProjectsUrl("GET", { id: id }))
@@ -302,7 +329,9 @@ export interface ProjectsListObjects extends ListResponseInterface {
  * @param method A valid http verb of class Method from axios package.
  * @param args An Object containing specific params as 
  */
-export const provideProjectsUrl = (method: Method, args: HttpQueryParams): CustomRequestConfig => {
+export const provideProjectsUrl = (
+    method: Method, args: HttpQueryParams
+): CustomRequestConfig => {
 
     let request: CustomRequestConfig = {
         headers: getCommonHeadersResourceServer(true),
@@ -365,7 +394,7 @@ export const provideProjectsUrl = (method: Method, args: HttpQueryParams): Custo
 
 
 /**
- * Interface for genes.
+ * @description Interface for genes.
  */
 export interface Gene {
     readonly id: uuid,
@@ -378,7 +407,7 @@ export interface Gene {
 
 
 /**
- * Interface for list of Gene objects.
+ * @description Interface for list of Gene objects.
  */
 export interface GeneListObjects extends ListResponseInterface {
     results: Array<Gene>
@@ -393,7 +422,8 @@ export interface TreesValidationSteps {
 
 
 /**
- * Interface for not also created trees. It would be used in creation forms.
+ * @description Interface for not also created trees. It would be used in
+ * creation forms.
  */
 export interface BaseTrees {
     title?: string,
@@ -407,8 +437,8 @@ export interface BaseTrees {
 
 
 /**
- * Interface for also created trees. It would be used in tree lists, updates and
- * delete.
+ * @description Interface for also created trees. It would be used in tree
+ * lists, updates and delete.
  */
 export interface CreatedTrees extends BaseTrees, CreatedRecords {
     is_active?: boolean,
@@ -417,7 +447,7 @@ export interface CreatedTrees extends BaseTrees, CreatedRecords {
 
 
 /**
- * Interface for Projects list.
+ * @description Interface for Projects list.
  */
 export interface TreesListObjects extends ListResponseInterface {
     results: Array<CreatedTrees>,
@@ -426,7 +456,7 @@ export interface TreesListObjects extends ListResponseInterface {
 
 
 /**
- * Return an appropriated http config object of CustomRequestConfig
+ * @description Return an appropriated http config object of CustomRequestConfig
  * type to be used in axios requests. See example below.
  * 
  * @example axios(provideProjectsUrl("GET", { id: id }))
@@ -439,7 +469,9 @@ export interface TreesListObjects extends ListResponseInterface {
  * @param project_pk A project primary key.
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
-export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
+export const provideTreesUrl = (
+    method: Method, project_pk: uuid, args: HttpQueryParams
+): CustomRequestConfig => {
 
     let request: CustomRequestConfig = {
         headers: getCommonHeadersResourceServer(true),
@@ -497,7 +529,8 @@ export const provideTreesUrl = (method: Method, project_pk: uuid, args: HttpQuer
 
 
 /**
- * Provide a basic url to perform a request to Gene-Connector gene public API.
+ * @description Provide a basic url to perform a request to Gene-Connector gene
+ * public API.
  * 
  * @param term A string containing a term to filter records.
  */
@@ -512,14 +545,16 @@ export const provideGeneSearchUrl = (term: string): CustomRequestConfig => {
 
 
 /**
- * Get all clades of a specific phylogenetic tree.
+ * @description Get all clades of a specific phylogenetic tree.
  * 
  * @see `CustomRequestConfig` interface.
  * @see `HttpQueryParams` interface.
  * @param project_pk A project primary key.
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
-export const provideGetLeavesUrl = (project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
+export const provideGetLeavesUrl = (
+    project_pk: uuid, args: HttpQueryParams
+): CustomRequestConfig => {
     return {
         headers: getCommonHeadersResourceServer(true),
         method: "GET",
@@ -529,14 +564,16 @@ export const provideGetLeavesUrl = (project_pk: uuid, args: HttpQueryParams): Cu
 
 
 /**
- * Map clades of tree.
+ * @description Map clades of tree.
  * 
  * @see `CustomRequestConfig` interface.
  * @see `HttpQueryParams` interface.
  * @param project_pk A project primary key.
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
-export const provideMapCladesUrl = (project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
+export const provideMapCladesUrl = (
+    project_pk: uuid, args: HttpQueryParams
+): CustomRequestConfig => {
     return {
         headers: getCommonHeadersResourceServer(true),
         method: "PATCH",
@@ -547,14 +584,16 @@ export const provideMapCladesUrl = (project_pk: uuid, args: HttpQueryParams): Cu
 
 
 /**
- * Provide url for test if outgroups are monophyletic.
+ * @description Provide url for test if outgroups are monophyletic.
  * 
  * @see `CustomRequestConfig` interface.
  * @see `HttpQueryParams` interface.
  * @param project_pk A project primary key.
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
-export const provideTestCladesUrl = (project_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
+export const provideTestCladesUrl = (
+    project_pk: uuid, args: HttpQueryParams
+): CustomRequestConfig => {
     return {
         headers: getCommonHeadersResourceServer(true),
         method: "PATCH",
@@ -565,13 +604,15 @@ export const provideTestCladesUrl = (project_pk: uuid, args: HttpQueryParams): C
 
 
 /**
- * Provide a url to send fasta file to be uploaded.
+ * @description Provide a url to send fasta file to be uploaded.
  * 
  * @see `CustomRequestConfig` interface.
  * @see `HttpQueryParams` interface.
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
-export const provideUploadAlignmentUrl = (args: HttpQueryParams): CustomRequestConfig => {
+export const provideUploadAlignmentUrl = (
+    args: HttpQueryParams
+): CustomRequestConfig => {
     return {
         headers: getCommonHeadersResourceServer(true),
         method: "POST",
@@ -582,13 +623,15 @@ export const provideUploadAlignmentUrl = (args: HttpQueryParams): CustomRequestC
 
 
 /**
- * Provide a url to start sequence features mapping.
+ * @description Provide a url to start sequence features mapping.
  * 
  * @see `CustomRequestConfig` interface.
  * @see `HttpQueryParams` interface.
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
-export const provideSequenceFeatureGenerationUrl = (tree_pk: uuid): CustomRequestConfig => {
+export const provideSequenceFeatureGenerationUrl = (
+    tree_pk: uuid
+): CustomRequestConfig => {
     return {
         headers: getCommonHeadersResourceServer(true),
         method: "PATCH",
@@ -597,7 +640,17 @@ export const provideSequenceFeatureGenerationUrl = (tree_pk: uuid): CustomReques
 }
 
 
-export const provideSequenceFeatureListUrl = (project_pk: uuid): CustomRequestConfig => {
+/**
+ * @description Provide `axios` configuration object to request a list of
+ * sequence features to backend.
+ * 
+ * @param project_pk The project UUID. Each sequence feature have a relationship
+ * to projects. Thus, the project UUID is a requested parameter to validate if
+ * the feature set really belongs to a given project.
+ */
+export const provideSequenceFeatureListUrl = (
+    project_pk: uuid
+): CustomRequestConfig => {
     return {
         headers: getCommonHeadersResourceServer(true),
         method: "GET",
@@ -612,7 +665,7 @@ export const provideSequenceFeatureListUrl = (project_pk: uuid): CustomRequestCo
 
 
 /**
- * Interface for created sequences.
+ * @description Interface for created sequences.
  */
 export interface CreatedSequence {
     readonly created: Date,
@@ -624,11 +677,15 @@ export interface CreatedSequence {
 }
 
 
-declare type ServerTrainStatusType = "unapplicable" | "started" | "finished" | "undefined";
+declare type ServerTrainStatusType = 
+    | "unapplicable" 
+    | "started" 
+    | "finished" 
+    | "undefined";
 
 
 /**
- * Interface for created machine learning models.
+ * @description Interface for created machine learning models.
  */
 export interface CreatedModel {
     readonly created: Date,
@@ -641,6 +698,9 @@ export interface CreatedModel {
 }
 
 
+/**
+ * @description Interface to specify the i4Life API response.
+ */
 export interface i4lifeRecord {
     readonly id: number, //346690,
     readonly identifier?: string, //"b2470ac3416863e7d4ce5976811edbd6",
@@ -674,6 +734,9 @@ export interface i4lifeRecord {
 }
 
 
+/**
+ * @description Specify the basic parameters needed to perform graph annotation.
+ */
 export interface BasicGraphAnnotation {
     id: number,
     created: Date,
@@ -697,7 +760,7 @@ export interface GraphAnnotation {
 
 
 /**
- * Interface for base Node descriptions.
+ * @description Interface for base Node descriptions.
  */
  export interface BaseNodeDescription {
     description: string,
@@ -713,7 +776,7 @@ export interface GraphAnnotation {
 
 
 /**
- * Interface for created Node descriptions.
+ * @description Interface for created Node descriptions.
  */
 export interface CreatedNodeDescrription extends BaseNodeDescription {
     readonly clade: uuid,
@@ -723,7 +786,7 @@ export interface CreatedNodeDescrription extends BaseNodeDescription {
 
 
 /**
- * Interface for created clades.
+ * @description Interface for created clades.
  */
 export interface CreatedClades extends CreatedRecords {
     tree?: uuid,
@@ -750,7 +813,7 @@ export interface CreatedClades extends CreatedRecords {
 
 
 /**
- * Interface for Clades list.
+ * @description Interface for Clades list.
  */
 export interface CladesListObjects extends ListResponseInterface {
     results: Array<CreatedClades>,
@@ -759,7 +822,7 @@ export interface CladesListObjects extends ListResponseInterface {
 
 
 /**
- * Return an appropriated http config object of CustomRequestConfig
+ * @description Return an appropriated http config object of CustomRequestConfig
  * type to be used in axios requests. See example below.
  * 
  * @example axios(provideProjectsUrl("GET", { id: id }))
@@ -772,7 +835,9 @@ export interface CladesListObjects extends ListResponseInterface {
  * @param tree_pk A tree primary key.
  * @param args An Object containing specific params as 
  */
-export const provideCladesUrl = (method: Method, tree_pk: uuid, args: HttpQueryParams): CustomRequestConfig => {
+export const provideCladesUrl = (
+    method: Method, tree_pk: uuid, args: HttpQueryParams
+): CustomRequestConfig => {
 
     let request: CustomRequestConfig = {
         headers: getCommonHeadersResourceServer(true),
@@ -804,7 +869,7 @@ export const provideCladesUrl = (method: Method, tree_pk: uuid, args: HttpQueryP
 
 
 /**
- * Return an appropriated http config object of CustomRequestConfig
+ * @description Return an appropriated http config object of CustomRequestConfig
  * type to be used in axios requests. See example below.
  * 
  * @example axios(provideProjectsUrl("GET", { id: id }))
@@ -817,7 +882,9 @@ export const provideCladesUrl = (method: Method, tree_pk: uuid, args: HttpQueryP
  * @param clade A clade primary key.
  * @param args An Object containing specific params as 
  */
-export const provideNodesDescriptionUrl = (method: Method, clade: uuid, args?: HttpQueryParams): CustomRequestConfig => {
+export const provideNodesDescriptionUrl = (
+    method: Method, clade: uuid, args?: HttpQueryParams
+): CustomRequestConfig => {
 
     let request: CustomRequestConfig = {
         headers: getCommonHeadersResourceServer(true),
@@ -858,7 +925,7 @@ export const provideNodesDescriptionUrl = (method: Method, clade: uuid, args?: H
 
 
 /**
- * Return an appropriated http config object of CustomRequestConfig
+ * @description Return an appropriated http config object of CustomRequestConfig
  * type to be used in axios requests. See example below.
  * 
  * @example axios(provideProjectsUrl("GET", { id: id }))
@@ -871,7 +938,9 @@ export const provideNodesDescriptionUrl = (method: Method, clade: uuid, args?: H
  * @param tree A tree primary key.
  * @param args An Object containing specific params as 
  */
- export const provideNodeClassifierDescriptionUrl = (method: Method, tree: uuid, args?: HttpQueryParams): CustomRequestConfig => {
+export const provideNodeClassifierDescriptionUrl = (
+    method: Method, tree: uuid, args?: HttpQueryParams
+): CustomRequestConfig => {
 
     let request: CustomRequestConfig = {
         headers: getCommonHeadersResourceServer(true),
@@ -902,7 +971,19 @@ export const provideNodesDescriptionUrl = (method: Method, clade: uuid, args?: H
 }
 
 
-export const provideSingleCladeTrainUrl = (source_clade: uuid, feature_set: uuid): CustomRequestConfig => {
+/**
+ * @description Train a clade representative machine learning model.
+ * 
+ * @param source_clade The source clade UUID. Each model train have a one-to-one
+ * relationship with clades. Thus, the source clade UUID have been provided to
+ * create and validate such relationship.
+ * @param feature_set The feature set UUID. Each model have a one-to-many
+ * relationship with feature sets. Thus, the feature set UUID have been provided
+ * to create and validate such relationship.
+ */
+export const provideSingleCladeTrainUrl = (
+    source_clade: uuid, feature_set: uuid
+): CustomRequestConfig => {
     return {
         headers: getCommonHeadersResourceServer(true),
         method: "PATCH",
@@ -911,7 +992,17 @@ export const provideSingleCladeTrainUrl = (source_clade: uuid, feature_set: uuid
 };
 
 
-export const provideSingleCladeTrainStatusUrl = (task_id: uuid): CustomRequestConfig => {
+/**
+ * @deprecated This url was not implemented and will be removed.
+ * 
+ * @description Models are trained asynchronously. Thus when the train process
+ * is started this url is used to verify if the train process was finished.
+ * 
+ * @param task_id Verify if the model 
+ */
+export const provideSingleCladeTrainStatusUrl = (
+    task_id: uuid
+): CustomRequestConfig => {
     return {
         headers: getCommonHeadersResourceServer(true),
         method: "GET",
@@ -939,7 +1030,9 @@ export const provideGetNodeByIdUrl = (node: number): CustomRequestConfig => {
 };
 
 
-export const provideNodeAnnotationCreateUrl = (graph_node: number, clade_pk: uuid, tree_pk: uuid, project_pk: uuid): CustomRequestConfig => {
+export const provideNodeAnnotationCreateUrl = (
+    graph_node: number, clade_pk: uuid, tree_pk: uuid, project_pk: uuid
+): CustomRequestConfig => {
     return {
         headers: getCommonHeadersResourceServer(true),
         method: "PATCH",
@@ -953,7 +1046,9 @@ export const provideNodeAnnotationCreateUrl = (graph_node: number, clade_pk: uui
 };
 
 
-export const provideNodeAnnotationDeleteUrl = (graph_node: number, clade_pk: uuid): CustomRequestConfig => {
+export const provideNodeAnnotationDeleteUrl = (
+    graph_node: number, clade_pk: uuid
+): CustomRequestConfig => {
     return {
         headers: getCommonHeadersResourceServer(true),
         method: "DELETE",
