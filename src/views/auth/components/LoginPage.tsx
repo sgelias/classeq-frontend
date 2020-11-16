@@ -1,10 +1,10 @@
-import React, { createRef, useState } from 'react';
+import React from 'react';
 import { useAsyncEffect } from 'use-async-effect';
 import queryString from 'query-string';
 import { useCookies } from 'react-cookie'
-import { keys } from 'ts-transformer-keys';
 
 import OauthPopup from './OauthPopup';
+import { authService } from '../_services/_auth.services';
 
 
 interface AuthResponse {
@@ -43,15 +43,38 @@ export default () => {
     };
 
 
+    const storeAuthParams = (params: AuthResponse): void => {
+        if (validate_auth_query_params(params)) {
+            if (params.expires_in) {
+                const expires_in = params.expires_in;
+                const expires = new Date(Date.now() + expires_in * 200);
+                localStorage.setItem("pas_auth", JSON.stringify(params));
+                setCookie("pas_auth", params, { path: "/", expires: expires });
+            }
+        }
+    }
+
+
+    useAsyncEffect(() => {
+        const params = queryString.parse(window.location.search);
+        if ("code" in params) {
+            //@ts-ignore
+            authService.oAuthGetToken(params.code)
+                .then((res: { data: AuthResponse}) => storeAuthParams(res.data))
+                .catch(err => console.log(err));
+        };
+    }, []);
+
+
     useAsyncEffect(() => {
 
         //@ts-ignore
         const params: AuthResponse = queryString.parse(window.location.search);
 
         if (validate_auth_query_params(params)) {
+            console.log(params);
             if (params.expires_in) {
                 const expires_in = params.expires_in;
-                console.log(expires_in);
                 const expires = new Date(Date.now() + expires_in * 200);
                 localStorage.setItem("pas_auth", JSON.stringify(params));
                 setCookie("pas_auth", params, { path: "/", expires: expires });
@@ -62,13 +85,12 @@ export default () => {
 
     return (
         <OauthPopup
-            url={"http://0.0.0.0:8000/api/auth/authorize/"}
             width={600}
             height={600}
             title={"OauthPopup"}
             onClose={() => console.log('closed')}
         >
-            <button>Enter</button>
+            Redirecting ...
         </OauthPopup>
     );
 };

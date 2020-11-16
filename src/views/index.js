@@ -22,9 +22,14 @@ import ProgressBars from './elements/ProgressBars';
 import PaginationPage from './elements/Pagination';
 import ErrorPage from './shared/404';
 
+import AuthLayout from '../layouts/AuthLayout';
 import { Clades } from './clades/index';
-import { ProjectsList, ProjectsDetails, ProjectsCreate, ProjectsUpdate } from './projects/index';
-import { LoginPage } from './auth/index';
+import { 
+  ProjectsList, 
+  ProjectsDetails, 
+  ProjectsCreate, 
+  ProjectsUpdate 
+} from './projects/index';
 
 
 // See React Router documentation for details: https://reacttraining.com/react-router/web/api/Route
@@ -190,7 +195,7 @@ const pageList = [
   {
     name: 'Login',
     path: '/auth',
-    component: LoginPage,
+    component: AuthLayout,
   },
 ];
 

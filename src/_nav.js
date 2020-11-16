@@ -5,7 +5,7 @@ export default {
       url: '/home',
       icon: 'Home',
     },
-    {
+    /* {
       name: 'UI Elements',
       icon: 'Layers',
       children: [
@@ -66,7 +66,7 @@ export default {
           url: '/elements/pagination',
         },
       ],
-    },
+    }, */
     {
       name: 'Pages',
       icon: 'File',
@@ -79,7 +79,7 @@ export default {
           name: 'Projects',
           url: '/projects',
         },
-        {
+        /* {
           name: 'Blank',
           url: '/blank',
         },
@@ -90,10 +90,10 @@ export default {
         {
           name: '404',
           url: '/404',
-        },
+        }, */
       ],
     },
-    {
+    /* {
       name: 'Apps',
       icon: 'Cloud',
       children: [
@@ -114,7 +114,7 @@ export default {
           url: '/apps/cms',
         },
       ],
-    },
+    }, */
     {
       divider: true,
     },

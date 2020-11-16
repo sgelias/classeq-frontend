@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import {
     provideAuthLoginUrl,
+    provideAuthGetTokenUrl,
     AuthCredentials,
     CustomRequestConfig,
 } from '../../../_helpers/_url-providers';
@@ -43,6 +44,16 @@ const login = async (username: string, password: string) => {
 
 
 /**
+ * Request a authorization token from sso server.
+ * @param code A string returned from oauth/token url.
+ */
+const oAuthGetToken = async (code: string) => {
+    const config: CustomRequestConfig = provideAuthGetTokenUrl(code);
+    return await axios(config);
+};
+
+
+/**
  * Remove user token from local storage to log-out user.
  */
 const logout = () => {
@@ -51,6 +62,7 @@ const logout = () => {
 
 
 export const authService = {
+    oAuthGetToken,
     login,
     logout,
     getToken,

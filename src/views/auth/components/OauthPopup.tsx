@@ -2,11 +2,12 @@ import React, { ReactChild, useState } from 'react'
 import { useAsyncEffect } from 'use-async-effect';
 import { useCookies } from 'react-cookie'
 
+import { getOAuthAuthorizationUrl } from '../../../_helpers/_url-providers';
+
 
 interface Props {
   width: number,
   height: number,
-  url: string,
   title: string,
   onClose: Function,
   children?: ReactChild,
@@ -19,7 +20,7 @@ export default (props: Props) => {
   /**
    * 
    */
-  const [cookie, setCookie] = useCookies();
+  const [cookie] = useCookies();
 
 
   /**
@@ -39,7 +40,7 @@ export default (props: Props) => {
    * @description Create a method to create and manage the authorization popup.
    */
   const createPopup = () => {
-    const { url, title, width, height } = props;
+    const { title, width, height } = props;
     const left = window.screenX + (window.outerWidth - width) / 2;
     const top = window.screenY + (window.outerHeight - height) / 2.5;
     const windowFeatures = `
@@ -61,7 +62,9 @@ export default (props: Props) => {
      * at the `externalWindow` variable. It will newly redirect the user to the
      * SSO system to get the authorization token.
      */
-    setExternalWindow(window.open(url, title, windowFeatures));
+    setExternalWindow(window.open(
+      getOAuthAuthorizationUrl(), title, windowFeatures
+    ));
 
     console.log(cookie.pas_auth)
 
@@ -76,8 +79,11 @@ export default (props: Props) => {
 
 
   return (
-    <div onClick={createPopup}>
-      {props.children}
-    </div>
+    <>
+      {/* <Router /> */}
+      <div onClick={createPopup}>
+        {props.children}
+      </div>
+    </>
   );
 }
