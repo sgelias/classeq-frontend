@@ -1,5 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import { RootStateOrAny, useSelector } from 'react-redux';
 
 import { BaseProject } from '../../../_helpers/_url-providers';
 import { BreadcrumbsItemBuilder } from '../../shared';
@@ -7,10 +9,58 @@ import ProjectsForm from './ProjectsForm';
 import { projectServices as ps } from '../_services/_projects.services';
 
 
-interface Props extends RouteComponentProps {}
+interface Props extends RouteComponentProps { }
 
 
-interface State extends BaseProject {}
+interface State extends BaseProject { }
+
+
+//export default () => {
+//
+//
+//    /**
+//     * @description Create a read-only hook for cookies.
+//     */
+//    const [cookie] = useCookies();
+//
+//
+//    const record: BaseProject = useSelector((state: RootStateOrAny) => (
+//        state.treesDetailsReducer.record
+//    ));
+//
+//
+//    const createProject = () => {
+//        ps.create(record, cookie.pas_auth.access_token)
+//            .then(res => console.log(res));
+//    };
+//
+//
+//    const handleSubmit = (event: Event) => {
+//        event.preventDefault();
+//        createProject();
+//    };
+//
+//
+//    const handleChange = (input: any) => {
+//        return (event: any) => {
+//            this.setState({
+//                [input]: event.target.value,
+//            })
+//        }
+//    };
+//
+//    return (
+//        <div>
+//            <BreadcrumbsItemBuilder />
+//            <ProjectsForm
+//                title={record.title}
+//                description={record.description}
+//                handleChange={this.handleChange}
+//                handleSubmit={handleSubmit}
+//            />
+//        </div>
+//    )
+//}
 
 
 export default class ProjectsCreate extends React.Component<Props, State> {
@@ -36,7 +86,6 @@ export default class ProjectsCreate extends React.Component<Props, State> {
 
 
     private handleSubmit(event: Event) {
-        console.log(this.state);
         event.preventDefault();
         this.createProject(this.state);
     };
@@ -53,11 +102,11 @@ export default class ProjectsCreate extends React.Component<Props, State> {
 
     render() {
         const { title, description } = this.state;
-        
+
         return (
             <div>
-                <BreadcrumbsItemBuilder/>
-                <ProjectsForm 
+                <BreadcrumbsItemBuilder />
+                <ProjectsForm
                     title={title}
                     description={description}
                     handleChange={this.handleChange}

@@ -17,8 +17,12 @@ import {
  * @see `ListResponseInterface`
  * @param params An object of type ListResponseInterface.
  */
-const list = async (params?: ListResponseInterface): Promise<{ data: ProjectsListObjects }> => {
-    let config: CustomRequestConfig = provideProjectsUrl("GET", { query_params: params });
+const list = async (
+    access_token?: string,  params?: ListResponseInterface
+): Promise<{ data: ProjectsListObjects }> => {
+    let config: CustomRequestConfig = provideProjectsUrl(
+        "GET", { query_params: params }
+    );
     return await axios(config);
 }
 
@@ -29,8 +33,12 @@ const list = async (params?: ListResponseInterface): Promise<{ data: ProjectsLis
  * @see `ListResponseInterface`
  * @param params An object of type ListResponseInterface.
  */
-const get = async (id: uuid): Promise<{ data: CreatedProject }> => {
-    let config: CustomRequestConfig = provideProjectsUrl("GET", { id: id });
+const get = async (
+    id: uuid, access_token?: string
+): Promise<{ data: CreatedProject }> => {
+    let config: CustomRequestConfig = provideProjectsUrl(
+        "GET", { id: id }
+    );
     return await axios(config);
 }
 
@@ -40,8 +48,12 @@ const get = async (id: uuid): Promise<{ data: CreatedProject }> => {
  * 
  * @param record An project object.
  */
-const create = async (record: BaseProject): Promise<CreatedProject> => {
-    let config: CustomRequestConfig = provideProjectsUrl("POST", { data: record });
+const create = async (
+    record: BaseProject, access_token?: string
+): Promise<CreatedProject> => {
+    let config: CustomRequestConfig = provideProjectsUrl(
+        "POST", { data: record }
+    );
     return await axios(config);
 }
 
@@ -51,8 +63,12 @@ const create = async (record: BaseProject): Promise<CreatedProject> => {
  * 
  * @param record An project object.
  */
-const update = async (record: CreatedProject): Promise<CreatedProject> => {
-    let config: CustomRequestConfig = provideProjectsUrl("PUT", { data: record });
+const update = async (
+    record: CreatedProject, access_token?: string
+): Promise<CreatedProject> => {
+    let config: CustomRequestConfig = provideProjectsUrl(
+        "PUT", { data: record }
+    );
     return await axios(config);
 }
 
@@ -62,8 +78,10 @@ const update = async (record: CreatedProject): Promise<CreatedProject> => {
  * 
  * @param id The uuid of the records to be deleted.
  */
-const deleteRecord = async (id: uuid): Promise<any> => {
-    let config: CustomRequestConfig = provideProjectsUrl("DELETE", { id: id });
+const deleteRecord = async (id: uuid, access_token?: string): Promise<any> => {
+    let config: CustomRequestConfig = provideProjectsUrl(
+        "DELETE", { id: id }
+    );
     return await axios(config);
 }
 

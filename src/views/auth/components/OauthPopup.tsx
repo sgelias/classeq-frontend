@@ -1,9 +1,10 @@
-import React, { ReactChild, useState } from 'react'
+import React, { ReactChild, useState } from 'react';
 import { useAsyncEffect } from 'use-async-effect';
-import { useCookies } from 'react-cookie'
+import { useCookies } from 'react-cookie';
 
+import { authService } from '../_services/_auth.services';
 import { getOAuthAuthorizationUrl } from '../../../_helpers/_url-providers';
-import { Redirect } from 'react-router-dom';
+import { LocationInterface } from '../../../layouts/AuthLayout';
 
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
   height: number,
   title: string,
   children?: ReactChild,
+  match: LocationInterface,
 };
 
 
@@ -21,6 +23,9 @@ export default (props: Props) => {
    * @description Create a read-only hook for cookies.
    */
   const [cookie] = useCookies();
+
+
+  const [user, setUser] = useState<any>();
 
 
   /**
@@ -37,7 +42,7 @@ export default (props: Props) => {
 
 
   /**
-   * @description Create a method to create and manage the authorization popup.
+   * @description Create a method to create the authorization popup.
    */
   const createPopup = () => {
     const { title, width, height } = props;
@@ -75,8 +80,17 @@ export default (props: Props) => {
    * cookies for example.
    */
   const finishAuthorizationProcess = () => {
-    window.close();
+    console.log(cookie.pas_auth)
+    authService.getUser(cookie.pas_auth.access_token)
+      .then(res => setUser(res.data))
+      .catch(err => console.log(err));
+    window.close()
   };
+
+
+  useAsyncEffect(() => {
+    cookie.pas_auth && finishAuthorizationProcess();
+  }, [cookie.pas_auth]);
 
 
   return (
@@ -84,8 +98,7 @@ export default (props: Props) => {
       {cookie.pas_auth
         ? (
           <button className="btn btn-primary btn-block p-2">
-            Samuel Elias
-            {finishAuthorizationProcess()}
+            {user?.email}
           </button>
         ) 
         : (

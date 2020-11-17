@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { Button, Badge, NavItem, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Header, SidebarNav, Footer, PageContent, Avatar, Chat, PageAlert, Page } from '../vibe';
 
@@ -9,8 +9,7 @@ import nav from '../_nav';
 import routes from '../views';
 import ContextProviders from '../vibe/components/utilities/ContextProviders';
 import handleKeyAccessibility, { handleClickAccessibility } from '../vibe/helpers/handleTabAccessibility';
-//import LoginPage from '../views/auth/components/auth-login/LoginPage';
-//import PrivateRoute from '../views/private-route/PrivateRoute';
+import PrivateRoute from '../views/private-route/PrivateRoute';
 
 
 const MOBILE_SIZE = 992;
@@ -95,9 +94,9 @@ export default class DashboardLayout extends Component {
               <PageContent>
                 <Switch>
                   {routes.map((page, key) => (
-                    <Route exact path={page.path} component={page.component} key={key} />
+                    <PrivateRoute exact path={page.path} component={page.component} key={key}/>
                   ))}
-                  {/* <PrivateRoute exact path={page.path} component={page.component} key={key}/> */}
+                  {/* <Route exact path={page.path} component={page.component} key={key} /> */}
                 </Switch>
               </PageContent>
             </Page>

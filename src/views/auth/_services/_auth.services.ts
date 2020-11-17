@@ -3,18 +3,23 @@ import axios from 'axios';
 import {
     provideAuthLoginUrl,
     provideAuthGetTokenUrl,
+    provideGetSSOUserUrl,
     AuthCredentials,
     CustomRequestConfig,
 } from '../../../_helpers/_url-providers';
 
 
 /**
+ * @deprecated The authentication process will be replaced by an single sign-on
+ * authorization process. This function and all related to authorization are
+ * deprecated and will be further removed.
+ * 
  * @description Getter like method for token management.
  */
 const getToken = () => {
     const _token: string | null = localStorage.getItem('user');
     if (_token) return JSON.parse(_token);
-}
+};
 
 
 /**
@@ -71,9 +76,17 @@ const oAuthGetToken = async (code: string) => {
 };
 
 
+const getUser = async (access_token: string) => {
+    const config: CustomRequestConfig = provideGetSSOUserUrl(access_token);
+    console.log(config);
+    return await axios(config);
+}
+
+
 export const authService = {
     oAuthGetToken,
     login,
     logout,
     getToken,
+    getUser,
 };

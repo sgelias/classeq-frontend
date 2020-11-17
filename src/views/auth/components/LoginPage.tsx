@@ -4,18 +4,24 @@ import { useCookies } from 'react-cookie'
 
 import OauthPopup from './OauthPopup';
 import { authService } from '../_services/_auth.services';
+import { LocationInterface } from '../../../layouts/AuthLayout';
 
 
 interface AuthResponse {
-    access_token: string
-    expires_in: number
-    refresh_token: string
-    scope: string
-    token_type: "Bearer"
+    access_token: string,
+    expires_in: number,
+    refresh_token: string,
+    scope: string,
+    token_type: "Bearer",
 };
 
 
-export default () => {
+interface Props {
+    match: LocationInterface,
+}
+
+
+export default (props: Props) => {
 
 
     /**
@@ -97,6 +103,7 @@ export default () => {
                         width={600}
                         height={600}
                         title={"OauthPopup"}
+                        match={props.match}
                     >
                         Authorize
                     </OauthPopup>

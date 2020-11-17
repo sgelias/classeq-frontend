@@ -86,13 +86,18 @@ export interface CreatedRecords {
  */
 const authHeader = (): Object => {
     // @ts-ignore
-    let user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user'));
 
     if (user && user.token) {
         return { 'Authorization': `JWT ${user.token}` };
     } else {
         return {};
     }
+}
+
+
+const oAuthHeader = (access_token: string) => {
+    return { 'Authorization': `Bearer ${access_token}` };
 }
 
 
@@ -134,6 +139,30 @@ const getCommonHeadersAuthServer = (
 
     if (add_headers) headers = { ...headers, ...add_headers };
     if (is_authenticated) headers = { ...headers, ...authHeader() }
+
+    return headers;
+}
+
+
+/**
+ * @description Return a http header including access_token.
+ * 
+ * @param add_headers Additional headers to include on final header object.
+ * @param is_authenticated If true the authentication token is also provided.
+ * @param access_token A string returned at the final of the single sign-on
+ * authorization flow.
+ */
+const getRestrictHeadersAuthServer = (
+    is_authenticated: boolean = false, access_token: string, 
+    add_headers?: Object
+): Object => {
+    let headers = {
+        //'Access-Control-Allow-Origin': `${backendUrl}/*`,
+        'Content-Type': 'application/json',
+    }
+
+    if (add_headers) headers = { ...headers, ...add_headers };
+    if (is_authenticated) headers = { ...headers, ...oAuthHeader(access_token) }
 
     return headers;
 }
@@ -230,11 +259,11 @@ export const provideAuthLoginUrl = (
  */
 export const getOAuthAuthorizationUrl = () => {
     const url = new URL(oAuthAuthorizeUrl);
-    
+
     url.search = new URLSearchParams({
-      response_type: oAuth_response_type,
-      client_id: oAuth_client_id,
-      redirect_uri: oAuthRedirectUrl,
+        response_type: oAuth_response_type,
+        client_id: oAuth_client_id,
+        redirect_uri: oAuthRedirectUrl,
     }).toString();
 
     return url.toString();
@@ -250,7 +279,7 @@ export const getOAuthAuthorizationUrl = () => {
  * authorization process
  */
 export const provideAuthGetTokenUrl = (code: string): CustomRequestConfig => {
-    
+
     const data: OAuthCredentials = {
         grant_type: oAuth_grant_type,
         client_id: oAuth_client_id,
@@ -274,6 +303,10 @@ export const provideAuthGetTokenUrl = (code: string): CustomRequestConfig => {
 
 
 /**
+ * @deprecated The authentication process will be replaced by an single sign-on
+ * authorization process. This function and all related to authorization are
+ * deprecated and will be further removed.
+ * 
  * @description Basic user interface.
  */
 export interface User {
@@ -282,6 +315,37 @@ export interface User {
     readonly username: string,
     readonly first_name: string,
     readonly last_name: string,
+}
+
+
+/**
+ * @description Describe the User object stored on resource server.
+ */
+export interface SSOUser {
+    readonly username: string | null,
+    readonly email: string,
+    readonly first_name: string | null,
+    readonly last_name: string | null,
+    readonly groups: {
+        name: string | null
+    }
+}
+
+
+/**
+ * @description Request the user credentials from resource server.
+ * 
+ * @param access_token The access token provided during single sign-on
+ * authorization flow.
+ */
+export const provideGetSSOUserUrl = (
+    access_token: string
+): CustomRequestConfig => {
+    return {
+        headers: getRestrictHeadersAuthServer(true, access_token),
+        method: "GET",
+        url: `${baseUrl}/user/`,
+    }
 }
 
 
@@ -331,10 +395,10 @@ export interface ProjectsListObjects extends ListResponseInterface {
  */
 export const provideProjectsUrl = (
     method: Method, args: HttpQueryParams
-): CustomRequestConfig => {
+): CustomRequestConfig => {//, access_token: string
 
     let request: CustomRequestConfig = {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getCommonHeadersResourceServer(true),//, access_token
     };
 
     switch (method) {
@@ -677,10 +741,10 @@ export interface CreatedSequence {
 }
 
 
-declare type ServerTrainStatusType = 
-    | "unapplicable" 
-    | "started" 
-    | "finished" 
+declare type ServerTrainStatusType =
+    | "unapplicable"
+    | "started"
+    | "finished"
     | "undefined";
 
 
@@ -710,7 +774,7 @@ export interface i4lifeRecord {
     readonly scientificNameID?: string, //"SF-159197",
     readonly parentNameUsageID?: number, //54881956,
     readonly modified?: Date, //"27-Oct-2017",
-    
+
     // Taxonomy
     readonly kingdom?: string, //"Fungi",
     readonly phylum?: string, //"Ascomycota",
@@ -722,7 +786,7 @@ export interface i4lifeRecord {
     readonly scientificName?: string, //"Fusarium anguioides Sherb., 1915",
     readonly specificEpithet?: string, //"anguioides",
     readonly scientificNameAuthorship?: string, //"Sherb., 1915",
-    
+
     // Taxonomic metadata
     readonly nameAccordingTo?: string, //"Kew Mycology",
     readonly taxonRank?: string, //"species",
@@ -762,7 +826,7 @@ export interface GraphAnnotation {
 /**
  * @description Interface for base Node descriptions.
  */
- export interface BaseNodeDescription {
+export interface BaseNodeDescription {
     description: string,
     node_type: string,
     external_links: {
@@ -908,7 +972,7 @@ export const provideNodesDescriptionUrl = (
                     }
                 };
             };
-        
+
         case "POST":
             return request = {
                 ...request, ...{
