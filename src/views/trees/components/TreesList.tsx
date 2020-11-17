@@ -13,6 +13,7 @@ import { treesServices as ts } from '../_services/_trees.services';
 import { useAsyncEffect } from 'use-async-effect';
 import { v4 as uuid } from 'uuid/interfaces';
 
+
 interface Props {
     project_id: uuid
 };
@@ -98,7 +99,7 @@ export default (props: Props) => {
     ];
 
 
-    return trees && (
+    return (trees && props.project_id) && (
         <Row>
             <Col>
                 <Card>

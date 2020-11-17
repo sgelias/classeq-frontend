@@ -9,110 +9,39 @@ import ProjectsForm from './ProjectsForm';
 import { projectServices as ps } from '../_services/_projects.services';
 
 
-interface Props extends RouteComponentProps { }
+export default () => {
 
 
-interface State extends BaseProject { }
+	/**
+	 * @description Create a read-only hook for cookies.
+	 */
+	const [cookie] = useCookies();
 
 
-//export default () => {
-//
-//
-//    /**
-//     * @description Create a read-only hook for cookies.
-//     */
-//    const [cookie] = useCookies();
-//
-//
-//    const record: BaseProject = useSelector((state: RootStateOrAny) => (
-//        state.treesDetailsReducer.record
-//    ));
-//
-//
-//    const createProject = () => {
-//        ps.create(record, cookie.pas_auth.access_token)
-//            .then(res => console.log(res));
-//    };
-//
-//
-//    const handleSubmit = (event: Event) => {
-//        event.preventDefault();
-//        createProject();
-//    };
-//
-//
-//    const handleChange = (input: any) => {
-//        return (event: any) => {
-//            this.setState({
-//                [input]: event.target.value,
-//            })
-//        }
-//    };
-//
-//    return (
-//        <div>
-//            <BreadcrumbsItemBuilder />
-//            <ProjectsForm
-//                title={record.title}
-//                description={record.description}
-//                handleChange={this.handleChange}
-//                handleSubmit={handleSubmit}
-//            />
-//        </div>
-//    )
-//}
+	/**
+	 * @description A hook the 
+	 */
+	const record: BaseProject = useSelector((state: RootStateOrAny) => (
+		state.projectsDetailsReducer.record
+	));
 
 
-export default class ProjectsCreate extends React.Component<Props, State> {
+	const createProject = () => {
+		ps.create(record, cookie.pas_auth.access_token)
+			.then(res => console.log(res));
+	};
 
 
-    public state: BaseProject = {
-        title: '',
-        description: '',
-    };
+	const handleSubmit = (event: Event) => {
+		event.preventDefault();
+		createProject();
+	};
 
 
-    constructor(props: any) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    };
-
-
-    private createProject(record: BaseProject) {
-        ps.create(record)
-            .then(res => console.log(res));
-    };
-
-
-    private handleSubmit(event: Event) {
-        event.preventDefault();
-        this.createProject(this.state);
-    };
-
-
-    private handleChange(input: any) {
-        return (event: any) => {
-            this.setState({
-                [input]: event.target.value,
-            })
-        }
-    };
-
-
-    render() {
-        const { title, description } = this.state;
-
-        return (
-            <div>
-                <BreadcrumbsItemBuilder />
-                <ProjectsForm
-                    title={title}
-                    description={description}
-                    handleChange={this.handleChange}
-                    handleSubmit={this.handleSubmit}
-                />
-            </div>
-        )
-    };
-}
+	return (
+		<>
+			<BreadcrumbsItemBuilder />
+			<ProjectsForm handleSubmit={handleSubmit} />
+		</>
+	)
+};

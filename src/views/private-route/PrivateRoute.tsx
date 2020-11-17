@@ -15,8 +15,6 @@ export default ({ component: Component, ...rest }) => {
     return (
         <Route {...rest} render={props => {
 
-            console.log(props);
-
             return cookie.pas_auth
                 ? <Component {...props} />
                 : (

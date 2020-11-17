@@ -1,80 +1,77 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useAsyncEffect } from 'use-async-effect';
 
 import { BreadcrumbsItemBuilder } from '../../shared';
 import { CreatedProject } from '../../../_helpers/_url-providers';
-import { history } from '../../../_helpers/_history';
 import ProjectsForm from './ProjectsForm';
 import { projectServices as ps } from '../_services/_projects.services';
+import { projectsActions as pa } from '../_reducers/_projects.actions';
+import { useCookies } from 'react-cookie';
 
 
-interface State extends CreatedProject {}
+export default () => {
 
 
-interface Props extends RouteComponentProps {}
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
+	const [cookie] = useCookies();
 
 
-export default class ProjectsCreate extends React.Component<Props, State> {
+    /**
+     * @description Set a dispatcher for state management.
+     */
+    const dispatch = useDispatch();
 
 
-    public state: any | CreatedProject;
+    /**
+     * @description Set a listener for the projectsDetails state.
+     */
+    const record: CreatedProject = useSelector((state: RootStateOrAny) => (
+        state.projectsDetailsReducer.record
+    ));
 
 
-    constructor(props: any) {
-        super(props);
-    
-        this.state = {
-            uuid: (this.props.match.params as any).rid
-        };
-        
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+    /**
+     * @description Start a record update flow on submit the form.
+     * 
+     * @see `projectsDetailsPending` projects action.
+     * @see `projectsUpdateSuccess` projects action.
+     * @see `projectsDetailsFail` projects action.
+     */
+    const handleSubmit = async () => {
+        dispatch(pa.projectsDetailsPending(true));
+        await ps.update(record, cookie.pas_auth.access_token)
+            .then(res => dispatch(pa.projectsDetailsSuccess(res.data)))
+            .then(() => dispatch(pa.projectsUpdateSuccess(record)))
+            .then(() => dispatch(pa.projectsDetailsPending(false)))
+            .catch(err => dispatch(pa.projectsDetailsFail(err)));
     };
 
 
-    componentDidMount() {
-        ps.get(this.state.uuid)
-            .then(res => this.setState(() => { return res.data }))
-            .catch(() => console.log(this.state));
-    };
-
-
-    private async updateProject(record: CreatedProject) {
-        await ps.update(record)
-            .then((res) => console.log(res));
-    };
-
-
-    private handleSubmit(event: Event) {
-        event.preventDefault();
-        this.updateProject(this.state)
-            .then(() => history.push(`/projects/${this.state.uuid}`));
-    };
-
-
-    private handleChange(input: any) {
-        return (event: any) => {
-            this.setState({
-                [input]: event.target.value,
+    /**
+     * @description Get a single project at the component start.
+     * 
+     * @see `projectsDetailsPending` projects action.
+     * @see `projectsUpdateSuccess` projects action.
+     * @see `projectsDetailsFail` projects action.
+     */
+    useAsyncEffect(() => {
+        dispatch(pa.projectsDetailsPending(true));
+        record.uuid && ps.get(record.uuid, cookie.pas_auth.access_token)
+            .then(res => {
+                dispatch(pa.projectsDetailsSuccess(res.data));
+                dispatch(pa.projectsDetailsPending(false));
             })
-        }
-    };
+            .catch(err => dispatch(pa.projectsDetailsFail(err)));
+    }, []);
 
 
-    render() {
-        const { title, description, uuid } = this.state;
-
-        return (
-            <div>
-                <BreadcrumbsItemBuilder/>
-                <ProjectsForm 
-                    uuid={uuid}
-                    title={title}
-                    description={description}
-                    handleChange={this.handleChange}
-                    handleSubmit={this.handleSubmit}
-                />
-            </div>
-        )
-    };
-}
+    return !record.uuid ? null : (
+        <>
+            <BreadcrumbsItemBuilder />
+            <ProjectsForm handleSubmit={handleSubmit} />
+        </>
+    )
+};

@@ -1,67 +1,78 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Row, Button, Col, Card, CardBody, CardFooter, CardText } from 'reactstrap';
-import { NavLink, RouteComponentProps } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { RootStateOrAny, useSelector } from 'react-redux';
 
 import { BreadcrumbsItemBuilder } from '../../shared';
-import { ProjectsListObjects } from '../../../_helpers/_url-providers';
+import { CreatedProject } from '../../../_helpers/_url-providers';
 import { projectServices as ps } from '../_services/_projects.services';
 import { Dates } from '../../shared/index';
+import { useAsyncEffect } from 'use-async-effect';
+import { useCookies } from 'react-cookie';
 
 
-interface Props extends RouteComponentProps {}
+export default () => {
 
 
-interface State extends ProjectsListObjects {}
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
+    const [cookie] = useCookies();
+    
+    
+    /**
+     * @description Set a listener for the projectsListReducer state.
+     */
+    const projects: Array<CreatedProject> = useSelector((state: RootStateOrAny) => (
+        state.projectsListReducer //.results
+    ));
 
 
-export default class ProjectsList extends Component<Props, State> {
+    useAsyncEffect(() => {
+        ps.list(cookie.pas_auth.access_token)
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
+    }, []);
 
 
-    public state: Readonly<ProjectsListObjects> = {
-        results: []
-    }
+    useAsyncEffect(() => {
+        console.log(projects);
+    }, []);
 
 
-    componentDidMount() {
-        ps.list().then(res => {
-            this.setState({ results: res.data.results })
-        });
-    }
-
-
-    render() {
-        const { match } = this.props;
-        
-        return (
-            <div>
-                <BreadcrumbsItemBuilder/>
-                <Row>
-                    {
-                        this.state.results.map((item, index) => (
-                            <Col md={4} key={index}>
-                                <Card>
-                                    <CardBody>
-                                        <NavLink to={`${match.url}/${item.uuid}`} activeClassName="active">
-                                            <h3>
-                                                { item.title }
-                                            </h3>
-                                        </NavLink>
-                                        <CardText>
-                                            { item.description }
-                                        </CardText>
-                                        <Dates created={item.created} updated={item.updated} />
-                                    </CardBody>
-                                    <CardFooter>
-                                        <Button color="success">
-                                            Edit
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
-                            </Col>
-                        ))
-                    }
-                </Row>
-            </div>
-        )
-    }
-}
+    return !projects ? null : (
+        <div>
+            <BreadcrumbsItemBuilder />
+            <Row>
+                {projects.map((item, index) => (
+                    <Col md={4} key={index}>
+                        <Card>
+                            <CardBody>
+                                <NavLink
+                                    to={`${window.location.href}/${item.uuid}`}
+                                    activeClassName="active"
+                                >
+                                    <h3>
+                                        {item.title}
+                                    </h3>
+                                </NavLink>
+                                <CardText>
+                                    {item.description}
+                                </CardText>
+                                <Dates
+                                    created={item.created}
+                                    updated={item.updated}
+                                />
+                            </CardBody>
+                            <CardFooter>
+                                <Button color="success">
+                                    Edit
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+        </div>
+    );
+};

@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 import {
-    provideAuthLoginUrl,
-    provideAuthGetTokenUrl,
-    provideGetSSOUserUrl,
-    AuthCredentials,
-    CustomRequestConfig,
+  provideAuthLoginUrl,
+  provideAuthGetTokenUrl,
+  provideGetSSOUserUrl,
+  AuthCredentials,
+  CustomRequestConfig,
 } from '../../../_helpers/_url-providers';
 
 
@@ -17,8 +17,8 @@ import {
  * @description Getter like method for token management.
  */
 const getToken = () => {
-    const _token: string | null = localStorage.getItem('user');
-    if (_token) return JSON.parse(_token);
+  const _token: string | null = localStorage.getItem('user');
+  if (_token) return JSON.parse(_token);
 };
 
 
@@ -34,22 +34,22 @@ const getToken = () => {
  */
 const login = async (username: string, password: string) => {
 
-    const credentials: AuthCredentials = {
-        username: username,
-        password: password,
-    };
+  const credentials: AuthCredentials = {
+    username: username,
+    password: password,
+  };
 
-    let config: CustomRequestConfig = provideAuthLoginUrl(credentials);
+  let config: CustomRequestConfig = provideAuthLoginUrl(credentials);
 
-    return await axios(config)
-        .then(user => {
-            localStorage.setItem('user', JSON.stringify(user['data']));
-            return user;
-        })
-        .catch(err => {
-            logout();
-            return err;
-        });
+  return await axios(config)
+    .then(user => {
+      localStorage.setItem('user', JSON.stringify(user['data']));
+      return user;
+    })
+    .catch(err => {
+      logout();
+      return err;
+    });
 };
 
 
@@ -61,7 +61,7 @@ const login = async (username: string, password: string) => {
  * @description Remove user token from local storage to log-out user.
  */
 const logout = () => {
-    localStorage.removeItem('user');
+  localStorage.removeItem('user');
 };
 
 
@@ -71,22 +71,28 @@ const logout = () => {
  * @param code A string returned from oauth/token url.
  */
 const oAuthGetToken = async (code: string) => {
-    const config: CustomRequestConfig = provideAuthGetTokenUrl(code);
-    return await axios(config);
+  const config: CustomRequestConfig = provideAuthGetTokenUrl(code);
+  return await axios(config);
 };
 
 
+/**
+ * @description Build a request to get used data. This function is called if the
+ * authorization process finishes with success.
+ * 
+ * @param access_token A string returned at teh first step of the single sign-on
+ * authorization process.
+ */
 const getUser = async (access_token: string) => {
-    const config: CustomRequestConfig = provideGetSSOUserUrl(access_token);
-    console.log(config);
-    return await axios(config);
+  const config: CustomRequestConfig = provideGetSSOUserUrl(access_token);
+  return await axios(config);
 }
 
 
 export const authService = {
-    oAuthGetToken,
-    login,
-    logout,
-    getToken,
-    getUser,
+  oAuthGetToken,
+  login,
+  logout,
+  getToken,
+  getUser,
 };

@@ -378,6 +378,7 @@ export interface CreatedProject extends BaseProject, CreatedRecords {
  */
 export interface ProjectsListObjects extends ListResponseInterface {
     results: Array<CreatedProject>
+    [key: string]: any,
 }
 
 
@@ -394,11 +395,11 @@ export interface ProjectsListObjects extends ListResponseInterface {
  * @param args An Object containing specific params as 
  */
 export const provideProjectsUrl = (
-    method: Method, args: HttpQueryParams
+    method: Method, accession_token: string, args: HttpQueryParams
 ): CustomRequestConfig => {//, access_token: string
 
     let request: CustomRequestConfig = {
-        headers: getCommonHeadersResourceServer(true),//, access_token
+        headers: getRestrictHeadersAuthServer(true, accession_token),//, access_token
     };
 
     switch (method) {
@@ -511,7 +512,7 @@ export interface CreatedTrees extends BaseTrees, CreatedRecords {
 
 
 /**
- * @description Interface for Projects list.
+ * @description Interface for Trees list.
  */
 export interface TreesListObjects extends ListResponseInterface {
     results: Array<CreatedTrees>,
@@ -523,7 +524,7 @@ export interface TreesListObjects extends ListResponseInterface {
  * @description Return an appropriated http config object of CustomRequestConfig
  * type to be used in axios requests. See example below.
  * 
- * @example axios(provideProjectsUrl("GET", { id: id }))
+ * @example axios(provideTreesUrl("GET", { id: id }))
  * @see `getCommonHeaders` method.
  * @see `buildParamsForLists` method.
  * @see `Method` from axios package.
