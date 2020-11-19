@@ -9,26 +9,35 @@ import {
   ProjectsListObjects,
   provideProjectsUrl,
 } from '../../../_helpers/_url-providers';
+import { projectsActions as pa } from '../_reducers/_projects.actions';
 
 
 /**
- * List all records.
+ * @description List all records.
  * 
  * @see `ListResponseInterface`
  * @param params An object of type ListResponseInterface.
  */
 const list = async (
-  access_token: string, params?: ListResponseInterface
-): Promise<{ data: ProjectsListObjects }> => {
+  access_token: string, dispatcher: any, params?: ListResponseInterface
+): Promise<void> => {
+
   let config: CustomRequestConfig = provideProjectsUrl(
     "GET", access_token, { query_params: params }
   );
-  return await axios(config);
+
+  await dispatcher(pa.projectsListPending(true));
+  await axios(config)
+    .then(async res => {
+      await dispatcher(pa.projectsListSuccess(res.data.results));
+      await dispatcher(pa.projectsListPending(false));
+    })
+    .catch(err => dispatcher(pa.projectsListFail(err)));
 }
 
 
 /**
- * Get a single record.
+ * @description Get a single record.
  * 
  * @see `ListResponseInterface`
  * @param params An object of type ListResponseInterface.
@@ -44,7 +53,7 @@ const get = async (
 
 
 /**
- * Create a new record.
+ * @description Create a new record.
  * 
  * @param record An project object.
  */
@@ -59,7 +68,7 @@ const create = async (
 
 
 /**
- * Update an existent record.
+ * @description Update an existent record.
  * 
  * @param record An project object.
  */
@@ -74,7 +83,7 @@ const update = async (
 
 
 /**
- * Delete a single record.
+ * @description Delete a single record.
  * 
  * @param id The uuid of the records to be deleted.
  */

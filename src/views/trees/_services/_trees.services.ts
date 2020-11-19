@@ -20,28 +20,28 @@ import { v4 as uuid } from 'uuid/interfaces';
 
 
 /**
- * List all records.
+ * @description List all records.
  * 
  * @see `ListResponseInterface`
  * @param project_pk A primary key of a reference project.
  * @param dispacher A dispach object of redux.
  * @param params An object of type ListResponseInterface.
  */
-const list = async (project_pk: uuid, dispacher: any, params?: ListResponseInterface): Promise<void> => {
+const list = async (project_pk: uuid, dispatcher: any, params?: ListResponseInterface): Promise<void> => {
     let config: CustomRequestConfig = provideTreesUrl("GET", project_pk, { query_params: params });
 
-    await dispacher(ta.treesListPending(true));
+    await dispatcher(ta.treesListPending(true));
     await axios(config)
         .then(async res => {
-            await dispacher(ta.treesListSuccess(res.data.results));
-            await dispacher(ta.treesListPending(false));
+            await dispatcher(ta.treesListSuccess(res.data.results));
+            await dispatcher(ta.treesListPending(false));
         })
-        .catch(err => dispacher(ta.treesListFail(err)));
+        .catch(err => dispatcher(ta.treesListFail(err)));
 };
 
 
 /**
- * Get a single record.
+ * @description Get a single record.
  * 
  * @see `ListResponseInterface`
  * @param project_pk A primary key of a reference tree.
@@ -54,7 +54,7 @@ const get = async (project_pk: uuid, id: uuid): Promise<{ data: CreatedTrees }> 
 
 
 /**
- * Create a new record.
+ * @description Create a new record.
  * 
  * @param project_pk A primary key of a reference tree.
  * @param record An project object.
@@ -66,7 +66,7 @@ const create = async (project_pk: uuid, record: BaseTrees): Promise<CreatedTrees
 
 
 /**
- * Update an existent record.
+ * @description Update an existent record.
  * 
  * @param project_pk A primary key of a reference tree.
  * @param record An project object.
@@ -78,7 +78,7 @@ const update = async (project_pk: uuid, record: CreatedTrees): Promise<CreatedTr
 
 
 /**
- * Delete a single record.
+ * @description Delete a single record.
  * 
  * @param project_pk A primary key of a reference tree.
  * @param id The uuid of the records to be deleted.
@@ -90,7 +90,7 @@ const deleteRecord = async (project_pk: uuid, id: uuid): Promise<any> => {
 
 
 /**
- * Get genes given a search term.
+ * @description Get genes given a search term.
  * 
  * @param term A string to filter results.
  */
@@ -101,7 +101,7 @@ const searchGene = async (term: string): Promise<{ data: GeneListObjects }> => {
 
 
 /**
- * Get all leaves of a specified tree.
+ * @description Get all leaves of a specified tree.
  * 
  * @param project_pk A primary key of a reference tree.
  * @param id The uuid of the records to be deleted.
@@ -113,7 +113,7 @@ const getLeaves = async (project_pk: uuid, id: uuid): Promise<any> => {
 
 
 /**
- * Map tree clades to database representations.
+ * @description Map tree clades to database representations.
  * 
  * @param project_pk A primary key of a reference tree.
  * @param id The uuid of the target tree.
@@ -131,7 +131,7 @@ const mapClades = async (project_pk: uuid, id: uuid, data: Array<string>): Promi
 
 
 /**
- * Test outgroup monophyletism.
+ * @description Test outgroup monophyletism.
  * 
  * @param project_pk A primary key of a reference tree.
  * @param id The uuid of the target tree.
@@ -147,7 +147,7 @@ const testClade = async (project_pk: uuid, id: uuid, data: Array<string>): Promi
 
 
 /**
- * Send multiple sequence alignment to upload.
+ * @description Send multiple sequence alignment to upload.
  * 
  * @param id The uuid of the target tree.
  * @param data A fasta file as a string.

@@ -15,6 +15,10 @@ import {
     treesDetailsReducer, 
     treesListReducer 
 } from '../views/trees/_reducers/_trees.reducers';
+import {
+    projectsDetailsReducer,
+    projectsListReducer
+} from '../views/projects/_reducers/_projects.reducers';
 
 
 const persistConfig = {
@@ -42,6 +46,8 @@ const rootReducer = combineReducers({
     cladesListReducer,
     cladesDetailsReducer,
     modelsTrainReducer,
+    projectsDetailsReducer,
+    projectsListReducer,
 });
 
 

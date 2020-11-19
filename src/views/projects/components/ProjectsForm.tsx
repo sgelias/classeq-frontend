@@ -1,33 +1,47 @@
 import React from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
-import { 
-    Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row 
+import {
+    Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row
 } from 'reactstrap';
 
 import { CreatedProject } from '../../../_helpers/_url-providers';
 import { projectsActions as pa } from '../_reducers/_projects.actions';
 
 
-interface Project {
+interface Props {
     handleSubmit: Function | any,
 }
 
 
-export default (project: Project) => {
+export default (props: Props) => {
 
 
+    /**
+     * @description Create a read-only hook for cookies.
+     */
     const dispatch = useDispatch();
 
 
+    /**
+     * @description Set a listener for the projectsDetailsReducer state.
+     */
     const record: CreatedProject = useSelector((state: RootStateOrAny) => (
         state.projectsDetailsReducer.record
     ));
 
 
+    /**
+     * @description Update state of `projectsDetailsReducer` on change values of
+     * the referred input field.
+     * 
+     * @param input The value of a target input  field.
+     */
     const handleChange = (input: any) => {
         return (event: any) => {
             try {
-                dispatch(pa.projectsDetailsSuccess({ [input]: event.target.value }));
+                dispatch(pa.projectsDetailsSuccess(
+                    { [input]: event.target.value }
+                ));
             } catch (err) {
                 dispatch(pa.projectsDetailsFail(err));
             };
@@ -35,6 +49,10 @@ export default (project: Project) => {
     };
 
 
+    /**
+     * @description Create a validation constant to monitoring if values of
+     * input fields (title and description) are valid.
+     */
     const isDisabled = (
         record.title === '' ||
         record.description === ''
@@ -58,7 +76,7 @@ export default (project: Project) => {
                                     placeholder="A brief and concise phrase to described your project."
                                     value={record.title || ''}
                                     onChange={handleChange('title')}
-                                    required={true} 
+                                    required={true}
                                 />
                             </FormGroup>
 
@@ -72,16 +90,18 @@ export default (project: Project) => {
                                     placeholder="A detailed description of the project."
                                     value={record.description || ''}
                                     onChange={handleChange('description')}
-                                    required={true} 
+                                    required={true}
                                 />
                             </FormGroup>
 
                             {/* Submit button */}
-                            <Button 
+                            <Button
                                 color="primary"
                                 disabled={isDisabled}
-                                onClick={project.handleSubmit}>
-                                <i className="fa fa-paper-plane"></i>&nbsp;&nbsp;Submit
+                                onClick={props.handleSubmit}>
+                                <i className="fa fa-paper-plane"></i>
+                                &nbsp;&nbsp;
+                                Submit
                             </Button>
 
                         </Form>
@@ -90,4 +110,4 @@ export default (project: Project) => {
             </Col>
         </Row>
     )
-}
+};

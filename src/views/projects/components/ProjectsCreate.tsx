@@ -1,7 +1,6 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { RootStateOrAny, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import { BaseProject } from '../../../_helpers/_url-providers';
 import { BreadcrumbsItemBuilder } from '../../shared';
@@ -15,26 +14,45 @@ export default () => {
 	/**
 	 * @description Create a read-only hook for cookies.
 	 */
+	const dispatch = useDispatch();
+
+
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
 	const [cookie] = useCookies();
 
 
 	/**
-	 * @description A hook the 
-	 */
-	const record: BaseProject = useSelector((state: RootStateOrAny) => (
-		state.projectsDetailsReducer.record
+     * @description Set a listener for the projectsDetailsReducer state.
+     */
+    const record: BaseProject = useSelector((state: RootStateOrAny) => (
+		state.projectsDetailsReducer?.record
 	));
 
 
-	const createProject = () => {
-		ps.create(record, cookie.pas_auth.access_token)
+	/**
+	 * @description Submit a new project to 
+	 */
+	const createProject = async () => {
+		await ps.create(record, cookie.pas_auth.access_token)
 			.then(res => console.log(res));
 	};
 
 
-	const handleSubmit = (event: Event) => {
-		event.preventDefault();
-		createProject();
+	/**
+	 * @description Submit a form using values from `ProjectsForm` component and
+	 * update the `projectsListReducer` on finish the transaction.
+	 * 
+	 * @see `ProjectsForm` component.
+	 * @see `projectsListReducer` reducer.
+	 */
+	const handleSubmit = () => {
+		Promise.resolve()
+            .then(async () => await createProject())
+            .then(async () => await ps.list(
+				cookie.pas_auth.access_token, dispatch
+			));
 	};
 
 

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Row, Button, Col, Card, CardBody, CardFooter, CardText } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
-import { RootStateOrAny, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 
 import { BreadcrumbsItemBuilder } from '../../shared';
 import { CreatedProject } from '../../../_helpers/_url-providers';
 import { projectServices as ps } from '../_services/_projects.services';
+import { projectsActions as pa } from '../_reducers/_projects.actions';
 import { Dates } from '../../shared/index';
 import { useAsyncEffect } from 'use-async-effect';
 import { useCookies } from 'react-cookie';
@@ -21,6 +22,12 @@ export default () => {
     
     
     /**
+     * @description Set a dispatcher for state management.
+     */
+    const dispatch = useDispatch();
+
+
+    /**
      * @description Set a listener for the projectsListReducer state.
      */
     const projects: Array<CreatedProject> = useSelector((state: RootStateOrAny) => (
@@ -29,9 +36,7 @@ export default () => {
 
 
     useAsyncEffect(() => {
-        ps.list(cookie.pas_auth.access_token)
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
+        ps.list(cookie.pas_auth.access_token, dispatch);
     }, []);
 
 

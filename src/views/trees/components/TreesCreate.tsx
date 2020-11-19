@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid/interfaces';
 
@@ -16,22 +16,31 @@ interface Props {
 export default (props: Props) => {
 
 
-    const dispatch = useDispatch();
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
+	const dispatch = useDispatch();
 
 
+    /**
+     * @description Set a listener for the projectsDetailsReducer state.
+     */
     const record: BaseTrees = useSelector((state: RootStateOrAny) => (
         state.treesDetailsReducer.record
     ));
 
 
-    const createTree = async (record: BaseTrees) => {
+    //const [record, setRecord] = useState<BaseTrees>()
+
+
+    const createTree = async () => {
         await ts.create(props.project_id, record);
     };
 
 
     const handleSubmit = () => {
         Promise.resolve()
-            .then(async () => await createTree(record))
+            .then(async () => await createTree())
             .then(async () => await ts.list(props.project_id, dispatch))
             .then(() => props.toggle());
     };
