@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { useAsyncEffect } from 'use-async-effect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCookies } from 'react-cookie';
@@ -16,6 +16,12 @@ import { projectsActions as pa } from '../_reducers/_projects.actions';
 
 
 export default () => {
+
+
+    /**
+     * @description Get the project uuid from url params using a hook.
+     */
+    const params = useParams<{ pid: string }>();
 
 
     /**
@@ -38,9 +44,14 @@ export default () => {
     ));
 
 
+    /**
+     * @description Get a project record on start the component. The query is
+     * performed for cases which the record are not stored in the application
+     * state.
+     */
     useAsyncEffect(() => {
         dispatch(pa.projectsDetailsPending(true));
-        record.uuid && ps.get(record.uuid, cookie.pas_auth.access_token)
+        ("pid" in params) && ps.get(params.pid, cookie.pas_auth.access_token)
             .then(res => dispatch(pa.projectsDetailsSuccess(res.data)))
             .then(() => dispatch(pa.projectsDetailsPending(false)))
             .catch(err => dispatch(pa.projectsDetailsFail(err)));
@@ -60,7 +71,7 @@ export default () => {
                                 &nbsp;&nbsp;&nbsp;
                                 {record.title}
                                 &nbsp;&nbsp;&nbsp;
-                                <NavLink to={`${window.location.href}/edit`} >
+                                <NavLink to={`${window.location.pathname}/edit`} >
                                     <FontAwesomeIcon icon="pencil-alt" size="xs" />
                                 </NavLink>
                             </h3>

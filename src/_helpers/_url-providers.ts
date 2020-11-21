@@ -64,7 +64,7 @@ export interface ListResponseInterface {
  * @description Define the basic interface for http requests.
  */
 export interface HttpQueryParams {
-    id?: uuid,
+    id?: uuid | string,
     query_params?: ListResponseInterface,
     data?: Object | any
 }

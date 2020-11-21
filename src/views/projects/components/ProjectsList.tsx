@@ -31,8 +31,17 @@ export default () => {
      * @description Set a listener for the projectsListReducer state.
      */
     const projects: Array<CreatedProject> = useSelector((state: RootStateOrAny) => (
-        state.projectsListReducer //.results
+        state.projectsListReducer.results
     ));
+
+
+    const dispatchRecordDetails = (record: CreatedProject) => {
+        Promise.resolve()
+            .then(() => dispatch(pa.projectsDetailsPending(true)))
+            .then(() => dispatch(pa.projectsDetailsSuccess(record)))
+            .then(() => dispatch(pa.projectsDetailsPending(false)))
+            .catch(err => dispatch(pa.projectsDetailsFail(err)));
+    };
 
 
     useAsyncEffect(() => {
@@ -45,8 +54,8 @@ export default () => {
     }, []);
 
 
-    return !projects ? null : (
-        <div>
+    return projects.length > 0 && (
+        <>
             <BreadcrumbsItemBuilder />
             <Row>
                 {projects.map((item, index) => (
@@ -54,8 +63,9 @@ export default () => {
                         <Card>
                             <CardBody>
                                 <NavLink
-                                    to={`${window.location.href}/${item.uuid}`}
+                                    to={`${window.location.pathname}/${item.uuid}`}
                                     activeClassName="active"
+                                    onClick={() => dispatchRecordDetails(item)}
                                 >
                                     <h3>
                                         {item.title}
@@ -78,6 +88,6 @@ export default () => {
                     </Col>
                 ))}
             </Row>
-        </div>
+        </>
     );
 };

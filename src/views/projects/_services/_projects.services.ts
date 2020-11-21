@@ -6,7 +6,6 @@ import {
   CustomRequestConfig,
   CreatedProject,
   ListResponseInterface,
-  ProjectsListObjects,
   provideProjectsUrl,
 } from '../../../_helpers/_url-providers';
 import { projectsActions as pa } from '../_reducers/_projects.actions';
@@ -15,7 +14,7 @@ import { projectsActions as pa } from '../_reducers/_projects.actions';
 /**
  * @description List all records.
  * 
- * @see `ListResponseInterface`
+ * @see `ListResponseInterface` interface.
  * @param params An object of type ListResponseInterface.
  */
 const list = async (
@@ -28,10 +27,8 @@ const list = async (
 
   await dispatcher(pa.projectsListPending(true));
   await axios(config)
-    .then(async res => {
-      await dispatcher(pa.projectsListSuccess(res.data.results));
-      await dispatcher(pa.projectsListPending(false));
-    })
+    .then(async res => await dispatcher(pa.projectsListSuccess(res.data.results)))
+    .then(async () => await dispatcher(pa.projectsListPending(false)))
     .catch(err => dispatcher(pa.projectsListFail(err)));
 }
 
@@ -39,11 +36,11 @@ const list = async (
 /**
  * @description Get a single record.
  * 
- * @see `ListResponseInterface`
+ * @see `ListResponseInterface` interface.
  * @param params An object of type ListResponseInterface.
  */
 const get = async (
-  id: uuid, access_token: string
+  id: uuid | string, access_token: string
 ): Promise<{ data: CreatedProject }> => {
   let config: CustomRequestConfig = provideProjectsUrl(
     "GET", access_token, { id: id }
