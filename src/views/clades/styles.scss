@@ -1,0 +1,130 @@
+.clades-card {
+    overflow-y: scroll;
+    max-height: 820px;
+
+    &.not-overflow {
+        overflow-x: hidden !important;
+        overflow-y: hidden !important;
+    }
+
+    th {
+        padding: 2px 8px !important;
+
+        &.nucleotide {
+            text-align: center;
+        }
+    }
+
+    td {
+        padding: 2px 8px !important;
+
+        &.not-null-cell {
+            background: #e4eeff !important;
+        }
+
+        &.selected {
+            background: red;
+        }
+
+        /* &.td-nowrap {
+            white-space: nowrap;
+        } */
+
+        &.nucleotide {
+            text-align: center;
+            color: black;
+
+            &.a {
+                background-color: rgb(100, 247, 63);
+            }
+
+            &.c {
+                background-color: rgb(255, 179, 64);
+            }
+
+            &.t {
+                background-color: rgb(60, 136, 238);
+            }
+
+            &.g {
+                background-color: rgb(235, 65, 60);
+            }
+        }
+    }
+
+    table.tableBodyScroll tbody {
+        overflow-y: scroll;
+    }
+}
+
+.full-width-modal {
+    width: 100% !important;
+    height: 100% !important;
+    /* margin: 0;
+    padding: 0; */
+
+    &.modal-content {
+        height: auto;
+        min-height: 100% !important;
+        border-radius: 0;
+    }
+}
+
+.sumburst-viz {
+    height: 2000 !important;
+}
+
+.node circle {
+    fill: rgb(247, 106, 214);
+    stroke: rgb(184, 37, 81);
+    stroke-width: 1.5px;
+}
+
+.node text {
+    font-size: 11px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: black;
+    fill: black;
+}
+
+.node {
+    cursor: pointer;
+}
+
+path.link {
+    fill: none;
+    stroke: #2593b8;
+    stroke-width: 1.5px;
+}
+
+.annotated {
+    color: green !important;
+}
+
+.clade-items {
+    &.selected {
+        &.valid {
+            background-color: #d7ffae;
+        }
+
+        &.invalid {
+            background-color: #f0d5d5;
+        }
+    }
+
+    &:hover {
+        cursor: pointer;
+
+        &.valid {
+            background-color: #d7ffae;
+        }
+
+        &.invalid {
+            background-color: #f0d5d5;
+        }
+    }
+}
+
+.sister-leaves {
+    color: green !important;
+}

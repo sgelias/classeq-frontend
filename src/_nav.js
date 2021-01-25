@@ -5,7 +5,7 @@ export default {
       url: '/home',
       icon: 'Home',
     },
-    {
+    /* {
       name: 'UI Elements',
       icon: 'Layers',
       children: [
@@ -66,26 +66,34 @@ export default {
           url: '/elements/pagination',
         },
       ],
-    },
+    }, */
     {
       name: 'Pages',
       icon: 'File',
       children: [
         {
+          name: 'Login',
+          url: '/auth',
+        },
+        {
+          name: 'Projects',
+          url: '/projects',
+        },
+        /* {
           name: 'Blank',
-          url: '/pages/blank',
+          url: '/blank',
         },
         {
           name: 'Sub Navigation',
-          url: '/pages/subnav',
+          url: '/subnav',
         },
         {
           name: '404',
-          url: '/pages/404',
-        },
+          url: '/404',
+        }, */
       ],
     },
-    {
+    /* {
       name: 'Apps',
       icon: 'Cloud',
       children: [
@@ -106,7 +114,7 @@ export default {
           url: '/apps/cms',
         },
       ],
-    },
+    }, */
     {
       divider: true,
     },

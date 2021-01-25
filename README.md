@@ -1,44 +1,25 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Classeq: Bringing real phylogenies into models for classifying biological sequences
 
-## Available Scripts
+This is the frontend part of Classeq project. The project is based on [Vibe template](https://themewagon.com/themes/free-bootstrap-4-react-js-admin-dashboard-template-vibe/), a '*free Bootstrap 4 React.js admin dashboard template for the backends of software, admin panels, dashboards, e-commerce dashboards*'. The project are developed in **Typescript** despite the legacy part of the Vibe template was temporary keeps in **Javascript**.
 
-In the project directory, you can run:
+## Project structure
 
-### `npm start`
+The backbone of the project components exists on the **vibe** directory. The other two important folders are **_helpers** and **views**. The former containing the `_store.ts` file, responsible by the connection with the global variables of redux, the `_history.ts`, responsible for the browser history management, and the `_url-provider.ts`, a provider of all application URLs. The **views** folder contains all main functionalities/modules of Classeq, as *projects*, *trees*, *clades*, *nodes*, and *models* management.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Almost each functionality/module have their own reducer (`_reducers`) and service (`_services`) directories, followed by the component folder (`component`), an index (`index.ts`), and a style file (`styles.scss`).
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Example:
 
-### `npm test`
+```bash
+── clades
+   ├── components
+   ├── _reducers
+   └── _services
+```
+The component directory can also contain subdirectories if needed.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Available scripts
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+To view the project, simpleously download or clone our repository, insall all dependencies and run `npm start`.
+___
+Be happy and let's code!!

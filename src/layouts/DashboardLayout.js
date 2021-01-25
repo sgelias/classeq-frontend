@@ -1,25 +1,32 @@
 import React, { Component } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { Button, Badge, NavItem, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Header, SidebarNav, Footer, PageContent, Avatar, Chat, PageAlert, Page } from '../vibe';
+
 import Logo from '../assets/images/vibe-logo.svg';
 import avatar1 from '../assets/images/avatar1.png';
 import nav from '../_nav';
 import routes from '../views';
 import ContextProviders from '../vibe/components/utilities/ContextProviders';
 import handleKeyAccessibility, { handleClickAccessibility } from '../vibe/helpers/handleTabAccessibility';
+import PrivateRoute from '../views/private-route/PrivateRoute';
+
 
 const MOBILE_SIZE = 992;
 
+
 export default class DashboardLayout extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
-      sidebarCollapsed: false,
+      sidebarCollapsed: true,
       isMobile: window.innerWidth <= MOBILE_SIZE,
       showChat1: true,
     };
   }
+
 
   handleResize = () => {
     if (window.innerWidth <= MOBILE_SIZE) {
@@ -29,11 +36,13 @@ export default class DashboardLayout extends Component {
     }
   };
 
+
   componentDidUpdate(prev) {
     if (this.state.isMobile && prev.location.pathname !== this.props.location.pathname) {
       this.toggleSideCollapse();
     }
   }
+
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize);
@@ -41,17 +50,21 @@ export default class DashboardLayout extends Component {
     document.addEventListener('click', handleClickAccessibility);
   }
 
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
+
 
   toggleSideCollapse = () => {
     this.setState(prevState => ({ sidebarCollapsed: !prevState.sidebarCollapsed }));
   };
 
+
   closeChat = () => {
     this.setState({ showChat1: false });
   };
+
 
   render() {
     const { sidebarCollapsed } = this.state;
@@ -81,9 +94,9 @@ export default class DashboardLayout extends Component {
               <PageContent>
                 <Switch>
                   {routes.map((page, key) => (
-                    <Route path={page.path} component={page.component} key={key} />
+                    <PrivateRoute exact path={page.path} component={page.component} key={key}/>
                   ))}
-                  <Redirect from="/" to="/home" />
+                  {/* <Route exact path={page.path} component={page.component} key={key} /> */}
                 </Switch>
               </PageContent>
             </Page>

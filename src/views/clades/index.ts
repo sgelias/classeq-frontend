@@ -1,0 +1,1 @@
+export { default as Clades } from './components/Clades';
