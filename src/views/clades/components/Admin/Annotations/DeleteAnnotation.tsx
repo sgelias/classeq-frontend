@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAsyncEffect } from 'use-async-effect';
+import { useCookies } from 'react-cookie';
 
 import { cladesServices as cs } from '../../../_services/_clades.services';
 import { cladesActions as ca } from '../../../_reducers/_clades.actions';
@@ -18,6 +19,15 @@ export interface DeleteAnnotationHandle {
 const DeleteAnnotation: React.ForwardRefRenderFunction<DeleteAnnotationHandle> = (_, ref) => {
 
 
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
+    const [cookie] = useCookies();
+    
+    
+    /**
+     * @description Set a dispatcher for state management.
+     */
     const dispatch = useDispatch();
 
 
@@ -69,14 +79,14 @@ const DeleteAnnotation: React.ForwardRefRenderFunction<DeleteAnnotationHandle> =
 
 
     const listClades = async (): Promise<void> => {
-        (params.tid) && await cs.listClades(params.tid, dispatch);
+        (params.tid) && await cs.listClades(cookie.pas_auth.access_token, params.tid, dispatch);
     };
 
 
     const deleteAnnotatedClade = () => {
         setDeleting(true);
         const clade_id = clade.annotation?.external_links?.annotation.id;
-        (clade_id && clade.uuid) && cs.deleteAnnotatedClade(clade_id, clade.uuid)
+        (clade_id && clade.uuid) && cs.deleteAnnotatedClade(cookie.pas_auth.access_token, clade_id, clade.uuid)
             .then(() => listClades())
             .then(() => setAdvancedOptions(false))
             .then(() => setDeleting(false))

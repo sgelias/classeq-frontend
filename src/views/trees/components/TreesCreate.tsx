@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid/interfaces';
+import { useCookies } from 'react-cookie';
 
 import { BaseTrees } from '../../../_helpers/_url-providers';
 import TreesForm from './TreesForm';
@@ -19,6 +20,12 @@ export default (props: Props) => {
     /**
 	 * @description Create a read-only hook for cookies.
 	 */
+    const [cookie] = useCookies();
+    
+    
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
 	const dispatch = useDispatch();
 
 
@@ -34,14 +41,16 @@ export default (props: Props) => {
 
 
     const createTree = async () => {
-        await ts.create(props.project_id, record);
+        await ts.create(cookie.pas_auth.access_token, props.project_id, record);
     };
 
 
     const handleSubmit = () => {
         Promise.resolve()
             .then(async () => await createTree())
-            .then(async () => await ts.list(props.project_id, dispatch))
+            .then(async () => await ts.list(
+                cookie.pas_auth.access_token, props.project_id, dispatch
+            ))
             .then(() => props.toggle());
     };
 

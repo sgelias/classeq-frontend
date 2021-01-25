@@ -72,6 +72,7 @@ const logout = () => {
  */
 const oAuthGetToken = async (code: string) => {
   const config: CustomRequestConfig = provideAuthGetTokenUrl(code);
+  console.log(config);
   return await axios(config);
 };
 

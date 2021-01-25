@@ -10,19 +10,23 @@ import { v4 as uuid } from 'uuid/interfaces';
 /**
  * Base url to perform request to backend API.
  */
-const backendUrl: string = 'http://localhost:8000';
+const backendUrl: string = 'http://localhost:8080';
 const baseUrl: string = `${backendUrl}/api/v1`;
+const frontendBaseUrl: string = "http://localhost:3000"
 
 
 /**
  * Constants of Oauth2 flows.
  */
-const authUrl: string = "http://0.0.0.0:8001" as const;
-export const oAuthRedirectUrl = "http://localhost:3000/auth/" as const;
-const oAuthAuthorizeUrl: string = `${authUrl}/o/authorize/`;
-const oAuthTokenUrl: string = `${authUrl}/o/token/`;
-const oAuth_client_id = 'fbQrZtbxqSurqLGOBjSU36R56Cm757HBUVJOHKZG' as const;
-const oAuth_client_secret = 'Dj87w7oqUhZh4qhTWo1DC8aL7glJMtRG5vY6Zai24x3r5VGQ6f68kxH4l6rq1oyFukvPnibSH8ey0a9BMkjE7R2IfSHPwThtMq3KpF1SyDXYaKIo5tZoIaDWWHNrFrqp' as const;
+export const oAuthRedirectUrl = `${frontendBaseUrl}/auth/`;
+
+const authUrl: string = "http://34.123.139.115" as const;
+//const authUrl: string = "https://lepista.net" as const;
+//const authUrl: string = "http://0.0.0.0:8001" as const;
+const oAuthAuthorizeUrl: string = `${authUrl}/api/v1/o/authorize/`;
+const oAuthTokenUrl: string = `${authUrl}/api/v1/o/token/`;
+const oAuth_client_id = 'ZhZ189bwNEjiza3xLhVGrZs2G3TnT5Isi4y7uZyU' as const;
+const oAuth_client_secret = 'l99sDJCq5tjWcOtzR6a5OZp1MGs3MQMJqSe55quKuJhIWRBSq6zyPhkzTWVy614rdBNjQ0HCCPsspMjvlsgNe8o5s0WXdOZeJ3uxNXVXCizvnt0i2UxaRuKJdhW7YRyi' as const;
 const oAuth_grant_type = 'authorization_code' as const;
 const oAuth_response_type = 'code' as const;
 
@@ -111,7 +115,7 @@ const getCommonHeadersResourceServer = (
     is_authenticated: boolean = false, add_headers?: Object
 ): Object => {
     let headers = {
-        'Access-Control-Allow-Origin': `${backendUrl}/*`,
+        'Access-Control-Allow-Origin': `${frontendBaseUrl}`,
         'Content-Type': 'application/json'
     }
 
@@ -132,7 +136,7 @@ const getCommonHeadersAuthServer = (
     is_authenticated: boolean = false, add_headers?: Object
 ): Object => {
     let headers = {
-        'Access-Control-Allow-Origin': `${authUrl}/*`,
+        'Access-Control-Allow-Origin': `${frontendBaseUrl}`,
         'Cache-Control': 'no-cache',
         'Content-Type': 'application/x-www-form-urlencoded',
     }
@@ -287,6 +291,8 @@ export const provideAuthGetTokenUrl = (code: string): CustomRequestConfig => {
         code: code,
         redirect_uri: oAuthRedirectUrl,
     }
+
+    console.log(data)
 
     return {
         method: "POST",
@@ -535,11 +541,11 @@ export interface TreesListObjects extends ListResponseInterface {
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
 export const provideTreesUrl = (
-    method: Method, project_pk: uuid, args: HttpQueryParams
+    method: Method, accession_token: string, project_pk: uuid, args: HttpQueryParams
 ): CustomRequestConfig => {
 
     let request: CustomRequestConfig = {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, accession_token),
     };
 
     switch (method) {
@@ -637,10 +643,10 @@ export const provideGetLeavesUrl = (
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
 export const provideMapCladesUrl = (
-    project_pk: uuid, args: HttpQueryParams
+    access_token: string, project_pk: uuid, args: HttpQueryParams
 ): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "PATCH",
         url: `${baseUrl}/${project_pk}/trees/${args.id}/map-clades`,
         data: args.data
@@ -657,10 +663,10 @@ export const provideMapCladesUrl = (
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
 export const provideTestCladesUrl = (
-    project_pk: uuid, args: HttpQueryParams
+    access_token: string, project_pk: uuid, args: HttpQueryParams
 ): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "PATCH",
         url: `${baseUrl}/${project_pk}/trees/${args.id}/test-clade`,
         data: args.data
@@ -676,10 +682,10 @@ export const provideTestCladesUrl = (
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
 export const provideUploadAlignmentUrl = (
-    args: HttpQueryParams
+    access_token: string, args: HttpQueryParams
 ): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "POST",
         url: `${baseUrl}/${args.id}/seq/map-fasta`,
         data: args.data
@@ -695,10 +701,10 @@ export const provideUploadAlignmentUrl = (
  * @param args An Object containing specific params as HttpQueryParams interface.
  */
 export const provideSequenceFeatureGenerationUrl = (
-    tree_pk: uuid
+    access_token: string, tree_pk: uuid
 ): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "PATCH",
         url: `${baseUrl}/${tree_pk}/seq-features/map-features`
     }
@@ -714,10 +720,10 @@ export const provideSequenceFeatureGenerationUrl = (
  * the feature set really belongs to a given project.
  */
 export const provideSequenceFeatureListUrl = (
-    project_pk: uuid
+    access_token: string, project_pk: uuid
 ): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "GET",
         url: `${baseUrl}/${project_pk}/seq-features/`
     }
@@ -901,11 +907,11 @@ export interface CladesListObjects extends ListResponseInterface {
  * @param args An Object containing specific params as 
  */
 export const provideCladesUrl = (
-    method: Method, tree_pk: uuid, args: HttpQueryParams
+    method: Method, access_token: string, tree_pk: uuid, args: HttpQueryParams
 ): CustomRequestConfig => {
 
     let request: CustomRequestConfig = {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
     };
 
     switch (method) {
@@ -948,11 +954,11 @@ export const provideCladesUrl = (
  * @param args An Object containing specific params as 
  */
 export const provideNodesDescriptionUrl = (
-    method: Method, clade: uuid, args?: HttpQueryParams
+    method: Method, access_token: string, clade: uuid, args?: HttpQueryParams
 ): CustomRequestConfig => {
 
     let request: CustomRequestConfig = {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
     };
 
     switch (method) {
@@ -1004,11 +1010,11 @@ export const provideNodesDescriptionUrl = (
  * @param args An Object containing specific params as 
  */
 export const provideNodeClassifierDescriptionUrl = (
-    method: Method, tree: uuid, args?: HttpQueryParams
+    method: Method, access_token: string, tree: uuid, args?: HttpQueryParams
 ): CustomRequestConfig => {
 
     let request: CustomRequestConfig = {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
     };
 
     switch (method) {
@@ -1047,10 +1053,10 @@ export const provideNodeClassifierDescriptionUrl = (
  * to create and validate such relationship.
  */
 export const provideSingleCladeTrainUrl = (
-    source_clade: uuid, feature_set: uuid
+    access_token: string, source_clade: uuid, feature_set: uuid
 ): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "PATCH",
         url: `${baseUrl}/${source_clade}/models/${feature_set}/train`,
     }
@@ -1066,19 +1072,21 @@ export const provideSingleCladeTrainUrl = (
  * @param task_id Verify if the model 
  */
 export const provideSingleCladeTrainStatusUrl = (
-    task_id: uuid
+    access_token: string, task_id: uuid
 ): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "GET",
         url: `${baseUrl}/${task_id}/models/get-status`
     }
 };
 
 
-export const provideGetNodeListUrl = (term: string): CustomRequestConfig => {
+export const provideGetNodeListUrl = (
+    access_token: string, term: string
+): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "GET",
         url: `${baseUrl}/nodes/`,
         params: { q: term, t: "full" },
@@ -1086,9 +1094,11 @@ export const provideGetNodeListUrl = (term: string): CustomRequestConfig => {
 };
 
 
-export const provideGetNodeByIdUrl = (node: number): CustomRequestConfig => {
+export const provideGetNodeByIdUrl = (
+    access_token: string, node: number
+): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "GET",
         url: `${baseUrl}/nodes/${node}`,
     }
@@ -1096,10 +1106,11 @@ export const provideGetNodeByIdUrl = (node: number): CustomRequestConfig => {
 
 
 export const provideNodeAnnotationCreateUrl = (
-    graph_node: number, clade_pk: uuid, tree_pk: uuid, project_pk: uuid
+    access_token: string, graph_node: number, clade_pk: uuid, tree_pk: uuid, 
+    project_pk: uuid
 ): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "PATCH",
         url: `${baseUrl}/nodes/${graph_node}/annotate-node`,
         params: {
@@ -1112,10 +1123,10 @@ export const provideNodeAnnotationCreateUrl = (
 
 
 export const provideNodeAnnotationDeleteUrl = (
-    graph_node: number, clade_pk: uuid
+    access_token: string, graph_node: number, clade_pk: uuid
 ): CustomRequestConfig => {
     return {
-        headers: getCommonHeadersResourceServer(true),
+        headers: getRestrictHeadersAuthServer(true, access_token),
         method: "DELETE",
         url: `${baseUrl}/nodes/${graph_node}/${clade_pk}/delete`,
     }

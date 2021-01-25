@@ -2,6 +2,7 @@ import { Alert, Card, CardBody, CardFooter, CardHeader, Col, Row } from 'reactst
 import { Button, Carousel, CarouselItem } from 'reactstrap';
 import React, { useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 
 import { CreatedTrees } from '../../../_helpers/_url-providers';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,6 +29,15 @@ enum ViewTypeEnum {
 export default (props: Props) => {
 
 
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
+    const [cookie] = useCookies();
+    
+    
+    /**
+     * @description Set a dispatcher for state management.
+     */
     const dispatch = useDispatch();
 
 
@@ -66,7 +76,7 @@ export default (props: Props) => {
 
 
     useAsyncEffect(() => {
-        ts.list(props.project_id, dispatch);
+        ts.list(cookie.pas_auth.access_token, props.project_id, dispatch);
     }, []);
 
 

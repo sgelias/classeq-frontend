@@ -3,6 +3,7 @@ import { Row, Col } from 'reactstrap';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAsyncEffect } from 'use-async-effect';
+import { useCookies } from 'react-cookie';
 
 import { CreatedClades } from '../../../_helpers/_url-providers';
 import { BreadcrumbsItemBuilder } from '../../shared';
@@ -16,10 +17,19 @@ import CladesSister from './Sister/CladesSister';
 export default () => {
 
 
-    const min_clade_length: number = 10;
-
-
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
+    const [cookie] = useCookies();
+    
+    
+    /**
+     * @description Set a dispatcher for state management.
+     */
     const dispatch = useDispatch();
+
+
+    const min_clade_length: number = 10;
 
 
     const params = useParams<any>();
@@ -43,7 +53,8 @@ export default () => {
 
 
     const listClades = async (): Promise<void> => {
-        (params.tid) && await cs.listClades(params.tid, dispatch);
+        (params.tid) && await cs.listClades(
+            cookie.pas_auth.access_token, params.tid, dispatch);
     };
 
 

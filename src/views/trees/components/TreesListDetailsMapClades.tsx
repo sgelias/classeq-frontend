@@ -1,6 +1,7 @@
 import { Badge, Button, Carousel, CarouselItem, Form, FormGroup, Input, Jumbotron, ListGroup, ListGroupItem, Modal, ModalBody, Spinner } from 'reactstrap';
 import React, { useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 
 import { CreatedTrees } from '../../../_helpers/_url-providers';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,6 +25,15 @@ enum ViewTypeEnum {
 export default (props: Props) => {
 
 
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
+    const [cookie] = useCookies();
+    
+    
+    /**
+     * @description Set a dispatcher for state management.
+     */
     const dispatch = useDispatch();
 
 
@@ -92,7 +102,10 @@ export default (props: Props) => {
 
 
     const testClade = () => {
-        ts.testClade(props.project_id, props.tree_id, outgroupList)
+        ts.testClade(
+            cookie.pas_auth.access_token, props.project_id, props.tree_id, 
+            outgroupList
+        )
             .then(() => setCanProceed(true))
             .then(() => setValidatingClade(false))
             .catch(err => alert(err.data));
@@ -101,7 +114,10 @@ export default (props: Props) => {
 
     const mapClades = () => {
         setMappingClades(true);
-        ts.mapClades(props.project_id, props.tree_id, outgroupList)
+        ts.mapClades(
+            cookie.pas_auth.access_token, props.project_id, props.tree_id, 
+            outgroupList
+        )
             .then(() => setMappingClades(false))
             .then(() => updateTreesListAndDetailsStatus())
             .then(() => toggle())
@@ -110,7 +126,7 @@ export default (props: Props) => {
 
 
     const updateTreesListAndDetailsStatus = async () => {
-        await ts.list(props.project_id, dispatch);
+        await ts.list(cookie.pas_auth.access_token, props.project_id, dispatch);
     };
 
 

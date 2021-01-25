@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Badge, Spinner, ListGroupItem } from 'reactstrap';
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 import { cladesActions as ca } from '../../../_reducers/_clades.actions';
 import { cladesServices as cs } from '../../../_services/_clades.services';
@@ -20,6 +21,15 @@ interface Props {
 export default (props: Props) => {
 
 
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
+    const [cookie] = useCookies();
+    
+    
+    /**
+     * @description Set a dispatcher for state management.
+     */
     const dispatch = useDispatch();
 
 
@@ -40,7 +50,8 @@ export default (props: Props) => {
 
 
     const listClades = async (): Promise<void> => {
-        (params.tid) && await cs.listClades(params.tid, dispatch);
+        (params.tid) && await cs.listClades(
+            cookie.pas_auth.access_token, params.tid, dispatch);
     };
 
 
@@ -62,8 +73,9 @@ export default (props: Props) => {
     const startSingleCladeTrain = () => {
         setTrainingStatus("PENDING");
         (clade.uuid && tree.feature_set?.uuid) && (
-            cs.startSingleCladeTrain(clade.uuid, tree?.feature_set?.uuid)
-                //.then(res => console.log(res.data))
+            cs.startSingleCladeTrain(
+                cookie.pas_auth.access_token, clade.uuid, tree?.feature_set?.uuid
+            )
                 .then(res => {
                     console.log(res);
                     setTaskListElement(res.data.id);

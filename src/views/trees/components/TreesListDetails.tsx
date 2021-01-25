@@ -1,6 +1,7 @@
 import { Button, CardText, ListGroup } from 'reactstrap';
 import React, { useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 
 import { CreatedTrees } from '../../../_helpers/_url-providers';
 import { Trasher } from '../../shared';
@@ -18,6 +19,12 @@ interface Props {
 
 
 export default (props: Props) => {
+
+
+    /**
+     * @description Create a read-only hook for cookies.
+     */
+    const [cookie] = useCookies();
 
 
     const dispatch = useDispatch();
@@ -42,7 +49,7 @@ export default (props: Props) => {
         dispatch(ta.treesDetailsPending(true));
         let tmp_record = record;
         tmp_record.is_active = !tmp_record.is_active;
-        await ts.update(props.project_id, record)
+        await ts.update(cookie.pas_auth.access_token, props.project_id, record)
             .then(res => dispatch(ta.treesDetailsSuccess(res.data)))
             .then(() => dispatch(ta.treesUpdateSuccess(record)))
             .then(() => dispatch(ta.treesDetailsPending(false)))
@@ -52,8 +59,12 @@ export default (props: Props) => {
 
     const deleteRecord = async (): Promise<void> => {
         if (record.uuid) {
-            await ts.deleteRecord(props.project_id, record.uuid)
-                .then(async () => await ts.list(props.project_id, dispatch))
+            await ts.deleteRecord(
+                cookie.pas_auth.access_token, props.project_id, record.uuid
+            )
+                .then(async () => await ts.list(
+                    cookie.pas_auth.access_token, props.project_id, dispatch
+                ))
                 .then(() => props.setList());
         }
     };

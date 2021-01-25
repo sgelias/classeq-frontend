@@ -3,6 +3,7 @@ import { Label, Input, Card, CardBody, Form, Alert, Progress, Button, Modal, Mod
 import { useSelector, RootStateOrAny, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAsyncEffect } from 'use-async-effect';
+import { useCookies } from 'react-cookie';
 
 import { cladesServices as cs } from '../../../_services/_clades.services';
 import { cladesActions as ca } from '../../../_reducers/_clades.actions';
@@ -21,6 +22,15 @@ export interface NodeInputHandle {
 const NodeInput: React.ForwardRefRenderFunction<NodeInputHandle> = (_, ref) => {
 
 
+    /**
+     * @description Create a read-only hook for cookies.
+     */
+    const [cookie] = useCookies();
+
+
+    /**
+     * @description Set a dispatcher for state management.
+     */
     const dispatch = useDispatch();
 
 
@@ -32,7 +42,7 @@ const NodeInput: React.ForwardRefRenderFunction<NodeInputHandle> = (_, ref) => {
 
     const [nodes, setNodes] = useState<Array<any>>([]);
 
-    
+
     const [annotateModal, setAnnotateModal] = useState(false);
 
 
@@ -64,7 +74,8 @@ const NodeInput: React.ForwardRefRenderFunction<NodeInputHandle> = (_, ref) => {
 
 
     const listClades = async (): Promise<void> => {
-        (params.tid) && await cs.listClades(params.tid, dispatch);
+        (params.tid) && await cs.listClades(
+            cookie.pas_auth.access_token, params.tid, dispatch);
     };
 
 
@@ -90,7 +101,10 @@ const NodeInput: React.ForwardRefRenderFunction<NodeInputHandle> = (_, ref) => {
 
     const annotateClade = (targed_id: number) => {
         (clade.uuid && tree.uuid) &&
-            cs.annotateClade(targed_id, clade.uuid, tree.uuid, tree.project)
+            cs.annotateClade(
+                cookie.pas_auth.access_token, targed_id, clade.uuid, tree.uuid,
+                tree.project
+            )
                 .then(() => listClades())
                 //.then(() => props.toggle())
                 .catch(err => console.log(err));
@@ -157,16 +171,17 @@ const NodeInput: React.ForwardRefRenderFunction<NodeInputHandle> = (_, ref) => {
                                         if (term && (term !== undefined || term !== "")) {
                                             setWaitingRequest(true);
                                             setNotFoundMessage(undefined);
-                                            cs.getNodeList(term).then(
-                                                res => {
-                                                    handleInput(res.data);
-                                                    populateKey(res.data, 'taxonRank');
-                                                    setWaitingRequest(false);
-                                                },
-                                                () => {
-                                                    setNotFoundMessage("Taxon not found.");
-                                                }
-                                            )
+                                            cs.getNodeList(cookie.pas_auth.access_token, term)
+                                                .then(
+                                                    res => {
+                                                        handleInput(res.data);
+                                                        populateKey(res.data, 'taxonRank');
+                                                        setWaitingRequest(false);
+                                                    },
+                                                    () => {
+                                                        setNotFoundMessage("Taxon not found.");
+                                                    }
+                                                )
                                         }
                                     }
                                 }}

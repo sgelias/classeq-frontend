@@ -27,8 +27,13 @@ import { v4 as uuid } from 'uuid/interfaces';
  * @param dispacher A dispach object of redux.
  * @param params An object of type ListResponseInterface.
  */
-const list = async (project_pk: uuid, dispatcher: any, params?: ListResponseInterface): Promise<void> => {
-    let config: CustomRequestConfig = provideTreesUrl("GET", project_pk, { query_params: params });
+const list = async (
+    access_token: string, project_pk: uuid, dispatcher: any, params?: ListResponseInterface
+): Promise<void> => {
+    
+    let config: CustomRequestConfig = provideTreesUrl(
+        "GET", access_token, project_pk, { query_params: params }
+    );
 
     await dispatcher(ta.treesListPending(true));
     await axios(config)
@@ -47,8 +52,14 @@ const list = async (project_pk: uuid, dispatcher: any, params?: ListResponseInte
  * @param project_pk A primary key of a reference tree.
  * @param id The tree primary key.
  */
-const get = async (project_pk: uuid, id: uuid): Promise<{ data: CreatedTrees }> => {
-    let config: CustomRequestConfig = provideTreesUrl("GET", project_pk, { id: id });
+const get = async (
+    access_token: string, project_pk: uuid, id: uuid
+): Promise<{ data: CreatedTrees }> => {
+    
+    let config: CustomRequestConfig = provideTreesUrl(
+        "GET", access_token, project_pk, { id: id }
+    );
+    
     return await axios(config);
 };
 
@@ -59,8 +70,14 @@ const get = async (project_pk: uuid, id: uuid): Promise<{ data: CreatedTrees }> 
  * @param project_pk A primary key of a reference tree.
  * @param record An project object.
  */
-const create = async (project_pk: uuid, record: BaseTrees): Promise<CreatedTrees> => {
-    let config: CustomRequestConfig = provideTreesUrl("POST", project_pk, { data: record });
+const create = async (
+    access_token: string, project_pk: uuid, record: BaseTrees
+): Promise<CreatedTrees> => {
+    
+    let config: CustomRequestConfig = provideTreesUrl(
+        "POST", access_token, project_pk, { data: record }
+    );
+    
     return await axios(config);
 };
 
@@ -71,8 +88,14 @@ const create = async (project_pk: uuid, record: BaseTrees): Promise<CreatedTrees
  * @param project_pk A primary key of a reference tree.
  * @param record An project object.
  */
-const update = async (project_pk: uuid, record: CreatedTrees): Promise<CreatedTrees> => {
-    let config: CustomRequestConfig = provideTreesUrl("PUT", project_pk, { data: record });
+const update = async (
+    access_token: string, project_pk: uuid, record: CreatedTrees
+): Promise<CreatedTrees> => {
+    
+    let config: CustomRequestConfig = provideTreesUrl(
+        "PUT", access_token, project_pk, { data: record }
+    );
+    
     return await axios(config);
 };
 
@@ -83,8 +106,14 @@ const update = async (project_pk: uuid, record: CreatedTrees): Promise<CreatedTr
  * @param project_pk A primary key of a reference tree.
  * @param id The uuid of the records to be deleted.
  */
-const deleteRecord = async (project_pk: uuid, id: uuid): Promise<any> => {
-    let config: CustomRequestConfig = provideTreesUrl("DELETE", project_pk, { id: id });
+const deleteRecord = async (
+    access_token: string, project_pk: uuid, id: uuid
+): Promise<any> => {
+    
+    let config: CustomRequestConfig = provideTreesUrl(
+        "DELETE", access_token, project_pk, { id: id }
+    );
+    
     return await axios(config);
 };
 
@@ -94,8 +123,12 @@ const deleteRecord = async (project_pk: uuid, id: uuid): Promise<any> => {
  * 
  * @param term A string to filter results.
  */
-const searchGene = async (term: string): Promise<{ data: GeneListObjects }> => {
+const searchGene = async (
+    term: string
+): Promise<{ data: GeneListObjects }> => {
+    
     let config: CustomRequestConfig = provideGeneSearchUrl(term);
+    
     return await axios(config);
 };
 
@@ -107,7 +140,11 @@ const searchGene = async (term: string): Promise<{ data: GeneListObjects }> => {
  * @param id The uuid of the records to be deleted.
  */
 const getLeaves = async (project_pk: uuid, id: uuid): Promise<any> => {
-    let config: CustomRequestConfig = provideGetLeavesUrl(project_pk, { id: id });
+    
+    let config: CustomRequestConfig = provideGetLeavesUrl(
+        project_pk, { id: id }
+    );
+    
     return await axios(config);
 };
 
@@ -119,13 +156,14 @@ const getLeaves = async (project_pk: uuid, id: uuid): Promise<any> => {
  * @param id The uuid of the target tree.
  * @param data An array containing outgroups as strings.
  */
-const mapClades = async (project_pk: uuid, id: uuid, data: Array<string>): Promise<any> => {
-    let config: CustomRequestConfig = provideMapCladesUrl(project_pk, {
-        id: id,
-        data: {
-            outgroup_list: data
-        }
+const mapClades = async (
+    access_token: string, project_pk: uuid, id: uuid, data: Array<string>
+): Promise<any> => {
+    
+    let config: CustomRequestConfig = provideMapCladesUrl(
+        access_token, project_pk, {id: id, data: { outgroup_list: data }
     });
+    
     return await axios(config);
 };
 
@@ -137,11 +175,14 @@ const mapClades = async (project_pk: uuid, id: uuid, data: Array<string>): Promi
  * @param id The uuid of the target tree.
  * @param data An array containing outgroups as strings.
  */
-const testClade = async (project_pk: uuid, id: uuid, data: Array<string>): Promise<any> => {
-    let config: CustomRequestConfig = provideTestCladesUrl(project_pk, {
-        id: id,
-        data: { outgroup_list: data }
+const testClade = async (
+    access_token: string, project_pk: uuid, id: uuid, data: Array<string>
+): Promise<any> => {
+    
+    let config: CustomRequestConfig = provideTestCladesUrl(
+        access_token, project_pk, { id: id, data: { outgroup_list: data } 
     });
+    
     return await axios(config);
 };
 
@@ -152,23 +193,38 @@ const testClade = async (project_pk: uuid, id: uuid, data: Array<string>): Promi
  * @param id The uuid of the target tree.
  * @param data A fasta file as a string.
  */
-const uploadAlignment = async (id: uuid, data: string): Promise<any> => {
-    let config: CustomRequestConfig = provideUploadAlignmentUrl({
-        id: id,
-        data: { fasta: data }
+const uploadAlignment = async (
+    access_token: string, id: uuid, data: string
+): Promise<any> => {
+    
+    let config: CustomRequestConfig = provideUploadAlignmentUrl(
+        access_token, { id: id, data: { fasta: data }
     });
+    
     return await axios(config);
 };
 
 
-const mapSequenceFeatures = async (tree_pk: uuid): Promise<any> => {
-    let config: CustomRequestConfig = provideSequenceFeatureGenerationUrl(tree_pk);
+const mapSequenceFeatures = async (
+    access_token: string, tree_pk: uuid
+): Promise<any> => {
+    
+    let config: CustomRequestConfig = provideSequenceFeatureGenerationUrl(
+        access_token, tree_pk
+    );
+    
     return await axios(config);
 };
 
 
-const listSequenceFeatures = async (project_pk: uuid): Promise<any> => {
-    let config: CustomRequestConfig = provideSequenceFeatureListUrl(project_pk);
+const listSequenceFeatures = async (
+    access_token: string, project_pk: uuid
+): Promise<any> => {
+    
+    let config: CustomRequestConfig = provideSequenceFeatureListUrl(
+        access_token, project_pk
+    );
+    
     return await axios(config);
 };
 

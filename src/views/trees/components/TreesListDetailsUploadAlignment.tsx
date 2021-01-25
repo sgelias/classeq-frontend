@@ -1,11 +1,13 @@
 import { Badge, Button, Form, FormGroup, Input, ListGroupItem, Modal, Spinner } from 'reactstrap';
 import React, { useState } from 'react';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 
 import { CreatedTrees } from '../../../_helpers/_url-providers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { treesServices as ts } from '../_services/_trees.services';
 import { v4 as uuid } from 'uuid/interfaces';
+
 
 interface Props {
     project_id: uuid,
@@ -15,6 +17,15 @@ interface Props {
 export default (props: Props) => {
 
 
+    /**
+	 * @description Create a read-only hook for cookies.
+	 */
+    const [cookie] = useCookies();
+    
+    
+    /**
+     * @description Set a dispatcher for state management.
+     */
     const dispatch = useDispatch();
 
 
@@ -37,7 +48,9 @@ export default (props: Props) => {
 
     const handleSubmit = () => {
         setUploadingAlignment(true);
-        (record.uuid && msa) && ts.uploadAlignment(record.uuid, msa)
+        (record.uuid && msa) && ts.uploadAlignment(
+            cookie.pas_auth.access_token, record.uuid, msa
+        )
             .then(() => setMsa(''))
             .then(() => setUploadingAlignment(true))
             .then(() => updateTreesListAndDetailsStatus())
@@ -47,7 +60,7 @@ export default (props: Props) => {
 
 
     const updateTreesListAndDetailsStatus = async () => {
-        await ts.list(props.project_id, dispatch);
+        await ts.list(cookie.pas_auth.access_token, props.project_id, dispatch);
     };
 
 

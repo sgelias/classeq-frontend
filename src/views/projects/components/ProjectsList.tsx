@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Button, Col, Card, CardBody, CardFooter, CardText } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 
 import { BreadcrumbsItemBuilder } from '../../shared';
 import { CreatedProject } from '../../../_helpers/_url-providers';
@@ -9,7 +10,6 @@ import { projectServices as ps } from '../_services/_projects.services';
 import { projectsActions as pa } from '../_reducers/_projects.actions';
 import { Dates } from '../../shared/index';
 import { useAsyncEffect } from 'use-async-effect';
-import { useCookies } from 'react-cookie';
 
 
 export default () => {
@@ -29,12 +29,21 @@ export default () => {
 
     /**
      * @description Set a listener for the projectsListReducer state.
+     * 
+     * @see `CreatedProject`
      */
     const projects: Array<CreatedProject> = useSelector((state: RootStateOrAny) => (
         state.projectsListReducer.results
     ));
 
 
+    /**
+     * @description Start the get project details flow on click in a single
+     * record at the record list.
+     * 
+     * @see `CreatedProject`
+     * @param record A CreatedProject object.
+     */
     const dispatchRecordDetails = (record: CreatedProject) => {
         Promise.resolve()
             .then(() => dispatch(pa.projectsDetailsPending(true)))
@@ -44,13 +53,11 @@ export default () => {
     };
 
 
+    /**
+     * @description Start the projects-request flow on start component.
+     */
     useAsyncEffect(() => {
         ps.list(cookie.pas_auth.access_token, dispatch);
-    }, []);
-
-
-    useAsyncEffect(() => {
-        console.log(projects);
     }, []);
 
 
